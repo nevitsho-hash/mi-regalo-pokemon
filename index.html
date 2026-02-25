@@ -3,157 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pokédex Visual</title>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <title>Pokedex Test</title>
     <style>
-        /* 1. EL ESCENARIO (FONDO) */
-        body, html {
+        /* FONDO GENERAL */
+        body {
             margin: 0;
             padding: 0;
-            height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
+            height: 100vh;
+            background-color: #3b5ba7; /* Azul Pokemon por si el mapa falla */
             background-image: url('https://i.pinimg.com/originals/91/91/31/9191319760773d32488a09f872659e9a.png');
             background-size: cover;
-            background-position: center;
-            font-family: 'Press Start 2P', cursive;
-            overflow: hidden;
+            font-family: sans-serif; /* Fuente del sistema para evitar errores de carga */
         }
 
-        /* 2. LA ESTRUCTURA DE LA POKÉDEX */
+        /* CUERPO DE LA POKEDEX */
         .pokedex {
-            width: 320px;
-            background-color: #e63946; /* Rojo brillante */
+            width: 300px;
+            background-color: #e63946;
             border: 5px solid #8b0000;
-            border-radius: 10px 10px 10px 60px; /* Esquina inferior izquierda redondeada */
+            border-radius: 15px 15px 15px 50px;
             padding: 20px;
-            box-shadow: 10px 10px 0px rgba(0,0,0,0.3);
+            box-shadow: 10px 10px 0px rgba(0,0,0,0.4);
             position: relative;
         }
 
-        /* El visor azul grande */
-        .big-blue-light {
-            width: 50px;
-            height: 50px;
-            background: radial-gradient(circle, #4cc9f0, #4361ee);
+        /* LUZ AZUL SUPERIOR */
+        .blue-light {
+            width: 45px;
+            height: 45px;
+            background: #4cc9f0;
             border: 4px solid white;
             border-radius: 50%;
-            position: absolute;
-            top: 15px;
-            left: 20px;
-            box-shadow: 0 0 15px #4cc9f0;
+            margin-bottom: 20px;
+            box-shadow: 0 0 10px #4cc9f0;
         }
 
-        /* Las 3 lucecitas de colores (rojo, amarillo, verde) */
-        .small-lights {
-            position: absolute;
-            top: 15px;
-            left: 80px;
-            display: flex;
-            gap: 5px;
-        }
-        .light {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            border: 1px solid #333;
-        }
-        .red { background: #ff4d4d; }
-        .yellow { background: #ffcc00; }
-        .green { background: #4caf50; }
-
-        /* 3. LA PANTALLA (EL CORAZÓN DEL DISEÑO) */
-        .screen-container {
-            background-color: #dedede; /* El marco gris de la pantalla */
-            margin-top: 50px;
+        /* MARCO GRIS DE LA PANTALLA */
+        .screen-border {
+            background-color: #dedede;
             padding: 15px;
             border-radius: 10px;
             border: 3px solid #555;
         }
 
-        .black-screen {
-            background-color: #000;
+        /* FONDO NEGRO DE LA PANTALLA */
+        .screen-black {
+            background-color: #1a1a1a;
+            min-height: 220px;
             border-radius: 5px;
-            min-height: 250px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 15px;
             text-align: center;
+            padding: 10px;
         }
 
-        /* Texto estilo retro */
+        /* TEXTO BLANCO */
         .message {
-            color: #fff;
-            font-size: 10px;
-            line-height: 1.8;
-            margin-bottom: 20px;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 15px;
             text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        /* Gengar centrado */
-        .gengar-sprite {
+        /* GENGAR */
+        .gengar {
             width: 100px;
+            height: auto;
             image-rendering: pixelated;
         }
 
-        /* 4. ELEMENTOS DECORATIVOS INFERIORES */
-        .bottom-decoration {
+        /* ADORNOS INFERIORES */
+        .decor {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            margin-top: 20px;
-            padding: 0 10px;
+            margin-top: 15px;
         }
-
-        .black-dot {
-            width: 30px;
-            height: 30px;
-            background: #333;
-            border-radius: 50%;
-        }
-
-        .lines-decor {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-        .line {
-            width: 40px;
-            height: 4px;
-            background: #333;
-            border-radius: 2px;
-        }
+        .dot { width: 25px; height: 25px; background: #333; border-radius: 50%; }
     </style>
 </head>
 <body>
 
     <div class="pokedex">
-        <div class="big-blue-light"></div>
-        <div class="small-lights">
-            <div class="light red"></div>
-            <div class="light yellow"></div>
-            <div class="light green"></div>
-        </div>
-
-        <div class="screen-container">
-            <div class="black-screen">
+        <div class="blue-light"></div>
+        
+        <div class="screen-border">
+            <div class="screen-black">
                 <div class="message">
                     Um sentimento estranho...<br>
                     Gengar está por perto!
                 </div>
-                <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/94.png" class="gengar-sprite" alt="Gengar Pixel">
+                <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/94.png" class="gengar" alt="Gengar">
             </div>
         </div>
 
-        <div class="bottom-decoration">
-            <div class="black-dot"></div>
-            <div class="lines-decor">
-                <div class="line"></div>
-                <div class="line"></div>
-            </div>
+        <div class="decor">
+            <div class="dot"></div>
+            <div style="color: white; font-size: 20px;">+</div>
         </div>
     </div>
 
