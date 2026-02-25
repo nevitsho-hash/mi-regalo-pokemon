@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokémon Journey: Stiven & Ela</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #202020;
+            color: white;
+            font-family: 'Press Start+2P', cursive;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        #game-container {
+            width: 90%;
+            max-width: 400px;
+            background: #714999; /* Color Gengar */
+            border: 8px solid #4a3065;
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 10px 0 #311b46;
+        }
+
+        .screen {
+            background: #98b088; /* Color pantalla GameBoy */
+            border: 4px solid #333;
+            min-height: 250px;
+            padding: 15px;
+            color: #0f380f;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .pixel-text {
+            font-size: 10px;
+            line-height: 1.6;
+            text-transform: uppercase;
+        }
+
+        .sprite {
+            width: 100px;
+            image-rendering: pixelated;
+            margin: 10px auto;
+        }
+
+        .btn {
+            background: #333;
+            color: white;
+            border: none;
+            padding: 10px;
+            font-family: 'Press Start+2P', cursive;
+            font-size: 10px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .options {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+
+        #btn-nao {
+            position: relative;
+        }
+
+        /* Animación final */
+        .heart {
+            color: red;
+            font-size: 20px;
+            animation: beat 0.5s infinite alternate;
+        }
+
+        @keyframes beat {
+            to { transform: scale(1.2); }
+        }
+
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+<div id="game-container">
+    <div class="screen" id="main-screen">
+        <div id="content">
+            <p class="pixel-text" id="status-text">Uma jornada épica começa...</p>
+            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/94.png" alt="Gengar" class="sprite" id="pokemon-sprite">
+            <div id="dialog-box">
+                <p class="pixel-text" id="main-message">Você encontrou o Gengar selvagem!</p>
+            </div>
+        </div>
+
+        <div id="final-buttons" class="options">
+            <button class="btn" onclick="aceitar()">SIM</button>
+            <button class="btn" id="btn-nao" onmouseover="fugir()">NÃO</button>
+        </div>
+
+        <div id="love-animation" class="hidden">
+            <p class="pixel-text">❤ STIVEN SE UNIU À SUA PARTIDA! ❤</p>
+            <div style="font-size: 30px;">🤵🏻👰🏾</div> <div class="heart">❤</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Función para que el botón "NO" escape (broma clásica)
+    function fugir() {
+        const btnNao = document.getElementById('btn-nao');
+        const x = Math.random() * 100 - 50;
+        const y = Math.random() * 100 - 50;
+        btnNao.style.transform = `translate(${x}px, ${y}px)`;
+    }
+
+    function aceitar() {
+        document.getElementById('content').classList.add('hidden');
+        document.getElementById('final-buttons').classList.add('hidden');
+        document.getElementById('love-animation').classList.remove('hidden');
+        
+        // Efecto de confeti o sonido si quisieras agregar
+        alert("Parabéns! Você capturou o coração do Stiven!");
+    }
+
+    // Lógica para los QRs:
+    // Puedes pasar un parámetro en la URL como ?pokemon=pikachu
+    const urlParams = new URLSearchParams(window.location.search);
+    const pokemon = urlParams.get('pokemon');
+
+    if (pokemon === 'gengar') {
+        document.getElementById('main-message').innerText = "Gengar pergunta: Quer namorar comigo?";
+    } else if (pokemon) {
+        document.getElementById('main-message').innerText = "Você encontrou " + pokemon + "!";
+        document.getElementById('final-buttons').classList.add('hidden');
+        // Aquí podrías cambiar la imagen del sprite según el pokemon
+    }
+</script>
+
+</body>
+</html>
