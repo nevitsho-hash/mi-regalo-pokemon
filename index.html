@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pokedéx: Missão Gengar</title>
+    <title>Pokedex: Missão Gengar</title>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
         body, html {
@@ -21,123 +21,55 @@
             font-family: 'Press Start 2P', cursive;
         }
 
-        /* Contenedor de la Pokédex */
+        /* Contenedor principal de la Pokedex */
         .pokedex {
-            width: 320px;
-            background-color: #dc0a2d; /* Rojo Pokédex */
+            width: 300px;
+            background-color: #dc0a2d; /* Rojo clásico */
             border: 6px solid #8b0000;
-            border-radius: 20px;
+            border-radius: 15px;
             padding: 20px;
             box-shadow: 0 15px 0 #5e0000, 0 20px 30px rgba(0,0,0,0.5);
             position: relative;
-            text-align: center;
         }
 
-        /* Luces de la Pokédex */
-        .light {
-            width: 40px; height: 40px;
+        /* Detalle del visor azul superior */
+        .top-light {
+            width: 40px;
+            height: 40px;
             background: #00ccff;
             border: 4px solid white;
             border-radius: 50%;
-            position: absolute; top: 10px; left: 20px;
+            position: absolute;
+            top: 10px;
+            left: 20px;
             box-shadow: 0 0 10px #00ccff;
         }
 
-        /* Pantalla Negra */
+        /* Pantalla de la Pokedex */
         .screen {
             background-color: #000;
             border: 15px solid #dedede;
             border-radius: 10px;
-            margin-top: 30px;
+            margin-top: 35px;
             padding: 20px 10px;
-            min-height: 250px;
+            min-height: 220px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            text-align: center;
         }
 
-        .text-box {
-            color: #fff;
-            font-size: 11px;
-            line-height: 1.8;
-            margin-bottom: 20px;
-        }
-
-        .gengar-pixel {
-            width: 80px;
-            image-rendering: pixelated;
-        }
-
-        /* Botones finales */
-        .btn-container { margin-top: 20px; display: none; }
-        .btn {
-            background: #4caf50;
+        /* Texto dentro de la pantalla */
+        .screen-text {
             color: white;
-            border: none;
-            padding: 10px;
-            font-family: 'Press Start 2P', cursive;
             font-size: 10px;
-            cursor: pointer;
-            width: 100%;
-            margin-bottom: 10px;
-            border-bottom: 4px solid #2e7d32;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            text-transform: uppercase;
         }
 
-        #btn-nao {
-            background: #f44336;
-            border-bottom: 4px solid #c62828;
-            position: relative;
-        }
-
-        .final-msg { display: none; color: #ffcc00; font-size: 12px; margin-top: 20px; }
-    </style>
-</head>
-<body>
-
-<div class="pokedex">
-    <div class="light"></div>
-    <div class="screen">
-        <div id="game-content">
-            <p class="text-box" id="pokedex-text">
-                Um sentimento estranho...<br>Gengar está por perto!
-            </p>
-            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/94.png" class="gengar-pixel" alt="Gengar Pixel">
-        </div>
-
-        <div class="btn-container" id="actions">
-            <button class="btn" onclick="aceitar()">SIM!</button>
-            <button class="btn" id="btn-nao" onmouseover="fugir()">NÃO</button>
-        </div>
-
-        <div class="final-msg" id="msg-final">
-            ❤️ MISSÃO CUMPRIDA! ❤️<br><br>
-            Stiven se uniu à sua partida!
-        </div>
-    </div>
-</div>
-
-<script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const pokemon = urlParams.get('pokemon');
-
-    if (pokemon === 'gengar') {
-        document.getElementById('pokedex-text').innerHTML = "Gengar foi encontrado!<br><br>Quer namorar comigo?";
-        document.getElementById('actions').style.display = 'block';
-    }
-
-    function fugir() {
-        const btn = document.getElementById('btn-nao');
-        btn.style.left = Math.random() * 50 + 'px';
-        btn.style.top = Math.random() * 50 + 'px';
-    }
-
-    function aceitar() {
-        document.getElementById('game-content').style.display = 'none';
-        document.getElementById('actions').style.display = 'none';
-        document.getElementById('msg-final').style.display = 'block';
-    }
-</script>
-
-</body>
-</html>
+        /* Gengar Pixelado */
+        .gengar-sprite {
+            width: 80px;
+            image-rendering
