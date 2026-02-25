@@ -2,110 +2,156 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pokedex Test</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Pokédex Mobile</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
-        /* FONDO GENERAL */
-        body {
+        /* RESET GENERAL */
+        * { box-sizing: border-box; }
+        
+        body, html {
             margin: 0;
             padding: 0;
+            width: 100%;
+            height: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 100vh;
-            background-color: #3b5ba7; /* Azul Pokemon por si el mapa falla */
+            background-color: #75b854; /* Respaldo verde */
             background-image: url('https://i.pinimg.com/originals/91/91/31/9191319760773d32488a09f872659e9a.png');
             background-size: cover;
-            font-family: sans-serif; /* Fuente del sistema para evitar errores de carga */
+            background-position: center;
+            font-family: 'Press Start 2P', cursive;
+            overflow: hidden; /* Evita que la página se mueva */
         }
 
-        /* CUERPO DE LA POKEDEX */
-        .pokedex {
-            width: 300px;
-            background-color: #e63946;
-            border: 5px solid #8b0000;
-            border-radius: 15px 15px 15px 50px;
+        /* CONTENEDOR TAMAÑO MÓVIL (Forzado para PC también) */
+        .pokedex-case {
+            width: 330px; /* Ancho estándar de un móvil pequeño */
+            background: #dc0a2d;
+            border: 6px solid #8b0000;
+            border-radius: 15px 15px 15px 60px;
             padding: 20px;
-            box-shadow: 10px 10px 0px rgba(0,0,0,0.4);
+            box-shadow: 15px 15px 0px rgba(0,0,0,0.3);
             position: relative;
         }
 
-        /* LUZ AZUL SUPERIOR */
-        .blue-light {
-            width: 45px;
-            height: 45px;
-            background: #4cc9f0;
+        /* DETALLES SUPERIORES */
+        .header-pokedex {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .main-blue-light {
+            width: 55px;
+            height: 55px;
+            background: radial-gradient(circle, #4cc9f0, #4361ee);
             border: 4px solid white;
             border-radius: 50%;
-            margin-bottom: 20px;
-            box-shadow: 0 0 10px #4cc9f0;
+            box-shadow: 0 0 15px #4cc9f0;
         }
 
-        /* MARCO GRIS DE LA PANTALLA */
-        .screen-border {
+        .status-lights {
+            display: flex;
+            gap: 6px;
+            padding-top: 5px;
+        }
+
+        .dot-light {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 1px solid #333;
+        }
+        .dot-red { background: #ff4d4d; }
+        .dot-yellow { background: #ffcc00; }
+        .dot-green { background: #4caf50; }
+
+        /* PANTALLA */
+        .screen-frame {
             background-color: #dedede;
             padding: 15px;
-            border-radius: 10px;
-            border: 3px solid #555;
+            border-radius: 12px;
+            border: 4px solid #555;
+            margin-bottom: 20px;
         }
 
-        /* FONDO NEGRO DE LA PANTALLA */
-        .screen-black {
-            background-color: #1a1a1a;
-            min-height: 220px;
-            border-radius: 5px;
+        .screen-display {
+            background-color: #000;
+            border-radius: 6px;
+            min-height: 260px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            padding: 15px;
             text-align: center;
-            padding: 10px;
         }
 
-        /* TEXTO BLANCO */
-        .message {
+        .pixel-text {
             color: #ffffff;
-            font-size: 14px;
-            font-weight: bold;
-            margin-bottom: 15px;
+            font-size: 11px;
+            line-height: 1.8;
+            margin-bottom: 25px;
             text-transform: uppercase;
-            letter-spacing: 1px;
         }
 
-        /* GENGAR */
-        .gengar {
-            width: 100px;
-            height: auto;
+        .gengar-gif {
+            width: 110px;
             image-rendering: pixelated;
         }
 
-        /* ADORNOS INFERIORES */
-        .decor {
+        /* CONTROLES INFERIORES */
+        .bottom-parts {
             display: flex;
             justify-content: space-between;
-            margin-top: 15px;
+            align-items: center;
+            margin-top: 5px;
         }
-        .dot { width: 25px; height: 25px; background: #333; border-radius: 50%; }
+
+        .joy-pad {
+            width: 55px;
+            height: 55px;
+            background: #333;
+            clip-path: polygon(35% 0%, 65% 0%, 65% 35%, 100% 35%, 100% 65%, 65% 65%, 65% 100%, 35% 100%, 35% 65%, 0% 65%, 0% 35%, 35% 35%);
+        }
+
+        .small-black-button {
+            width: 35px;
+            height: 35px;
+            background: #222;
+            border-radius: 50%;
+            border: 2px solid #111;
+        }
     </style>
 </head>
 <body>
 
-    <div class="pokedex">
-        <div class="blue-light"></div>
+    <div class="pokedex-case">
+        <div class="header-pokedex">
+            <div class="main-blue-light"></div>
+            <div class="status-lights">
+                <div class="dot-light dot-red"></div>
+                <div class="dot-light dot-yellow"></div>
+                <div class="dot-light dot-green"></div>
+            </div>
+        </div>
         
-        <div class="screen-border">
-            <div class="screen-black">
-                <div class="message">
+        <div class="screen-frame">
+            <div class="screen-display">
+                <div class="pixel-text">
                     Um sentimento estranho...<br>
                     Gengar está por perto!
                 </div>
-                <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/94.png" class="gengar" alt="Gengar">
+                <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/94.png" class="gengar-gif" alt="Gengar">
             </div>
         </div>
 
-        <div class="decor">
-            <div class="dot"></div>
-            <div style="color: white; font-size: 20px;">+</div>
+        <div class="bottom-parts">
+            <div class="small-black-button"></div>
+            <div class="joy-pad"></div>
         </div>
     </div>
 
