@@ -16,26 +16,37 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            /* FONDO CREADO CON CÓDIGO: Un verde pixelado retro */
-            background-color: #4a7c59;
-            background-image:  linear-gradient(#568a67 2px, transparent 2px), linear-gradient(90deg, #568a67 2px, transparent 2px);
-            background-size: 40px 40px;
+            /* Aquí usamos tu imagen de GitHub */
+            background-image: url('fondo-pokemon.png'); 
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
             font-family: 'Press Start 2P', cursive;
             overflow: hidden;
         }
 
-        /* CUERPO DE LA POKÉDEX (Fiel a tu imagen .webp) */
-        .pokedex {
-            position: relative;
-            width: 320px;
-            background: #e63946;
-            border: 4px solid #1a1a1a;
-            border-radius: 15px 15px 15px 50px;
-            padding: 15px;
-            box-shadow: 10px 10px 0px rgba(0,0,0,0.3);
+        /* Capa de suavizado para el fondo */
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.1);
+            z-index: 1;
         }
 
-        /* DISEÑO SUPERIOR */
+        /* CUERPO DE LA POKÉDEX (Fiel a tu imagen original) */
+        .pokedex {
+            position: relative;
+            z-index: 10;
+            width: 320px;
+            background: #e63946;
+            border: 5px solid #1a1a1a;
+            border-radius: 15px 15px 15px 60px;
+            padding: 15px;
+            box-shadow: 12px 12px 0px rgba(0,0,0,0.4);
+        }
+
+        /* DISEÑO SUPERIOR (Visor y luces) */
         .top-design {
             display: flex;
             align-items: flex-start;
@@ -43,94 +54,67 @@
             margin-bottom: 30px;
         }
 
-        .blue-lens {
+        .blue-eye {
             width: 55px; height: 55px;
             background: radial-gradient(circle at 30% 30%, #4cc9f0, #2563eb);
             border: 4px solid #fff;
             border-radius: 50%;
-            box-shadow: 0 0 10px rgba(76, 201, 240, 0.5);
+            box-shadow: inset -4px -4px 6px rgba(0,0,0,0.4);
         }
 
-        .lights-row { display: flex; gap: 5px; margin-top: 5px; }
+        .lights { display: flex; gap: 6px; margin-top: 5px; }
         .l { width: 10px; height: 10px; border-radius: 50%; border: 2px solid #1a1a1a; }
 
-        /* MARCO GRIS Y PANTALLA NEGRA */
-        .frame {
+        /* PANTALLA (Borde gris claro y pantalla negra) */
+        .screen-frame {
             background: #dedede;
-            border: 3px solid #1a1a1a;
+            border: 4px solid #1a1a1a;
             border-radius: 10px 10px 10px 35px;
             padding: 12px 12px 25px 12px;
             position: relative;
         }
 
-        .screen {
+        .screen-black {
             background: #000;
-            min-height: 220px;
             border-radius: 5px;
+            min-height: 230px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             padding: 10px;
+            text-align: center;
         }
 
-        .txt {
+        .msg {
             color: #fff;
             font-size: 9px;
             line-height: 1.6;
-            text-align: center;
             margin-bottom: 15px;
+            text-transform: uppercase;
         }
 
-        .gengar { width: 80px; image-rendering: pixelated; }
+        .gengar-sprite {
+            width: 90px;
+            image-rendering: pixelated;
+        }
 
-        /* BOTONES DE ABAJO */
-        .bottom-btns {
+        /* BOTONES INFERIORES */
+        .bottom-controls {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 20px;
+            margin-top: 25px;
         }
 
-        .green-screen {
+        .green-button {
             width: 75px; height: 35px;
             background: #4caf50;
             border: 3px solid #1a1a1a;
             border-radius: 5px;
+            box-shadow: 0 4px 0 #2e7d32;
         }
 
         .cross {
-            width: 50px; height: 50px;
-            background: #2d3436;
-            clip-path: polygon(35% 0%, 65% 0%, 65% 35%, 100% 35%, 100% 65%, 65% 65%, 65% 100%, 35% 100%, 35% 65%, 0% 65%, 0% 35%, 35% 35%);
-        }
-    </style>
-</head>
-<body>
-
-    <div class="pokedex">
-        <div class="top-design">
-            <div class="blue-lens"></div>
-            <div class="lights-row">
-                <div class="l" style="background:#ff4d4d"></div>
-                <div class="l" style="background:#ffcc00"></div>
-                <div class="l" style="background:#4caf50"></div>
-            </div>
-        </div>
-
-        <div class="frame">
-            <div class="screen">
-                <p class="txt">UM SENTIMENTO ESTRANHO...<br>GENGAR ESTÁ POR PERTO!</p>
-                <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/94.png" class="gengar">
-            </div>
-        </div>
-
-        <div class="bottom-btns">
-            <div style="width:30px; height:30px; background:#1a1a1a; border-radius:50%;"></div>
-            <div class="green-screen"></div>
-            <div class="cross"></div>
-        </div>
-    </div>
-
-</body>
-</html>
+            width: 55px; height: 55px;
+            background: #
