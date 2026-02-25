@@ -3,56 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pokedex: Missão Gengar</title>
+    <title>Pokedéx: Missão Gengar</title>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
+        * { box-sizing: border-box; }
+        
         body, html {
             margin: 0;
             padding: 0;
-            height: 100%;
-            width: 100%;
+            height: 100vh;
+            width: 100vw;
             display: flex;
             align-items: center;
             justify-content: center;
-            /* Fondo de mapa de Pokémon pixelado */
+            background-color: #222; /* Color de respaldo por si el mapa no carga */
             background-image: url('https://i.pinimg.com/originals/91/91/31/9191319760773d32488a09f872659e9a.png');
             background-size: cover;
             background-position: center;
             font-family: 'Press Start 2P', cursive;
+            overflow: hidden;
         }
 
-        /* Contenedor principal de la Pokedex */
         .pokedex {
-            width: 300px;
-            background-color: #dc0a2d; /* Rojo clásico */
+            width: 90%;
+            max-width: 320px;
+            background-color: #dc0a2d;
             border: 6px solid #8b0000;
-            border-radius: 15px;
+            border-radius: 20px;
             padding: 20px;
-            box-shadow: 0 15px 0 #5e0000, 0 20px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 0 #5e0000, 0 20px 30px rgba(0,0,0,0.5);
             position: relative;
+            z-index: 10;
         }
 
-        /* Detalle del visor azul superior */
         .top-light {
-            width: 40px;
-            height: 40px;
-            background: #00ccff;
+            width: 45px;
+            height: 45px;
+            background: radial-gradient(circle, #00ccff, #0066ff);
             border: 4px solid white;
             border-radius: 50%;
             position: absolute;
-            top: 10px;
+            top: 15px;
             left: 20px;
-            box-shadow: 0 0 10px #00ccff;
+            box-shadow: 0 0 15px #00ccff;
         }
 
-        /* Pantalla de la Pokedex */
         .screen {
             background-color: #000;
-            border: 15px solid #dedede;
+            border: 12px solid #dedede;
             border-radius: 10px;
-            margin-top: 35px;
+            margin-top: 45px;
             padding: 20px 10px;
-            min-height: 220px;
+            min-height: 280px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -60,25 +62,28 @@
             text-align: center;
         }
 
-        /* Texto dentro de la pantalla */
         .screen-text {
-            color: white;
+            color: #fff;
             font-size: 10px;
             line-height: 1.6;
             margin-bottom: 20px;
             text-transform: uppercase;
         }
 
-        /* Gengar Pixelado */
         .gengar-sprite {
-            width: 80px;
-            image-rendering: pixelated; /* Mantiene el estilo pixel */
+            width: 100px;
+            image-rendering: pixelated;
+            animation: bounce 1s infinite alternate;
         }
 
-        /* Botones de acción */
+        @keyframes bounce {
+            from { transform: translateY(0); }
+            to { transform: translateY(-10px); }
+        }
+
         .controls {
-            margin-top: 20px;
-            display: none; /* Se activa con el QR de Gengar */
+            margin-top: 10px;
+            width: 100%;
         }
 
         .btn {
@@ -87,38 +92,28 @@
             border: none;
             padding: 12px;
             font-family: 'Press Start 2P', cursive;
-            font-size: 10px;
+            font-size: 9px;
             cursor: pointer;
             width: 100%;
-            margin-bottom: 10px;
-            border-bottom: 4px solid #2e7d32;
+            margin-bottom: 8px;
             border-radius: 5px;
+            box-shadow: 0 4px 0 #2e7d32;
         }
 
         #btn-nao {
             background: #f44336;
-            border-bottom: 4px solid #c62828;
+            box-shadow: 0 4px 0 #c62828;
             position: relative;
         }
 
-        /* Mensaje Final */
         #final-msg {
             display: none;
             color: #ffcc00;
             font-size: 11px;
             line-height: 1.8;
-            padding-top: 10px;
         }
 
-        /* Estilo de la cruceta decorativa */
-        .d-pad {
-            width: 40px;
-            height: 40px;
-            background: #333;
-            margin: 15px auto 0;
-            position: relative;
-            clip-path: polygon(33% 0%, 66% 0%, 66% 33%, 100% 33%, 100% 66%, 66% 66%, 66% 100%, 33% 100%, 33% 66%, 0% 66%, 0% 33%, 33% 33%);
-        }
+        .hidden { display: none; }
     </style>
 </head>
 <body>
@@ -134,7 +129,7 @@
             <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/94.png" class="gengar-sprite" alt="Gengar">
         </div>
 
-        <div class="controls" id="controls">
+        <div id="controls" class="controls hidden">
             <button class="btn" onclick="showLove()">SIM!</button>
             <button class="btn" id="btn-nao" onmouseover="moveBtn()" onclick="moveBtn()">NÃO</button>
         </div>
@@ -144,32 +139,30 @@
             STIVEN SE UNIU À SUA PARTIDA!
         </div>
     </div>
-
-    <div class="d-pad"></div>
 </div>
 
 <script>
-    // Lógica para detectar el QR de Gengar
+    // Detectar si es el QR de Gengar
     const params = new URLSearchParams(window.location.search);
     const pokemonFound = params.get('pokemon');
 
+    // Si es Gengar, cambiamos el texto y mostramos botones
     if (pokemonFound === 'gengar') {
         document.getElementById('status-text').innerHTML = "GENGAR ENCONTRADO!<br><br>QUER NAMORAR COMIGO?";
-        document.getElementById('controls').style.display = 'block';
+        document.getElementById('controls').classList.remove('hidden');
     }
 
-    // Función para que el botón "No" se mueva
     function moveBtn() {
         const btn = document.getElementById('btn-nao');
-        const x = Math.random() * 60 - 30;
-        const y = Math.random() * 60 - 30;
-        btn.style.transform = `translate(${x}px, ${y}px)`;
+        btn.style.position = 'absolute';
+        btn.style.left = Math.random() * 60 + '%';
+        btn.style.top = Math.random() * 60 + '%';
+        btn.style.zIndex = "100";
     }
 
-    // Función para el mensaje final
     function showLove() {
-        document.getElementById('content-area').style.display = 'none';
-        document.getElementById('controls').style.display = 'none';
+        document.getElementById('content-area').classList.add('hidden');
+        document.getElementById('controls').classList.add('hidden');
         document.getElementById('final-msg').style.display = 'block';
     }
 </script>
