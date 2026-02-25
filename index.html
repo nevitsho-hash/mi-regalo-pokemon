@@ -72,4 +72,107 @@
         /* Gengar Pixelado */
         .gengar-sprite {
             width: 80px;
-            image-rendering
+            image-rendering: pixelated; /* Mantiene el estilo pixel */
+        }
+
+        /* Botones de acción */
+        .controls {
+            margin-top: 20px;
+            display: none; /* Se activa con el QR de Gengar */
+        }
+
+        .btn {
+            background: #4caf50;
+            color: white;
+            border: none;
+            padding: 12px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 10px;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 10px;
+            border-bottom: 4px solid #2e7d32;
+            border-radius: 5px;
+        }
+
+        #btn-nao {
+            background: #f44336;
+            border-bottom: 4px solid #c62828;
+            position: relative;
+        }
+
+        /* Mensaje Final */
+        #final-msg {
+            display: none;
+            color: #ffcc00;
+            font-size: 11px;
+            line-height: 1.8;
+            padding-top: 10px;
+        }
+
+        /* Estilo de la cruceta decorativa */
+        .d-pad {
+            width: 40px;
+            height: 40px;
+            background: #333;
+            margin: 15px auto 0;
+            position: relative;
+            clip-path: polygon(33% 0%, 66% 0%, 66% 33%, 100% 33%, 100% 66%, 66% 66%, 66% 100%, 33% 100%, 33% 66%, 0% 66%, 0% 33%, 33% 33%);
+        }
+    </style>
+</head>
+<body>
+
+<div class="pokedex">
+    <div class="top-light"></div>
+    
+    <div class="screen">
+        <div id="content-area">
+            <p class="screen-text" id="status-text">
+                Um sentimento estranho...<br>Gengar está por perto!
+            </p>
+            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/94.png" class="gengar-sprite" alt="Gengar">
+        </div>
+
+        <div class="controls" id="controls">
+            <button class="btn" onclick="showLove()">SIM!</button>
+            <button class="btn" id="btn-nao" onmouseover="moveBtn()" onclick="moveBtn()">NÃO</button>
+        </div>
+
+        <div id="final-msg">
+            ❤️ MISSÃO CUMPRIDA! ❤️<br><br>
+            STIVEN SE UNIU À SUA PARTIDA!
+        </div>
+    </div>
+
+    <div class="d-pad"></div>
+</div>
+
+<script>
+    // Lógica para detectar el QR de Gengar
+    const params = new URLSearchParams(window.location.search);
+    const pokemonFound = params.get('pokemon');
+
+    if (pokemonFound === 'gengar') {
+        document.getElementById('status-text').innerHTML = "GENGAR ENCONTRADO!<br><br>QUER NAMORAR COMIGO?";
+        document.getElementById('controls').style.display = 'block';
+    }
+
+    // Función para que el botón "No" se mueva
+    function moveBtn() {
+        const btn = document.getElementById('btn-nao');
+        const x = Math.random() * 60 - 30;
+        const y = Math.random() * 60 - 30;
+        btn.style.transform = `translate(${x}px, ${y}px)`;
+    }
+
+    // Función para el mensaje final
+    function showLove() {
+        document.getElementById('content-area').style.display = 'none';
+        document.getElementById('controls').style.display = 'none';
+        document.getElementById('final-msg').style.display = 'block';
+    }
+</script>
+
+</body>
+</html>
