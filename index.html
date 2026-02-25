@@ -2,8 +2,8 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pokédex Journey</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Pokédex Mobile</title>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; }
@@ -16,105 +16,134 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            /* Aquí usamos tu imagen de GitHub */
+            background-color: #000; /* Fondo negro de seguridad */
+            /* Tu imagen local */
             background-image: url('fondo pokemon.jpg'); 
-            background-size: cover;
+            background-size: cover; 
             background-position: center;
-            background-attachment: fixed;
+            background-repeat: no-repeat;
             font-family: 'Press Start 2P', cursive;
             overflow: hidden;
         }
 
-        /* Capa de suavizado para el fondo */
+        /* Capa de contraste */
         body::before {
             content: "";
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.1);
+            background: rgba(0, 0, 0, 0.2);
             z-index: 1;
         }
 
-        /* CUERPO DE LA POKÉDEX (Fiel a tu imagen original) */
+        /* ESTRUCTURA POKÉDEX MÓVIL */
         .pokedex {
             position: relative;
             z-index: 10;
-            width: 320px;
+            width: 92%;
+            max-width: 340px;
             background: #e63946;
             border: 5px solid #1a1a1a;
             border-radius: 15px 15px 15px 60px;
-            padding: 15px;
-            box-shadow: 12px 12px 0px rgba(0,0,0,0.4);
+            padding: 20px;
+            box-shadow: 10px 10px 0px rgba(0,0,0,0.5);
         }
 
-        /* DISEÑO SUPERIOR (Visor y luces) */
+        /* CABECERA (Luz azul y mini luces) */
         .top-design {
             display: flex;
             align-items: flex-start;
             gap: 12px;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
 
-        .blue-eye {
+        .blue-lens {
             width: 55px; height: 55px;
             background: radial-gradient(circle at 30% 30%, #4cc9f0, #2563eb);
             border: 4px solid #fff;
             border-radius: 50%;
-            box-shadow: inset -4px -4px 6px rgba(0,0,0,0.4);
+            box-shadow: 0 0 10px rgba(76, 201, 240, 0.5);
         }
 
         .lights { display: flex; gap: 6px; margin-top: 5px; }
-        .l { width: 10px; height: 10px; border-radius: 50%; border: 2px solid #1a1a1a; }
+        .l { width: 12px; height: 12px; border-radius: 50%; border: 2px solid #1a1a1a; }
 
-        /* PANTALLA (Borde gris claro y pantalla negra) */
-        .screen-frame {
+        /* PANTALLA (Borde gris y pantalla negra) */
+        .frame {
             background: #dedede;
             border: 4px solid #1a1a1a;
-            border-radius: 10px 10px 10px 35px;
-            padding: 12px 12px 25px 12px;
+            border-radius: 10px 10px 10px 40px;
+            padding: 15px 15px 30px 15px;
             position: relative;
         }
 
-        .screen-black {
+        .screen {
             background: #000;
+            min-height: 240px;
             border-radius: 5px;
-            min-height: 230px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             padding: 10px;
-            text-align: center;
+            border: 2px solid #333;
         }
 
         .msg {
             color: #fff;
-            font-size: 9px;
-            line-height: 1.6;
-            margin-bottom: 15px;
+            font-size: 10px;
+            line-height: 1.7;
+            text-align: center;
+            margin-bottom: 20px;
             text-transform: uppercase;
         }
 
-        .gengar-sprite {
-            width: 90px;
+        .sprite {
+            width: 95px;
             image-rendering: pixelated;
         }
 
-        /* BOTONES INFERIORES */
-        .bottom-controls {
+        /* BOTONES DE ABAJO */
+        .bottom-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-top: 25px;
         }
 
-        .green-button {
-            width: 75px; height: 35px;
+        .btn-green {
+            width: 70px; height: 35px;
             background: #4caf50;
             border: 3px solid #1a1a1a;
             border-radius: 5px;
             box-shadow: 0 4px 0 #2e7d32;
         }
 
-        .cross {
+        .d-pad {
             width: 55px; height: 55px;
-            background: #
+            background: #2d3436;
+            clip-path: polygon(35% 0%, 65% 0%, 65% 35%, 100% 35%, 100% 65%, 65% 65%, 65% 100%, 35% 100%, 35% 65%, 0% 65%, 0% 35%, 35% 35%);
+        }
+
+        .black-circle {
+            width: 35px; height: 35px;
+            background: #1a1a1a;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="pokedex">
+        <div class="top-design">
+            <div class="blue-lens"></div>
+            <div class="lights">
+                <div class="l" style="background:#ff4d4d"></div>
+                <div class="l" style="background:#ffcc00"></div>
+                <div class="l" style="background:#4caf50"></div>
+            </div>
+        </div>
+
+        <div class="frame">
+            <div class="screen">
+                <p class="msg">Um sentimento estranho...<br>Gengar está por perto!</p>
+                <img
