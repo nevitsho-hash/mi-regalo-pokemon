@@ -16,70 +16,75 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: #000; 
+            background-color: #000; /* Bordes negros para proteger la calidad */
+            
+            /* Fondo con tu mapa 736x1376 */
             background-image: url('fondo-pokemon.jpg'); 
-            background-size: contain;
+            background-size: contain; 
             background-position: center;
             background-repeat: no-repeat;
+            
             font-family: 'Press Start 2P', cursive;
             overflow: hidden;
         }
 
         /* CONTENEDOR DE LA POKEDEX */
-        .pokedex-wrapper {
+        .pokedex-container {
             position: relative;
             width: 90%;
-            max-width: 340px;
+            max-width: 350px; /* Tamaño ideal para móvil */
             z-index: 10;
         }
 
-        .pokedex-img {
+        /* Tu nueva imagen PNG transparente */
+        .pokedex-base {
             width: 100%;
             height: auto;
             display: block;
-            /* Esto ayuda a que si la imagen tiene fondo blanco, se mezcle mejor */
-            mix-blend-mode: multiply; 
+            filter: drop-shadow(0 15px 10px rgba(0,0,0,0.5));
         }
 
-        /* AJUSTE PRECISO DE LA PANTALLA */
-        .screen-area {
+        /* ÁREA DINÁMICA DE LA PANTALLA */
+        /* Ajustado exactamente al hueco negro de tu imagen */
+        .screen-content {
             position: absolute;
-            /* Estas coordenadas posicionan el contenido dentro del cuadro negro */
-            top: 25%;    
-            left: 17.5%;
-            width: 65%;
-            height: 40%;
+            top: 24.5%;   /* Posición vertical */
+            left: 17%;    /* Posición horizontal */
+            width: 66%;   /* Ancho del hueco */
+            height: 40%;  /* Alto del hueco */
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             text-align: center;
+            pointer-events: none; /* Para que no interfiera si hay botones debajo */
         }
 
-        .msg {
+        .pokedex-msg {
             color: #fff;
-            font-size: 7px; /* Más pequeño para que quepa bien */
-            line-height: 1.5;
-            margin-bottom: 10px;
+            font-size: 8px; /* Ajustado para que no se salga */
+            line-height: 1.6;
+            margin-bottom: 12px;
             text-transform: uppercase;
         }
 
-        .gengar {
-            width: 70px;
-            image-rendering: pixelated;
+        .pokemon-sprite {
+            width: 85px;
+            image-rendering: pixelated; /* Mantiene el estilo retro */
         }
+
     </style>
 </head>
 <body>
 
-    <div class="pokedex-wrapper">
-        <img src="pokedex.png" class="pokedex-img" alt="Pokedex">
+    <div class="pokedex-container">
+        <img src="pokedex.png" class="pokedex-base" alt="Pokedex">
 
-        <div class="screen-area">
-            <p class="msg">
-                GENGAR ESTÁ<br>POR PERTO!
+        <div class="screen-content">
+            <p class="pokedex-msg">
+                UM SENTIMENTO<br>ESTRANHO...<br>GENGAR POR PERTO!
             </p>
-            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/94.png" class="gengar" alt="Gengar">
+            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/94.png" class="pokemon-sprite" alt="Gengar">
         </div>
     </div>
 
