@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -17,7 +17,7 @@
             align-items: center;
             justify-content: center;
             background-color: #000; 
-            /* Tu mapa de fondo con calidad original */
+            /* Tu mapa de fondo */
             background-image: url('fondo-pokemon.jpg'); 
             background-size: contain; 
             background-position: center;
@@ -26,31 +26,30 @@
             overflow: hidden;
         }
 
-        /* CONTENEDOR DE LA POKEDEX - Ahora más grande para móvil */
+        /* CONTENEDOR DE LA POKÉDEX */
         .pokedex-container {
             position: relative;
             width: 95vw; 
-            max-width: 480px; /* Tamaño imponente */
+            max-width: 480px; /* Tamaño ideal para que se vea grande */
             z-index: 10;
-            /* Esta línea permite que el contenido interior se escale proporcionalmente */
             container-type: inline-size; 
         }
 
+        /* La imagen pokedex.png que subiste */
         .pokedex-base {
             width: 100%;
             height: auto;
             display: block;
-            filter: drop-shadow(0 15px 30px rgba(0,0,0,0.7));
+            filter: drop-shadow(0 15px 25px rgba(0,0,0,0.6));
         }
 
-        /* ÁREA DINÁMICA DE LA PANTALLA (HUECO NEGRO) */
+        /* ÁREA DE LA PANTALLA (Ajustada a pokedex.png) */
         .screen-content {
             position: absolute;
-            /* Coordenadas precisas para encajar en el cuadro negro */
-            top: 24.5%;    
-            left: 17.2%;
-            width: 65.5%;
-            height: 40.5%;
+            top: 24.5%;   /* Ajuste vertical */
+            left: 17%;    /* Ajuste horizontal */
+            width: 66%;   /* Ancho del hueco negro */
+            height: 41%;  /* Alto del hueco negro */
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -59,17 +58,16 @@
             padding: 2cqi;
         }
 
-        /* TEXTO QUE CRECE/ENCOGE CON LA POKEDEX */
+        /* TEXTO ESCALABLE */
         .pokedex-msg {
             color: #fff;
-            /* 3.2cqi significa que el texto siempre será el 3.2% del ancho de la Pokedex */
             font-size: 3.2cqi; 
             line-height: 1.6;
             margin-bottom: 2cqi;
             text-transform: uppercase;
         }
 
-        /* SPRITE QUE SE AJUSTA A LA POKEDEX */
+        /* SPRITE ESCALABLE */
         .pokemon-sprite {
             width: 35cqi; 
             image-rendering: pixelated;
