@@ -16,11 +16,10 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: #000; /* Bordes negros para proteger la calidad */
-            
-            /* Fondo con tu mapa 736x1376 */
+            /* CAMBIO CLAVE: Fondo negro para los bordes y ajuste contenido */
+            background-color: #000; 
             background-image: url('fondo-pokemon.jpg'); 
-            background-size: contain; 
+            background-size: contain; /* Ajusta al alto/ancho sin estirar de más */
             background-position: center;
             background-repeat: no-repeat;
             
@@ -28,63 +27,136 @@
             overflow: hidden;
         }
 
-        /* CONTENEDOR DE LA POKEDEX */
-        .pokedex-container {
+        /* Quitamos el body::before para que no le quite brillo a tu imagen original */
+
+        .pokedex {
             position: relative;
-            width: 90%;
-            max-width: 350px; /* Tamaño ideal para móvil */
             z-index: 10;
+            width: 90%;
+            max-width: 320px;
+            background: #e63946;
+            border: 5px solid #1a1a1a;
+            border-radius: 15px 15px 15px 60px;
+            padding: 18px;
+            box-shadow: 10px 10px 0px rgba(0,0,0,0.5);
         }
 
-        /* Tu nueva imagen PNG transparente */
-        .pokedex-base {
-            width: 100%;
-            height: auto;
-            display: block;
-            filter: drop-shadow(0 15px 10px rgba(0,0,0,0.5));
+        .top-design {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 25px;
         }
 
-        /* ÁREA DINÁMICA DE LA PANTALLA */
-        /* Ajustado exactamente al hueco negro de tu imagen */
-        .screen-content {
-            position: absolute;
-            top: 24.5%;   /* Posición vertical */
-            left: 17%;    /* Posición horizontal */
-            width: 66%;   /* Ancho del hueco */
-            height: 40%;  /* Alto del hueco */
+        .blue-lens {
+            width: 55px; height: 55px;
+            background: radial-gradient(circle at 30% 30%, #4cc9f0, #2563eb);
+            border: 4px solid #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(76, 201, 240, 0.5);
+        }
+
+        .lights { display: flex; gap: 6px; margin-top: 5px; }
+        .l { width: 12px; height: 12px; border-radius: 50%; border: 2px solid #1a1a1a; }
+
+        .frame {
+            background: #dedede;
+            border: 4px solid #1a1a1a;
+            border-radius: 10px 10px 10px 40px;
+            padding: 15px 15px 30px 15px;
+            position: relative;
+        }
+
+        .screen {
+            background: #000;
+            min-height: 240px;
+            border-radius: 5px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            text-align: center;
-            pointer-events: none; /* Para que no interfiera si hay botones debajo */
+            padding: 10px;
+            border: 2px solid #333;
         }
 
-        .pokedex-msg {
+        .msg {
             color: #fff;
-            font-size: 8px; /* Ajustado para que no se salga */
-            line-height: 1.6;
-            margin-bottom: 12px;
+            font-size: 10px;
+            line-height: 1.7;
+            text-align: center;
+            margin-bottom: 20px;
             text-transform: uppercase;
         }
 
-        .pokemon-sprite {
-            width: 85px;
-            image-rendering: pixelated; /* Mantiene el estilo retro */
+        .sprite {
+            width: 95px;
+            image-rendering: pixelated;
         }
 
+        .bottom-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 25px;
+        }
+
+        .btn-green {
+            width: 70px; height: 35px;
+            background: #4caf50;
+            border: 3px solid #1a1a1a;
+            border-radius: 5px;
+            box-shadow: 0 4px 0 #2e7d32;
+        }
+
+        .d-pad {
+            width: 55px; height: 55px;
+            background: #2d3436;
+            clip-path: polygon(35% 0%, 65% 0%, 65% 35%, 100% 35%, 100% 65%, 65% 65%, 65% 100%, 35% 100%, 35% 65%, 0% 65%, 0% 35%, 35% 35%);
+        }
+
+        .black-circle {
+            width: 35px; height: 35px;
+            background: #1a1a1a;
+            border-radius: 50%;
+        }
+
+        .top-dots {
+            position: absolute;
+            top: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex; gap: 10px;
+        }
+        .dot { width: 6px; height: 6px; background: #ff4d4d; border-radius: 50%; }
     </style>
 </head>
 <body>
 
-    <div class="pokedex-container">
-        <img src="pokedex.png" class="pokedex-base" alt="Pokedex">
+    <div class="pokedex">
+        <div class="top-design">
+            <div class="blue-lens"></div>
+            <div class="lights">
+                <div class="l" style="background:#ff4d4d"></div>
+                <div class="l" style="background:#ffcc00"></div>
+                <div class="l" style="background:#4caf50"></div>
+            </div>
+        </div>
 
-        <div class="screen-content">
-            <p class="pokedex-msg">
-                UM SENTIMENTO<br>ESTRANHO...<br>GENGAR POR PERTO!
-            </p>
-            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/94.png" class="pokemon-sprite" alt="Gengar">
+        <div class="frame">
+            <div class="top-dots">
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+            <div class="screen">
+                <p class="msg">Um sentimento estranho...<br>Gengar está por perto!</p>
+                <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/94.png" class="sprite" alt="Gengar">
+            </div>
+        </div>
+
+        <div class="bottom-row">
+            <div class="black-circle"></div>
+            <div class="btn-green"></div>
+            <div class="d-pad"></div>
         </div>
     </div>
 
