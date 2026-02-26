@@ -9,85 +9,77 @@
         * { box-sizing: border-box; }
 
         body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #000; 
+            margin: 0; padding: 0;
+            width: 100%; height: 100%;
+            display: flex; align-items: center; justify-content: center;
+            background-color: #000;
             background-image: url('fondo-pokemon.jpg'); 
-            background-size: contain; 
+            background-size: contain;
             background-position: center;
             background-repeat: no-repeat;
             font-family: 'Press Start 2P', cursive;
             overflow: hidden;
         }
 
-        /* CONTENEDOR MAESTRO */
         .pokedex-container {
             position: relative;
-            width: 92vw; /* Casi todo el ancho del móvil */
-            max-width: 450px; /* Para que no se pixele en pantallas grandes */
-            z-index: 10;
+            width: 90vw;
+            max-width: 450px;
             container-type: inline-size;
         }
 
-        /* La imagen de fondo de la Pokedex */
         .pokedex-base {
             width: 100%;
             height: auto;
             display: block;
-            filter: drop-shadow(0 15px 30px rgba(0,0,0,0.8));
+            /* Si la imagen tiene fondo blanco, esto ayuda a que no tape el mapa */
+            mix-blend-mode: multiply; 
         }
 
-        /* CUADRO NEGRO (Ajustado milimétricamente a pokedex.png) */
+        /* --- ESTA ES LA CAJA QUE DEBES MOVER --- */
         .screen-content {
             position: absolute;
-            /* Estos valores son la 'llave' para entrar en el cuadro negro */
-            top: 25.5%;    
-            left: 18.5%;
-            width: 63%;
-            height: 38.5%;
             
+            /* TOCA ESTOS NÚMEROS: */
+            top: 28%;      /* Sube o baja el bloque (Aumenta el número para BAJAR el texto) */
+            left: 18.5%;   /* Mueve a los lados (Aumenta para ir a la DERECHA) */
+            width: 63%;    /* Ancho del cuadro negro */
+            height: 35%;   /* Alto del cuadro negro (Si el Gengar se sale por abajo, reduce este número) */
+
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: space-around; /* Separa el texto del Gengar */
+            justify-content: space-around; /* Mantiene texto arriba y Gengar abajo */
             text-align: center;
-            padding: 1cqi;
+            
+            /* GUÍA VISUAL: Borra esta línea roja cuando ya esté centrado */
+            border: 2px solid red; 
         }
 
-        /* TEXTO ESCALABLE */
         .pokedex-msg {
             color: #fff;
-            font-size: 3cqi; /* Un poquito más pequeño para asegurar que no se salga */
+            font-size: 3.2cqi; 
             line-height: 1.6;
-            text-transform: uppercase;
             margin: 0;
+            text-transform: uppercase;
         }
 
-        /* GENGAR ESCALABLE */
         .pokemon-sprite {
-            width: 35cqi; 
-            height: auto;
+            width: 32cqi; /* Un poco más pequeño para que no se salga */
             image-rendering: pixelated;
         }
-
     </style>
 </head>
 <body>
 
     <div class="pokedex-container">
-        <img src="pokedex.png" class="pokedex-base" alt="Pokedex">
+        <img src="pokedex.png" class="pokedex-base">
 
         <div class="screen-content">
             <p class="pokedex-msg">
                 UM SENTIMENTO<br>ESTRANHO...<br>GENGAR POR PERTO!
             </p>
-            
-            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/94.png" class="pokemon-sprite" alt="Gengar">
+            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/94.png" class="pokemon-sprite">
         </div>
     </div>
 
