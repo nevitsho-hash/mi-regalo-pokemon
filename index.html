@@ -21,17 +21,172 @@
             overflow: hidden;
         }
 
-        /* CUERPO RECTANGULAR CON CURVA A LA DERECHA */
+        /* CUERPO DE LA POKÉDEX CON DEGRADADO Y SOMBRAS */
         .pokedex {
             position: relative;
             width: 85%;
             max-width: 330px;
-            min-height: 550px;
+            min-height: 540px;
             background: linear-gradient(145deg, #ff4d4d, #b91c1c);
-            border: 5px solid #1a1a1a;
-            /* Curva pronunciada en la esquina inferior derecha (80px) */
-            border-radius: 25px 25px 80px 25px; 
+            border: 4px solid #1a1a1a;
+            border-radius: 20px 20px 90px 20px; /* Curva derecha pronunciada */
             display: flex;
             flex-direction: column;
-            box-shadow: inset -8px -8px 0px rgba(0,0,0,0.2), 15px 20px 30px rgba(0,0,0,0.6);
+            box-shadow: 
+                inset -8px -8px 0px rgba(0,0,0,0.2), 
+                15px 20px 30px rgba(0,0,0,0.6);
             z-index: 10;
+        }
+
+        /* DETALLE DE LA BISAGRA LATERAL */
+        .pokedex::before {
+            content: '';
+            position: absolute;
+            left: -10px; top: 50px;
+            width: 15px; height: 80%;
+            background: linear-gradient(to right, #800, #e63946, #800);
+            border: 3px solid #1a1a1a;
+            border-radius: 5px;
+        }
+
+        /* SECCIÓN SUPERIOR */
+        .pokedex-top {
+            display: flex;
+            padding: 20px;
+            border-bottom: 4px solid #1a1a1a;
+            gap: 15px;
+            align-items: flex-start;
+        }
+
+        .big-blue-lens {
+            width: 50px; height: 50px;
+            background: radial-gradient(circle at 30% 30%, #4cc9f0, #2563eb);
+            border: 5px solid #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 15px rgba(76, 201, 240, 0.8), inset -3px -3px 5px rgba(0,0,0,0.5);
+        }
+
+        /* PANTALLA CON EFECTO RETRO */
+        .pokedex-body {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .screen-bezel {
+            background: #d1d1d1;
+            border: 4px solid #1a1a1a;
+            border-radius: 10px 10px 10px 40px;
+            padding: 15px 15px 30px 15px;
+            box-shadow: inset 4px 4px 0px #fff;
+        }
+
+        .screen-black {
+            background: #000;
+            background-image: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                              linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 4px, 3px 100%; /* Efecto Scanlines */
+            border-radius: 5px;
+            min-height: 240px;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            border: 3px solid #444;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pokedex-text {
+            color: #fff; font-size: 8px; line-height: 1.8;
+            text-align: center; margin-bottom: 10px;
+            text-shadow: 2px 2px 0px #000;
+            z-index: 2;
+        }
+
+        .pokemon-sprite {
+            width: 100px;
+            image-rendering: pixelated;
+            filter: drop-shadow(0 0 5px rgba(255,255,255,0.2));
+            z-index: 2;
+        }
+
+        /* CONTROLES INFERIORES */
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+            padding-bottom: 10px;
+        }
+
+        .black-circle {
+            width: 45px; height: 45px;
+            background: radial-gradient(circle at 30% 30%, #444, #111);
+            border-radius: 50%;
+            border: 3px solid #1a1a1a;
+            box-shadow: 2px 2px 0px rgba(255,255,255,0.1);
+        }
+
+        .green-button-long {
+            width: 80px; height: 40px;
+            background: linear-gradient(to bottom, #4caf50, #2e7d32);
+            border: 3px solid #1a1a1a;
+            border-radius: 10px;
+            box-shadow: 0 5px 0 #1b431e, 0 8px 10px rgba(0,0,0,0.3);
+            cursor: pointer;
+            transition: all 0.1s;
+        }
+        
+        .green-button-long:active {
+            transform: translateY(4px);
+            box-shadow: 0 1px 0 #1b431e;
+        }
+
+        .d-pad {
+            width: 60px; height: 60px;
+            background: #222;
+            clip-path: polygon(35% 0%, 65% 0%, 65% 35%, 100% 35%, 100% 65%, 65% 65%, 65% 100%, 35% 100%, 35% 65%, 0% 65%, 0% 35%, 35% 35%);
+            filter: drop-shadow(2px 2px 0px #000);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="pokedex">
+        <div class="pokedex-top">
+            <div class="big-blue-lens"></div>
+            <div style="display:flex; gap:5px;">
+                <div style="width:10px; height:10px; background:#ff4d4d; border-radius:50%; border:2px solid #000;"></div>
+                <div style="width:10px; height:10px; background:#ffcc00; border-radius:50%; border:2px solid #000;"></div>
+                <div style="width:10px; height:10px; background:#4caf50; border-radius:50%; border:2px solid #000;"></div>
+            </div>
+        </div>
+
+        <div class="pokedex-body">
+            <div class="screen-bezel">
+                <div class="screen-black">
+                    <p class="pokedex-text">
+                        UM SENTIMENTO<br>ESTRANHO...<br>GENGAR POR PERTO!
+                    </p>
+                    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/94.png" class="pokemon-sprite">
+                </div>
+            </div>
+
+            <div class="controls">
+                <div class="black-circle"></div>
+                <div class="green-button-long" onclick="iniciarCaptura()"></div>
+                <div class="d-pad"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function iniciarCaptura() {
+            // Aquí añadiremos la magia de la sorpresa más adelante
+            alert("¡Iniciando protocolo de captura!");
+        }
+    </script>
+</body>
+</html>
