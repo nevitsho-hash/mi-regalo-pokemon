@@ -17,7 +17,6 @@
             align-items: center;
             justify-content: center;
             background-color: #000; 
-            /* Tu fondo de mapa nítido */
             background-image: url('fondo-pokemon.jpg'); 
             background-size: contain;
             background-position: center;
@@ -32,43 +31,41 @@
             width: 90%;
             max-width: 340px;
             z-index: 10;
-            display: flex;
-            justify-content: center;
-            align-items: center;
         }
 
-        /* La imagen que subiste a GitHub */
         .pokedex-img {
             width: 100%;
             height: auto;
             display: block;
+            /* Esto ayuda a que si la imagen tiene fondo blanco, se mezcle mejor */
+            mix-blend-mode: multiply; 
         }
 
-        /* ÁREA DE LA PANTALLA (Capa invisible sobre la imagen) */
+        /* AJUSTE PRECISO DE LA PANTALLA */
         .screen-area {
             position: absolute;
-            top: 22%;    /* Ajustado para caer justo en el hueco negro */
-            left: 15%;
-            width: 70%;
-            height: 45%;
+            /* Estas coordenadas posicionan el contenido dentro del cuadro negro */
+            top: 25%;    
+            left: 17.5%;
+            width: 65%;
+            height: 40%;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 10px;
         }
 
         .msg {
             color: #fff;
-            font-size: 8px;
-            line-height: 1.6;
-            margin-bottom: 15px;
+            font-size: 7px; /* Más pequeño para que quepa bien */
+            line-height: 1.5;
+            margin-bottom: 10px;
             text-transform: uppercase;
         }
 
         .gengar {
-            width: 80px;
+            width: 70px;
             image-rendering: pixelated;
         }
     </style>
@@ -76,11 +73,11 @@
 <body>
 
     <div class="pokedex-wrapper">
-        <img src="pokedex.png" class="pokedex-img" alt="Pokedex Case">
+        <img src="pokedex.png" class="pokedex-img" alt="Pokedex">
 
         <div class="screen-area">
             <p class="msg">
-                Um sentimento estranho...<br>Gengar está por perto!
+                GENGAR ESTÁ<br>POR PERTO!
             </p>
             <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/94.png" class="gengar" alt="Gengar">
         </div>
