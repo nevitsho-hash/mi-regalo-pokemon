@@ -16,27 +16,25 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: #000; /* Bordes negros para proteger la calidad */
-            
-            /* Fondo con tu mapa 736x1376 */
+            background-color: #000; 
             background-image: url('fondo-pokemon.jpg'); 
             background-size: contain; 
             background-position: center;
             background-repeat: no-repeat;
-            
             font-family: 'Press Start 2P', cursive;
             overflow: hidden;
         }
 
-        /* CONTENEDOR DE LA POKEDEX */
+        /* CONTENEDOR DE LA POKEDEX - Ahora más grande */
         .pokedex-container {
             position: relative;
-            width: 90%;
-            max-width: 350px; /* Tamaño ideal para móvil */
+            width: 95%; /* Ocupa casi todo el ancho en móviles pequeños */
+            max-width: 500px; /* Aumentado de 350px a 500px para que se vea grande */
             z-index: 10;
+            /* Esta línea es mágica: permite que el contenido se escale con la Pokedex */
+            container-type: inline-size; 
         }
 
-        /* Tu nueva imagen PNG transparente */
         .pokedex-base {
             width: 100%;
             height: auto;
@@ -45,32 +43,36 @@
         }
 
         /* ÁREA DINÁMICA DE LA PANTALLA */
-        /* Ajustado exactamente al hueco negro de tu imagen */
         .screen-content {
             position: absolute;
-            top: 24.5%;   /* Posición vertical */
-            left: 17%;    /* Posición horizontal */
-            width: 66%;   /* Ancho del hueco */
-            height: 40%;  /* Alto del hueco */
+            top: 24.5%;   
+            left: 17%;    
+            width: 66%;   
+            height: 40%;  
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             text-align: center;
-            pointer-events: none; /* Para que no interfiera si hay botones debajo */
+            pointer-events: none; 
         }
 
+        /* TEXTO ESCALABLE - Ahora usa 'cqi' */
         .pokedex-msg {
             color: #fff;
-            font-size: 8px; /* Ajustado para que no se salga */
+            /* 3.2cqi significa que el tamaño es el 3.2% del ancho de la Pokedex. 
+               Si la Pokedex se hace pequeña, el texto se hace pequeño. */
+            font-size: 3.2cqi; 
             line-height: 1.6;
-            margin-bottom: 12px;
+            margin-bottom: 2cqi; 
             text-transform: uppercase;
         }
 
+        /* GENGAR ESCALABLE - Ahora usa 'cqi' */
         .pokemon-sprite {
-            width: 85px;
-            image-rendering: pixelated; /* Mantiene el estilo retro */
+            /* Gengar siempre ocupará el 35% del ancho de la Pokédex */
+            width: 35cqi; 
+            image-rendering: pixelated; 
         }
 
     </style>
@@ -82,7 +84,7 @@
 
         <div class="screen-content">
             <p class="pokedex-msg">
-                UM SENTIMENTO<br>ESTRANHO...<br>GENGAR POR PERTO!
+                GENGAR ESTÁ CERCA!
             </p>
             <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/94.png" class="pokemon-sprite" alt="Gengar">
         </div>
