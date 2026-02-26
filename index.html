@@ -17,7 +17,6 @@
             align-items: center;
             justify-content: center;
             background-color: #000; 
-            /* Tu mapa de fondo */
             background-image: url('fondo-pokemon.jpg'); 
             background-size: contain; 
             background-position: center;
@@ -26,16 +25,15 @@
             overflow: hidden;
         }
 
-        /* CONTENEDOR DE LA POKÉDEX */
+        /* CONTENEDOR DE LA POKÉDEX (Como la Imagen 1) */
         .pokedex-container {
             position: relative;
-            width: 95vw; 
-            max-width: 480px; /* Tamaño ideal para que se vea grande */
+            width: 90vw; 
+            max-width: 480px; 
             z-index: 10;
-            container-type: inline-size; 
+            container-type: inline-size; /* Permite que el contenido se auto-ajuste */
         }
 
-        /* La imagen pokedex.png que subiste */
         .pokedex-base {
             width: 100%;
             height: auto;
@@ -43,34 +41,38 @@
             filter: drop-shadow(0 15px 25px rgba(0,0,0,0.6));
         }
 
-        /* ÁREA DE LA PANTALLA (Ajustada a pokedex.png) */
+        /* CUADRO NEGRO DE LA PANTALLA */
         .screen-content {
             position: absolute;
-            top: 24.5%;   /* Ajuste vertical */
-            left: 17%;    /* Ajuste horizontal */
-            width: 66%;   /* Ancho del hueco negro */
-            height: 41%;  /* Alto del hueco negro */
+            /* Coordenadas ajustadas para la nueva pokedex.png */
+            top: 23%;    
+            left: 16.5%;
+            width: 67%;
+            height: 42%;
+            
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: space-between; /* Empuja el texto arriba y Gengar abajo */
             text-align: center;
-            padding: 2cqi;
+            padding: 4cqi 2cqi; /* Margen interno para que nada toque los bordes */
         }
 
-        /* TEXTO ESCALABLE */
+        /* TEXTO (Igual a la distribución de la imagen) */
         .pokedex-msg {
             color: #fff;
             font-size: 3.2cqi; 
-            line-height: 1.6;
-            margin-bottom: 2cqi;
+            line-height: 1.7;
             text-transform: uppercase;
+            margin: 0;
         }
 
-        /* SPRITE ESCALABLE */
+        /* SPRITE DE GENGAR */
         .pokemon-sprite {
             width: 35cqi; 
+            height: auto;
             image-rendering: pixelated;
+            margin-bottom: 2cqi; /* Un poco de espacio abajo */
         }
 
     </style>
@@ -84,6 +86,7 @@
             <p class="pokedex-msg">
                 UM SENTIMENTO<br>ESTRANHO...<br>GENGAR POR PERTO!
             </p>
+            
             <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/94.png" class="pokemon-sprite" alt="Gengar">
         </div>
     </div>
