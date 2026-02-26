@@ -25,50 +25,50 @@
             overflow: hidden;
         }
 
-        /* CONTENEDOR DE LA POKÉDEX - Grande como en la Imagen 1 */
+        /* CONTENEDOR MAESTRO */
         .pokedex-container {
             position: relative;
-            width: 90vw; 
-            max-width: 480px; 
+            width: 92vw; /* Casi todo el ancho del móvil */
+            max-width: 450px; /* Para que no se pixele en pantallas grandes */
             z-index: 10;
             container-type: inline-size;
         }
 
+        /* La imagen de fondo de la Pokedex */
         .pokedex-base {
             width: 100%;
             height: auto;
             display: block;
-            /* Filtro para dar profundidad */
-            filter: drop-shadow(0 15px 30px rgba(0,0,0,0.7));
+            filter: drop-shadow(0 15px 30px rgba(0,0,0,0.8));
         }
 
-        /* AJUSTE MILIMÉTRICO DEL ÁREA NEGRA */
+        /* CUADRO NEGRO (Ajustado milimétricamente a pokedex.png) */
         .screen-content {
             position: absolute;
-            /* Coordenadas específicas para el hueco de pokedex.png */
-            top: 24%;    
-            left: 17%;
-            width: 66%;
-            height: 40%;
+            /* Estos valores son la 'llave' para entrar en el cuadro negro */
+            top: 25.5%;    
+            left: 18.5%;
+            width: 63%;
+            height: 38.5%;
             
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center; /* Centra el bloque de contenido */
+            justify-content: space-around; /* Separa el texto del Gengar */
             text-align: center;
+            padding: 1cqi;
         }
 
-        /* MENSAJE DE TEXTO */
+        /* TEXTO ESCALABLE */
         .pokedex-msg {
             color: #fff;
-            /* Tamaño fluido: se ajusta si la Pokédex se agranda */
-            font-size: 3.2cqi; 
+            font-size: 3cqi; /* Un poquito más pequeño para asegurar que no se salga */
             line-height: 1.6;
             text-transform: uppercase;
-            margin: 0 0 15% 0; /* Empuja el texto hacia arriba del Gengar */
+            margin: 0;
         }
 
-        /* GENGAR */
+        /* GENGAR ESCALABLE */
         .pokemon-sprite {
             width: 35cqi; 
             height: auto;
