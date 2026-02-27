@@ -21,32 +21,20 @@
             overflow: hidden;
         }
 
-        /* CUERPO DE LA POKÉDEX CON DEGRADADO Y SOMBRAS */
+        /* CUERPO RECTANGULAR CON CURVA A LA DERECHA */
         .pokedex {
             position: relative;
             width: 85%;
-            max-width: 330px;
-            min-height: 540px;
+            max-width: 340px;
+            min-height: 560px;
             background: linear-gradient(145deg, #ff4d4d, #b91c1c);
-            border: 4px solid #1a1a1a;
-            border-radius: 20px 20px 90px 20px; /* Curva derecha pronunciada */
+            border: 5px solid #1a1a1a;
+            /* Curva pronunciada en la esquina inferior derecha */
+            border-radius: 25px 25px 90px 25px; 
             display: flex;
             flex-direction: column;
-            box-shadow: 
-                inset -8px -8px 0px rgba(0,0,0,0.2), 
-                15px 20px 30px rgba(0,0,0,0.6);
+            box-shadow: inset -8px -8px 0px rgba(0,0,0,0.2), 15px 20px 30px rgba(0,0,0,0.6);
             z-index: 10;
-        }
-
-        /* DETALLE DE LA BISAGRA LATERAL */
-        .pokedex::before {
-            content: '';
-            position: absolute;
-            left: -10px; top: 50px;
-            width: 15px; height: 80%;
-            background: linear-gradient(to right, #800, #e63946, #800);
-            border: 3px solid #1a1a1a;
-            border-radius: 5px;
         }
 
         /* SECCIÓN SUPERIOR */
@@ -55,63 +43,65 @@
             padding: 20px;
             border-bottom: 4px solid #1a1a1a;
             gap: 15px;
-            align-items: flex-start;
+            align-items: center;
         }
 
         .big-blue-lens {
             width: 50px; height: 50px;
             background: radial-gradient(circle at 30% 30%, #4cc9f0, #2563eb);
-            border: 5px solid #fff;
+            border: 4px solid #fff;
             border-radius: 50%;
             box-shadow: 0 0 15px rgba(76, 201, 240, 0.8), inset -3px -3px 5px rgba(0,0,0,0.5);
         }
 
-        /* PANTALLA CON EFECTO RETRO */
+        .small-lights { display: flex; gap: 8px; }
+        .dot { width: 12px; height: 12px; border-radius: 50%; border: 2px solid #1a1a1a; }
+
+        /* PANTALLA Y CONTENIDO GRANDE */
         .pokedex-body {
             padding: 20px;
             flex-grow: 1;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 15px;
         }
 
         .screen-bezel {
-            background: #d1d1d1;
+            background: #e0e0e0;
             border: 4px solid #1a1a1a;
-            border-radius: 10px 10px 10px 40px;
+            border-radius: 12px 12px 12px 45px;
             padding: 15px 15px 30px 15px;
-            box-shadow: inset 4px 4px 0px #fff;
+            box-shadow: inset 3px 3px 0px #fff;
         }
 
         .screen-black {
             background: #000;
-            background-image: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
-                              linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-            background-size: 100% 4px, 3px 100%; /* Efecto Scanlines */
+            background-image: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), 
+                              linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            background-size: 100% 4px, 3px 100%;
             border-radius: 5px;
-            min-height: 240px;
+            min-height: 260px;
             display: flex; flex-direction: column;
             align-items: center; justify-content: center;
-            border: 3px solid #444;
-            position: relative;
-            overflow: hidden;
+            border: 3px solid #333;
+            padding: 15px;
         }
 
         .pokedex-text {
-            color: #fff; font-size: 8px; line-height: 1.8;
-            text-align: center; margin-bottom: 10px;
-            text-shadow: 2px 2px 0px #000;
-            z-index: 2;
+            color: #fff; 
+            font-size: 11px; /* Letras más grandes */
+            line-height: 1.6;
+            text-align: center; 
+            margin-bottom: 20px; 
+            text-transform: uppercase;
         }
 
         .pokemon-sprite {
-            width: 100px;
+            width: 130px; /* Gengar más grande */
             image-rendering: pixelated;
-            filter: drop-shadow(0 0 5px rgba(255,255,255,0.2));
-            z-index: 2;
         }
 
-        /* CONTROLES INFERIORES */
+        /* CONTROLES */
         .controls {
             display: flex;
             justify-content: space-between;
@@ -122,34 +112,31 @@
 
         .black-circle {
             width: 45px; height: 45px;
-            background: radial-gradient(circle at 30% 30%, #444, #111);
+            background: #333;
             border-radius: 50%;
-            border: 3px solid #1a1a1a;
-            box-shadow: 2px 2px 0px rgba(255,255,255,0.1);
+            border: 4px solid #1a1a1a;
         }
 
-        .green-button-long {
-            width: 80px; height: 40px;
+        .green-button {
+            width: 95px; height: 48px;
             background: linear-gradient(to bottom, #4caf50, #2e7d32);
-            border: 3px solid #1a1a1a;
+            border: 4px solid #1a1a1a;
             border-radius: 10px;
-            box-shadow: 0 5px 0 #1b431e, 0 8px 10px rgba(0,0,0,0.3);
+            box-shadow: 0 5px 0 #1b431e;
             cursor: pointer;
-            transition: all 0.1s;
+            transition: 0.1s;
         }
         
-        .green-button-long:active {
+        .green-button:active {
             transform: translateY(4px);
             box-shadow: 0 1px 0 #1b431e;
         }
 
         .d-pad {
-            width: 60px; height: 60px;
-            background: #222;
+            width: 65px; height: 65px;
+            background: #333;
             clip-path: polygon(35% 0%, 65% 0%, 65% 35%, 100% 35%, 100% 65%, 65% 65%, 65% 100%, 35% 100%, 35% 65%, 0% 65%, 0% 35%, 35% 35%);
-            filter: drop-shadow(2px 2px 0px #000);
         }
-
     </style>
 </head>
 <body>
@@ -157,10 +144,10 @@
     <div class="pokedex">
         <div class="pokedex-top">
             <div class="big-blue-lens"></div>
-            <div style="display:flex; gap:5px;">
-                <div style="width:10px; height:10px; background:#ff4d4d; border-radius:50%; border:2px solid #000;"></div>
-                <div style="width:10px; height:10px; background:#ffcc00; border-radius:50%; border:2px solid #000;"></div>
-                <div style="width:10px; height:10px; background:#4caf50; border-radius:50%; border:2px solid #000;"></div>
+            <div class="small-lights">
+                <div class="dot" style="background:#ff4d4d"></div>
+                <div class="dot" style="background:#ffcc00"></div>
+                <div class="dot" style="background:#4caf50"></div>
             </div>
         </div>
 
@@ -170,13 +157,13 @@
                     <p class="pokedex-text">
                         UM SENTIMENTO<br>ESTRANHO...<br>GENGAR POR PERTO!
                     </p>
-                    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/94.png" class="pokemon-sprite">
+                    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/94.png" class="pokemon-sprite" alt="Gengar">
                 </div>
             </div>
 
             <div class="controls">
                 <div class="black-circle"></div>
-                <div class="green-button-long" onclick="iniciarCaptura()"></div>
+                <div class="green-button" onclick="iniciarCaptura()"></div>
                 <div class="d-pad"></div>
             </div>
         </div>
@@ -184,8 +171,13 @@
 
     <script>
         function iniciarCaptura() {
-            // Aquí añadiremos la magia de la sorpresa más adelante
-            alert("¡Iniciando protocolo de captura!");
+            // Animación sencilla de parpadeo antes de la sorpresa
+            const screen = document.querySelector('.screen-black');
+            screen.style.backgroundColor = '#fff';
+            setTimeout(() => {
+                screen.style.backgroundColor = '#000';
+                alert("¡Iniciando protocolo de captura!");
+            }, 100);
         }
     </script>
 </body>
