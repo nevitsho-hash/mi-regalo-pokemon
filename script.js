@@ -1,5 +1,5 @@
 const pokemonDB = {
-    "PIKACHU": { text: "¡HAS ENCONTRADO<br>A PIKACHU!<br>EL RATON ELECTRICO", sprite: "pikachu.png" },
+    "BEAUTIFLY": { text: "¡MIRA ESA BEAUTIFLY!<br>SUS ALAS SON BELLAS,<br>¡PERO TU ERES MAS<br>QUE CUALQUIER POKEMON!", sprite: "beautifly.png" },
     "SNORLAX": { text: "¡HAS ENCONTRADO<br>A SNORLAX!<br>DORMILON POR EXCELENCIA", sprite: "snorlax.png" },
     "SWALOT": { text: "¡HAS ENCONTRADO<br>A SWALOT!<br>EL POKEMON BOLSA", sprite: "swalot.png" },
     "TOTODILE": { text: "¡HAS ENCONTRADO<br>A TOTODILE!<br>EL COCODRILO ALEGRE", sprite: "totodile.png" },
