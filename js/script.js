@@ -1,12 +1,11 @@
-// 1. Configuración de Sonidos (Rutas relativas desde la raíz)
-const sonidoBoton = new Audio('assets/snd/clic.mp3');
-const sonidoCaptura = new Audio('assets/snd/captura.wav');
+// Asegúrate de que en GitHub los archivos se llamen exactamente así (MAYÚSCULAS)
+const sonidoBoton = new Audio('assets/snd/CLIC.MP3');
+const sonidoCaptura = new Audio('assets/snd/CAPTURA.WAV');
 
-// 2. Base de Datos (Asegúrate de que los nombres coincidan con tus QR)
 const pokemonDB = {
     "BEAUTIFLY": { 
         text: "¡MIRA ESA BEAUTIFLY!<br>SUS ALAS SON BELLAS,<br>¡PERO TU ERES MAS<br>QUE CUALQUIER POKEMON!", 
-        sprite: "assets/img/BEAUTIFLY.PNG" // Ruta en mayúsculas
+        sprite: "assets/img/BEAUTIFLY.PNG" 
     },
     "SNORLAX": { 
         text: "¡HAS ENCONTRADO<br>A SNORLAX!<br>BLOQUEA EL CAMINO,<br>PERO NO A MI CORAZON", 
@@ -37,8 +36,8 @@ const pokemonDB = {
 let html5QrCode;
 
 function activarEscaner() {
-    // Intentar sonido del botón
-    sonidoBoton.play().catch(e => console.log("Sonido clic bloqueado"));
+    // Intentar sonido (ahora en mayúsculas)
+    sonidoBoton.play().catch(e => console.log("Audio de clic falló"));
 
     document.getElementById('pokedex-content').style.display = 'none';
     document.getElementById('reader').style.display = 'block';
@@ -53,27 +52,18 @@ function activarEscaner() {
         { facingMode: "environment" }, 
         config,
         (decodedText) => {
-            console.log("QR Detectado:", decodedText); // Ver qué lee el móvil
             let code = decodedText.toUpperCase().trim();
-            
             if (pokemonDB[code]) {
                 actualizarPantalla(pokemonDB[code]);
-            } else {
-                actualizarPantalla({ 
-                    text: "QR NO VALIDO:<br>" + code, 
-                    sprite: "assets/img/gengar.png" 
-                });
             }
             html5QrCode.stop();
         }
-    ).catch((err) => {
-        console.error("Error al iniciar cámara:", err);
-    });
+    ).catch((err) => console.error(err));
 }
 
 function actualizarPantalla(data) {
-    // Intentar sonido de captura
-    sonidoCaptura.play().catch(e => console.log("Sonido captura bloqueado"));
+    // Intentar sonido (ahora en mayúsculas)
+    sonidoCaptura.play().catch(e => console.log("Audio de captura falló"));
 
     document.getElementById('reader').style.display = 'none';
     document.getElementById('pokedex-content').style.display = 'flex';
