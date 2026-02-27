@@ -4,13 +4,34 @@ const sonidoCaptura = new Audio('assets/snd/captura.wav');
 
 // 2. Base de Datos (Asegúrate de que los nombres coincidan con tus QR)
 const pokemonDB = {
-    "BEAUTIFLY": { text: "¡MIRA ESA BEAUTIFLY!<br>SUS ALAS SON BELLAS,<br>¡PERO TU ERES MAS<br>QUE CUALQUIER POKEMON!", sprite: "assets/img/beautifly.png" },
-    "SNORLAX": { text: "¡HAS ENCONTRADO<br>A SNORLAX!<br>BLOQUEA EL CAMINO,<br>PERO NO A MI CORAZON", sprite: "assets/img/snorlax.png" },
-    "SWALOT": { text: "¡HAS ENCONTRADO<br>A SWALOT!<br>EL POKEMON BOLSA", sprite: "assets/img/swalot.png" },
-    "TOTODILE": { text: "¡HAS ENCONTRADO<br>A TOTODILE!<br>EL COCODRILO ALEGRE", sprite: "assets/img/totodile.png" },
-    "UMBREON": { text: "¡HAS ENCONTRADO<br>A UMBREON!<br>LUZ EN LA OSCURIDAD", sprite: "assets/img/umbreon.png" },
-    "JIGGLYPUFF": { text: "¡HAS ENCONTRADO<br>A JIGGLYPUFF!<br>CUIDADO CON SU CANTO", sprite: "assets/img/jigglypuff.png" },
-    "GENGAR": { text: "¡HAS ENCONTRADO<br>A GENGAR!<br>LA SOMBRA TRAVIESA", sprite: "assets/img/gengar.png" }
+    "BEAUTIFLY": { 
+        text: "¡MIRA ESA BEAUTIFLY!<br>SUS ALAS SON BELLAS,<br>¡PERO TU ERES MAS<br>QUE CUALQUIER POKEMON!", 
+        sprite: "assets/img/BEAUTIFLY.PNG" // Ruta en mayúsculas
+    },
+    "SNORLAX": { 
+        text: "¡HAS ENCONTRADO<br>A SNORLAX!<br>BLOQUEA EL CAMINO,<br>PERO NO A MI CORAZON", 
+        sprite: "assets/img/SNORLAX.PNG" 
+    },
+    "SWALOT": { 
+        text: "¡HAS ENCONTRADO<br>A SWALOT!<br>EL POKEMON BOLSA", 
+        sprite: "assets/img/SWALOT.PNG" 
+    },
+    "TOTODILE": { 
+        text: "¡HAS ENCONTRADO<br>A TOTODILE!<br>EL COCODRILO ALEGRE", 
+        sprite: "assets/img/TOTODILE.PNG" 
+    },
+    "UMBREON": { 
+        text: "¡HAS ENCONTRADO<br>A UMBREON!<br>LUZ EN LA OSCURIDAD", 
+        sprite: "assets/img/UMBREON.PNG" 
+    },
+    "JIGGLYPUFF": { 
+        text: "¡HAS ENCONTRADO<br>A JIGGLYPUFF!<br>CUIDADO CON SU CANTO", 
+        sprite: "assets/img/JIGGLYPUFF.PNG" 
+    },
+    "GENGAR": { 
+        text: "¡HAS ENCONTRADO<br>A GENGAR!<br>LA SOMBRA TRAVIESA", 
+        sprite: "assets/img/GENGAR.PNG" 
+    }
 };
 
 let html5QrCode;
