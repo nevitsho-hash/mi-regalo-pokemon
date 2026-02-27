@@ -1,4 +1,3 @@
-// Asegúrate de que en GitHub los archivos se llamen exactamente así (MAYÚSCULAS)
 const sonidoBoton = new Audio('assets/snd/CLIC.MP3');
 const sonidoCaptura = new Audio('assets/snd/CAPTURA.WAV');
 
@@ -33,24 +32,17 @@ const pokemonDB = {
     }
 };
 
-let html5QrCode;
-
 function activarEscaner() {
-    // Intentar sonido (ahora en mayúsculas)
-    sonidoBoton.play().catch(e => console.log("Audio de clic falló"));
+    // Forzamos el sonido al interactuar
+    sonidoBoton.play().catch(() => console.log("Sonido bloqueado"));
 
     document.getElementById('pokedex-content').style.display = 'none';
     document.getElementById('reader').style.display = 'block';
 
-    if (!html5QrCode) {
-        html5QrCode = new Html5Qrcode("reader");
-    }
-
-    const config = { fps: 10, qrbox: { width: 250, height: 250 } };
-
+    const html5QrCode = new Html5Qrcode("reader");
     html5QrCode.start(
         { facingMode: "environment" }, 
-        config,
+        { fps: 10, qrbox: 250 },
         (decodedText) => {
             let code = decodedText.toUpperCase().trim();
             if (pokemonDB[code]) {
@@ -58,15 +50,25 @@ function activarEscaner() {
             }
             html5QrCode.stop();
         }
-    ).catch((err) => console.error(err));
+    ).catch(err => console.error(err));
 }
 
 function actualizarPantalla(data) {
-    // Intentar sonido (ahora en mayúsculas)
-    sonidoCaptura.play().catch(e => console.log("Audio de captura falló"));
+    // Intentar sonido de captura
+    sonidoCaptura.play().catch(() => console.log("Sonido captura bloqueado"));
 
     document.getElementById('reader').style.display = 'none';
     document.getElementById('pokedex-content').style.display = 'flex';
     document.getElementById('main-text').innerHTML = data.text;
-    document.getElementById('main-sprite').src = data.sprite;
+    
+    // Cambiamos la imagen
+    const imgElement = document.getElementById('main-sprite');
+    imgElement.src = data.sprite;
+    
+    // Si la imagen falla (error 404), intentamos cargarla en minúsculas automáticamente
+    imgElement.onerror = function() {
+        if (this.src.includes('.PNG')) {
+            this.src = this.src.replace('.PNG', '.png').toLowerCase();
+        }
+    };
 }
