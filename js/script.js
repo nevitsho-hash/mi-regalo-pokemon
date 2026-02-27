@@ -1,43 +1,43 @@
-// 1. Definimos los sonidos con sus extensiones correctas
-const sonidoBoton = new Audio('clic.mp3');
-const sonidoCaptura = new Audio('captura.wav');
+// 1. RUTAS DE SONIDOS ACTUALIZADAS
+const sonidoBoton = new Audio('assets/snd/clic.mp3');
+const sonidoCaptura = new Audio('assets/snd/captura.wav');
 
-// --- BASE DE DATOS DE TUS POKÉMON ---
+// 2. BASE DE DATOS CON RUTAS DE IMÁGENES ACTUALIZADAS
 const pokemonDB = {
     "BEAUTIFLY": { 
         text: "¡MIRA ESA BEAUTIFLY!<br>SUS ALAS SON BELLAS,<br>¡PERO TU ERES MAS<br>QUE CUALQUIER POKEMON!", 
-        sprite: "beautifly.png" 
+        sprite: "assets/img/beautifly.png" 
     },
     "SNORLAX": { 
         text: "¡HAS ENCONTRADO<br>A SNORLAX!<br>BLOQUEA EL CAMINO,<br>PERO NO A MI CORAZON", 
-        sprite: "snorlax.png" 
+        sprite: "assets/img/snorlax.png" 
     },
     "SWALOT": { 
         text: "¡HAS ENCONTRADO<br>A SWALOT!<br>EL POKEMON BOLSA", 
-        sprite: "swalot.png" 
+        sprite: "assets/img/swalot.png" 
     },
     "TOTODILE": { 
         text: "¡HAS ENCONTRADO<br>A TOTODILE!<br>EL COCODRILO ALEGRE", 
-        sprite: "totodile.png" 
+        sprite: "assets/img/totodile.png" 
     },
     "UMBREON": { 
         text: "¡HAS ENCONTRADO<br>A UMBREON!<br>LUZ EN LA OSCURIDAD", 
-        sprite: "umbreon.png" 
+        sprite: "assets/img/umbreon.png" 
     },
     "JIGGLYPUFF": { 
         text: "¡HAS ENCONTRADO<br>A JIGGLYPUFF!<br>CUIDADO CON SU CANTO", 
-        sprite: "jigglypuff.png" 
+        sprite: "assets/img/jigglypuff.png" 
     },
     "GENGAR": { 
         text: "¡HAS ENCONTRADO<br>A GENGAR!<br>LA SOMBRA TRAVIESA", 
-        sprite: "gengar.png" 
+        sprite: "assets/img/gengar.png" 
     }
 };
 
 let html5QrCode;
 
 function activarEscaner() {
-    // 2. Sonido al pulsar el botón verde
+    // Sonido al pulsar botón verde
     sonidoBoton.play();
 
     document.getElementById('pokedex-content').style.display = 'none';
@@ -54,7 +54,10 @@ function activarEscaner() {
             if (pokemonDB[code]) {
                 actualizarPantalla(pokemonDB[code]);
             } else {
-                actualizarPantalla({ text: "ERROR:<br>POKEMON NO<br>REGISTRADO", sprite: "gengar.png" });
+                actualizarPantalla({ 
+                    text: "ERROR:<br>POKEMON NO<br>REGISTRADO", 
+                    sprite: "assets/img/gengar.png" 
+                });
             }
             html5QrCode.stop();
         }
@@ -66,7 +69,7 @@ function activarEscaner() {
 }
 
 function actualizarPantalla(data) {
-    // 3. Sonido cuando aparece el Pokémon en pantalla
+    // Sonido de captura exitosa
     sonidoCaptura.play(); 
 
     document.getElementById('reader').style.display = 'none';
