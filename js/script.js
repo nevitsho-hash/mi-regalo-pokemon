@@ -1,8 +1,11 @@
-// 1. RUTAS DE SONIDOS ACTUALIZADAS
+// 1. Forzamos la carga de sonidos con rutas relativas a la raíz
 const sonidoBoton = new Audio('assets/snd/clic.mp3');
 const sonidoCaptura = new Audio('assets/snd/captura.wav');
 
-// 2. BASE DE DATOS CON RUTAS DE IMÁGENES ACTUALIZADAS
+// Ajustes de compatibilidad
+sonidoBoton.preload = 'auto';
+sonidoCaptura.preload = 'auto';
+
 const pokemonDB = {
     "BEAUTIFLY": { 
         text: "¡MIRA ESA BEAUTIFLY!<br>SUS ALAS SON BELLAS,<br>¡PERO TU ERES MAS<br>QUE CUALQUIER POKEMON!", 
@@ -37,8 +40,8 @@ const pokemonDB = {
 let html5QrCode;
 
 function activarEscaner() {
-    // Sonido al pulsar botón verde
-    sonidoBoton.play();
+    // Intentar reproducir sonido del botón (clic)
+    sonidoBoton.play().catch(e => console.warn("Audio bloqueado inicialmente:", e));
 
     document.getElementById('pokedex-content').style.display = 'none';
     document.getElementById('reader').style.display = 'block';
@@ -69,8 +72,8 @@ function activarEscaner() {
 }
 
 function actualizarPantalla(data) {
-    // Sonido de captura exitosa
-    sonidoCaptura.play(); 
+    // Sonido de captura
+    sonidoCaptura.play().catch(e => console.warn("Error al sonar captura:", e));
 
     document.getElementById('reader').style.display = 'none';
     document.getElementById('pokedex-content').style.display = 'flex';
