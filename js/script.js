@@ -1,8 +1,8 @@
-// 1. Sonidos base (Rutas corregidas a tu carpeta sng)
+// 1. Sonidos base
 const sonidoBoton = new Audio('assets/sng/clic.mp3');
 const sonidoCaptura = new Audio('assets/sng/captura.wav');
 
-// 2. Base de datos con rutas a imágenes y sonidos individuales
+// 2. Base de datos (Asegúrate de que los archivos coincidan en Assets/Img y Assets/Sng)
 const pokemonDB = {
     "BEAUTIFLY": { 
         text: "¡MIRA ESA BEAUTIFLY!<br>SUS ALAS SON BELLAS,<br>¡PERO TU ERES MAS<br>QUE CUALQUIER POKEMON!", 
@@ -44,10 +44,8 @@ const pokemonDB = {
 let html5QrCode;
 
 function activarEscaner() {
-    // Sonido de clic al pulsar el botón verde
     sonidoBoton.play().catch(() => {});
     
-    // Resetear la vista: ocultar contenido y mostrar cámara
     document.getElementById('pokedex-content').style.display = 'none';
     document.getElementById('reader').style.display = 'block';
 
@@ -64,31 +62,30 @@ function activarEscaner() {
             let code = decodedText.toUpperCase().trim();
             if (pokemonDB[code]) {
                 const data = pokemonDB[code];
-                // Detenemos la cámara y actualizamos la pantalla
                 html5QrCode.stop().then(() => {
                     actualizarPantalla(data);
                 });
             }
         }
-    ).catch((err) => {
-        console.error("Error al iniciar cámara:", err);
-    });
+    ).catch((err) => console.error(err));
 }
 
 function actualizarPantalla(data) {
-    // 1. Cambios visuales
+    // Primero mostramos la imagen y el texto
     document.getElementById('reader').style.display = 'none';
     document.getElementById('pokedex-content').style.display = 'flex';
     document.getElementById('main-text').innerHTML = data.text;
     document.getElementById('main-sprite').src = data.sprite;
 
-    // 2. Secuencia de Audio automática
-    // Primero el sonido de captura general
-    sonidoCaptura.play().catch(e => console.log("Error sonido captura:", e));
-    
-    // Luego el grito personalizado del Pokémon (retraso de 1.2 segundos)
+    // SECUENCIA DE SONIDO CON PAUSA
+    // Esperamos 500ms (medio segundo) para que el ojo vea al Pokémon antes del sonido
     setTimeout(() => {
-        const audioGrito = new Audio(data.cry);
-        audioGrito.play().catch(e => console.log("No se encontró el grito:", e));
-    }, 1200);
+        sonidoCaptura.play().catch(e => console.log("Error captura:", e));
+        
+        // El grito suena 1.2 segundos después de la Pokéball
+        setTimeout(() => {
+            const audioGrito = new Audio(data.cry);
+            audioGrito.play().catch(e => console.log("Grito no encontrado"));
+        }, 1200);
+    }, 500); 
 }
