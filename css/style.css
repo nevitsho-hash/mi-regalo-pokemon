@@ -1,4 +1,3 @@
-
 /* Reset y Base */
 * { box-sizing: border-box; }
 
@@ -79,44 +78,76 @@ body, html {
 .pokedex-text { color: #fff; font-size: 11px; line-height: 1.5; text-align: center; margin: 0 0 15px 0; text-transform: uppercase; }
 .pokemon-sprite { width: 130px; image-rendering: pixelated; }
 
-#reader { width: 100% !important; height: 100% !important; display: none; }
-#reader video { object-fit: cover !important; width: 100% !important; height: 100% !important; }
-
-/* CONTROLES - BOTÓN NEGRO AJUSTADO */
+/* CONTROLES */
 .controls { 
     display: flex; 
     justify-content: center; 
     align-items: flex-end; 
     margin-top: auto; 
-    padding-bottom: 20px;
+    padding-bottom: 25px;
     position: relative; 
-    height: 85px;
+    height: 95px;
 }
 
 .black-circle { 
     position: absolute; 
     left: 10px;        
-    top: -5px;          /* Ajustado ligeramente por el nuevo tamaño */
-    width: 32px;       /* Un poco más grande como pediste */
+    top: 0px;          
+    width: 32px;       
     height: 32px; 
     background: #333; 
     border-radius: 50%; 
     border: 3px solid #1a1a1a; 
-    box-shadow: inset -2px -2px 0px rgba(0,0,0,0.5);
+    /* Sombra coherente: derecha y abajo (5px) */
+    box-shadow: 5px 5px 0px #111, inset -2px -2px 0px rgba(0,0,0,0.5); 
+    cursor: pointer;
 }
+.black-circle:active { transform: translate(3px, 3px); box-shadow: 2px 2px 0px #111; }
 
 .green-button { 
+    position: relative;
     width: 95px; height: 48px; 
     background: linear-gradient(to bottom, #4caf50, #2e7d32); 
     border: 4px solid #1a1a1a; border-radius: 10px; 
-    box-shadow: 0 5px 0 #1b431e; cursor: pointer; 
+    /* Sombra coherente: derecha y abajo (5px) */
+    box-shadow: 5px 5px 0px #1b431e; 
+    cursor: pointer; 
+    z-index: 5;
 }
-.green-button:active { transform: translateY(4px); box-shadow: 0 1px 0 #1b431e; }
+.green-button:active { transform: translate(3px, 3px); box-shadow: 2px 2px 0px #1b431e; }
 
+/* CRUCETA CON SOMBRA REAL */
 .d-pad { 
     position: absolute; 
     right: 5px;
-    bottom: 10px;
-    width: 65px; height: 65px; background: #333; 
+    bottom: 15px;
+    width: 65px; height: 65px; 
+    background: #333; 
+    /* El clip-path crea la forma */
     clip-path: polygon(35% 0%, 65% 0%, 65% 35%, 100% 35%, 100% 65%, 65% 65%, 65% 100%, 35% 100%, 35% 65%, 0% 65%, 0% 35%, 35% 35%); 
+    z-index: 5;
+}
+
+/* La sombra de la cruz: desplazada 5px derecha y 5px abajo */
+.d-pad::before {
+    content: "";
+    position: absolute;
+    top: 5px; left: 5px; 
+    width: 65px; height: 65px;
+    background: #111;
+    clip-path: polygon(35% 0%, 65% 0%, 65% 35%, 100% 35%, 100% 65%, 65% 65%, 65% 100%, 35% 100%, 35% 65%, 0% 65%, 0% 35%, 35% 35%);
+    z-index: -1;
+}
+
+/* ANIMACIÓN DE CAPTURA - Pokéball temblando */
+.shaking-ball {
+    animation: shaking 0.4s infinite alternate;
+}
+
+@keyframes shaking {
+    0% { transform: translate(0, 0) rotate(0deg); }
+    25% { transform: translate(-8px, 0) rotate(-15deg); }
+    50% { transform: translate(0, 0) rotate(0deg); }
+    75% { transform: translate(8px, 0) rotate(15deg); }
+    100% { transform: translate(0, 0) rotate(0deg); }
 }
