@@ -101,7 +101,7 @@ body, html {
     background: #333; 
     border-radius: 50%; 
     border: 3px solid #1a1a1a; 
-    box-shadow: inset -2px -2px 0px rgba(0,0,0,0.5);
+    box-shadow: inset -2px -2px 0px rgba(0,0,0,0.5), 0 5px 0 #111; /* Sombra añadida aquí también */
 }
 
 .green-button { 
@@ -112,14 +112,14 @@ body, html {
 }
 .green-button:active { transform: translateY(4px); box-shadow: 0 1px 0 #1b431e; }
 
-/* CRUCETA CON SOMBRA DE PROFUNDIDAD */
+/* CRUCETA CON SOMBRA EXTERNA VISIBLE */
 .d-pad { 
     position: absolute; 
     right: 5px;
     bottom: 10px;
     width: 65px; height: 65px; 
     background: #333; 
-    /* EFECTO SOMBRA: Igual que el botón negro pero adaptado a la forma de cruz */
-    filter: drop-shadow(0 5px 0 #111);
+    /* Esta sombra sí es compatible con clip-path */
+    filter: drop-shadow(0 5px 0 #111); 
     clip-path: polygon(35% 0%, 65% 0%, 65% 35%, 100% 35%, 100% 65%, 65% 65%, 65% 100%, 35% 100%, 35% 65%, 0% 65%, 0% 35%, 35% 35%); 
 }
