@@ -1,8 +1,7 @@
-// 1. Sonidos (Corregido a tu carpeta 'sng')
-const sonidoBoton = new Audio('./assets/sng/clic.mp3');
-const sonidoCaptura = new Audio('./assets/sng/captura.wav');
+// Forzamos las rutas para que el navegador no se pierda
+const sonidoBoton = new Audio('./assets/snd/clic.mp3'); // Asegúrate que en GitHub sea clic.mp3 en minúsculas
+const sonidoCaptura = new Audio('./assets/snd/captura.wav'); // Asegúrate que en GitHub sea captura.wav en minúsculas
 
-// 2. Base de datos (Nombres en MAYÚSCULAS y extensión .png)
 const pokemonDB = {
     "BEAUTIFLY": { 
         text: "¡MIRA ESA BEAUTIFLY!<br>SUS ALAS SON BELLAS,<br>¡PERO TU ERES MAS<br>QUE CUALQUIER POKEMON!", 
@@ -37,8 +36,8 @@ const pokemonDB = {
 let html5QrCode;
 
 function activarEscaner() {
-    // Intentamos sonar el clic
-    sonidoBoton.play().catch(() => console.log("Audio clic en espera"));
+    // Intentar sonido (ahora en mayúsculas)
+    sonidoBoton.play().catch(e => console.log("Audio de clic falló"));
 
     document.getElementById('pokedex-content').style.display = 'none';
     document.getElementById('reader').style.display = 'block';
@@ -57,21 +56,16 @@ function activarEscaner() {
             if (pokemonDB[code]) {
                 actualizarPantalla(pokemonDB[code]);
             } else {
-                actualizarPantalla({ 
-                    text: "QR NO REGISTRADO:<br>" + code, 
-                    sprite: "./assets/img/GENGAR.png" 
-                });
+                actualizarPantalla({ text: "ERROR:<br>POKEMON NO<br>REGISTRADO", sprite: "./assets/img/GENGAR.png" }); // Ruta Gengar inicio
             }
             html5QrCode.stop();
         }
-    ).catch((err) => {
-        console.error("Error cámara:", err);
-    });
+    ).catch(err => console.error(err));
 }
 
 function actualizarPantalla(data) {
-    // Sonido de captura
-    sonidoCaptura.play().catch(() => console.log("Audio captura en espera"));
+    // Intentar sonido (ahora en mayúsculas)
+    sonidoCaptura.play().catch(e => console.log("Audio de captura falló"));
 
     document.getElementById('reader').style.display = 'none';
     document.getElementById('pokedex-content').style.display = 'flex';
@@ -80,10 +74,13 @@ function actualizarPantalla(data) {
     const imgElement = document.getElementById('main-sprite');
     imgElement.src = data.sprite;
 
-    // Si la imagen falla, intentamos cargarla en minúsculas por si acaso
+    // SISTEMA DE EMERGENCIA: Si no carga la imagen, avisa qué ruta falló
     imgElement.onerror = function() {
         if (this.src.includes('.png')) {
-            this.src = this.src.replace('.png', '.PNG');
+            // Intentamos cargarla en mayúsculas automáticamente
+            this.src = this.src.replace('.png', '.PNG').toLowerCase();
+        } else {
+            document.getElementById('main-text').innerHTML = "ERROR CARGA:<br>" + data.sprite; // Si falla, avisa qué ruta falló
         }
     };
 }
