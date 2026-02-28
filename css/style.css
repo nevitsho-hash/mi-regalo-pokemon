@@ -25,7 +25,7 @@ body, html {
     min-height: 560px;
     background: linear-gradient(145deg, #ff4d4d, #b91c1c);
     border: 5px solid #1a1a1a;
-    border-radius: 0px; 
+    border-radius: 25px; 
     display: flex;
     flex-direction: column;
     box-shadow: inset -8px -8px 0px rgba(0,0,0,0.2), 15px 20px 30px rgba(0,0,0,0.6);
