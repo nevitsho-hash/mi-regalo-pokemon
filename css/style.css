@@ -78,7 +78,10 @@ body, html {
 .pokedex-text { color: #fff; font-size: 11px; line-height: 1.5; text-align: center; margin: 0 0 15px 0; text-transform: uppercase; }
 .pokemon-sprite { width: 130px; image-rendering: pixelated; }
 
-/* CONTROLES */
+#reader { width: 100% !important; height: 100% !important; display: none; }
+#reader video { object-fit: cover !important; width: 100% !important; height: 100% !important; }
+
+/* CONTROLES - PERSPECTIVA CORREGIDA */
 .controls { 
     display: flex; 
     justify-content: center; 
@@ -86,7 +89,7 @@ body, html {
     margin-top: auto; 
     padding-bottom: 20px;
     position: relative; 
-    height: 85px;
+    height: 90px;
 }
 
 .black-circle { 
@@ -98,16 +101,18 @@ body, html {
     background: #333; 
     border-radius: 50%; 
     border: 3px solid #1a1a1a; 
-    /* AJUSTADO: Sombra a la derecha y abajo como el verde */
+    /* Sombra igual al verde: Derecha y Abajo */
     box-shadow: 4px 4px 0 #111, inset -2px -2px 0px rgba(0,0,0,0.5); 
     z-index: 5;
 }
 
 .green-button { 
+    position: relative;
     width: 95px; height: 48px; 
     background: linear-gradient(to bottom, #4caf50, #2e7d32); 
     border: 4px solid #1a1a1a; border-radius: 10px; 
-    box-shadow: 5px 5px 0 #1b431e; /* Referencia mantenida */
+    /* Referencia: Derecha y Abajo */
+    box-shadow: 4px 4px 0 #1b431e; 
     cursor: pointer; 
     z-index: 5;
 }
@@ -117,19 +122,4 @@ body, html {
     position: absolute; 
     right: 5px;
     bottom: 10px;
-    width: 65px; height: 65px; 
-    background: #333; 
-    clip-path: polygon(35% 0%, 65% 0%, 65% 35%, 100% 35%, 100% 65%, 65% 65%, 65% 100%, 35% 100%, 35% 65%, 0% 65%, 0% 35%, 35% 35%); 
-    z-index: 5;
-}
-
-/* AJUSTADO: Sombra de la cruz a la derecha y abajo */
-.d-pad::before {
-    content: "";
-    position: absolute;
-    top: 4px; left: 4px; 
-    width: 65px; height: 65px;
-    background: #111;
-    clip-path: polygon(35% 0%, 65% 0%, 65% 35%, 100% 35%, 100% 65%, 65% 65%, 65% 100%, 35% 100%, 35% 65%, 0% 65%, 0% 35%, 35% 35%);
-    z-index: -1;
-}
+    width: 6
