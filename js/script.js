@@ -68,7 +68,7 @@ function activarEscaner() {
 }
 
 function actualizarPantalla(data) {
-    // Sonido de captura
+    // Sonido de captura (Ya sabemos que funciona, ¡genial!)
     sonidoCaptura.play().catch(() => console.log("Audio de captura bloqueado"));
 
     document.getElementById('reader').style.display = 'none';
@@ -77,13 +77,20 @@ function actualizarPantalla(data) {
     
     const imgElement = document.getElementById('main-sprite');
     
-    // TRUCO FINAL: Forzamos la carga ignorando la caché anterior
-    imgElement.src = data.sprite + "?v=" + new Date().getTime();
+    // 1. Intentamos la ruta que me dijiste: BEAUTIFLY.png
+    imgElement.src = data.sprite;
 
-    // Si aun así falla, intentamos la extensión en MAYÚSCULAS
+    // 2. SISTEMA DE RESCATE AUTOMÁTICO
     imgElement.onerror = function() {
+        console.log("Fallo con .png, intentando variantes...");
+        
+        // Si falló con .png, intenta con .PNG (mayúsculas)
         if (this.src.includes('.png')) {
             this.src = this.src.replace('.png', '.PNG');
+        } 
+        // Si aun así falla, podría ser que el archivo no tiene la ruta assets/ delante
+        else if (!this.src.includes('assets/img/')) {
+            this.src = 'assets/img/' + data.sprite.split('/').pop();
         }
     };
 }
