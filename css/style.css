@@ -97,36 +97,10 @@ body, html {
     background: #333; 
     border-radius: 50%; 
     border: 3px solid #1a1a1a; 
-    /* Sombra sólida igual a la de la cruz */
-    box-shadow: 0 5px 0 #111, inset -2px -2px 0px rgba(0,0,0,0.5); 
+    /* Sombra con perspectiva: 4px derecha, 4px abajo */
+    box-shadow: 4px 4px 0 #111, inset -2px -2px 0px rgba(0,0,0,0.5); 
 }
 
 .green-button { 
     width: 95px; height: 48px; 
-    background: linear-gradient(to bottom, #4caf50, #2e7d32); 
-    border: 4px solid #1a1a1a; border-radius: 10px; 
-    box-shadow: 0 5px 0 #1b431e; cursor: pointer; 
-}
-.green-button:active { transform: translateY(4px); box-shadow: 0 1px 0 #1b431e; }
-
-/* CRUCETA CON SOMBRA REALIZADA POR CAPAS */
-.d-pad { 
-    position: absolute; 
-    right: 5px;
-    bottom: 10px;
-    width: 65px; height: 65px; 
-    background: #333; 
-    clip-path: polygon(35% 0%, 65% 0%, 65% 35%, 100% 35%, 100% 65%, 65% 65%, 65% 100%, 35% 100%, 35% 65%, 0% 65%, 0% 35%, 35% 35%); 
-    z-index: 2;
-}
-
-/* LA SOMBRA: Un elemento idéntico debajo desplazado */
-.d-pad::before {
-    content: "";
-    position: absolute;
-    top: 5px; left: 0; /* Desplazamiento de la sombra */
-    width: 65px; height: 65px;
-    background: #111; /* Color de la sombra */
-    clip-path: polygon(35% 0%, 65% 0%, 65% 35%, 100% 35%, 100% 65%, 65% 65%, 65% 100%, 35% 100%, 35% 65%, 0% 65%, 0% 35%, 35% 35%);
-    z-index: -1; /* Se coloca detrás de la cruz principal */
-}
+    background: linear-
