@@ -1,56 +1,20 @@
-const sonidoBoton = new Audio('assets/snd/CLIC.MP3');
-const sonidoCaptura = new Audio('assets/snd/CAPTURA.WAV');
+// Prueba rápida de sonido y ruta
+const sonidoBoton = new Audio('assets/snd/clic.mp3'); // Asegúrate que en GitHub sea clic.mp3 en minúsculas
+const sonidoCaptura = new Audio('assets/snd/captura.wav');
 
 const pokemonDB = {
     "BEAUTIFLY": { 
-        text: "¡MIRA ESA BEAUTIFLY!<br>SUS ALAS SON BELLAS,<br>¡PERO TU ERES MAS<br>QUE CUALQUIER POKEMON!", 
-        sprite: "assets/img/BEAUTIFLY.png" 
-    },
-    "SNORLAX": { 
-        text: "¡HAS ENCONTRADO<br>A SNORLAX!<br>BLOQUEA EL CAMINO,<br>PERO NO A MI CORAZON", 
-        sprite: "assets/img/SNORLAX.PNG" 
-    },
-    "SWALOT": { 
-        text: "¡HAS ENCONTRADO<br>A SWALOT!<br>EL POKEMON BOLSA", 
-        sprite: "assets/img/SWALOT.PNG" 
-    },
-    "TOTODILE": { 
-        text: "¡HAS ENCONTRADO<br>A TOTODILE!<br>EL COCODRILO ALEGRE", 
-        sprite: "assets/img/TOTODILE.PNG" 
-    },
-    "UMBREON": { 
-        text: "¡HAS ENCONTRADO<br>A UMBREON!<br>LUZ EN LA OSCURIDAD", 
-        sprite: "assets/img/UMBREON.PNG" 
-    },
-    "JIGGLYPUFF": { 
-        text: "¡HAS ENCONTRADO<br>A JIGGLYPUFF!<br>CUIDADO CON SU CANTO", 
-        sprite: "assets/img/JIGGLYPUFF.PNG" 
-    },
-    "GENGAR": { 
-        text: "¡HAS ENCONTRADO<br>A GENGAR!<br>LA SOMBRA TRAVIESA", 
-        sprite: "assets/img/GENGAR.PNG" 
+        text: "¡PRUEBA DE RUTA CORRECTA!", 
+        sprite: "assets/img/BEAUTIFLY.png" // Exactamente como me dijiste
     }
 };
 
-function activarEscaner() {
-    // Forzamos el sonido al interactuar
-    sonidoBoton.play().catch(() => console.log("Sonido bloqueado"));
-
-    document.getElementById('pokedex-content').style.display = 'none';
-    document.getElementById('reader').style.display = 'block';
-
-    const html5QrCode = new Html5Qrcode("reader");
-    html5QrCode.start(
-        { facingMode: "environment" }, 
-        { fps: 10, qrbox: 250 },
-        (decodedText) => {
-            let code = decodedText.toUpperCase().trim();
-            if (pokemonDB[code]) {
-                actualizarPantalla(pokemonDB[code]);
-            }
-            html5QrCode.stop();
-        }
-    ).catch(err => console.error(err));
+function actualizarPantalla(data) {
+    sonidoCaptura.play().catch(e => console.log("Error sonido:", e));
+    document.getElementById('reader').style.display = 'none';
+    document.getElementById('pokedex-content').style.display = 'flex';
+    document.getElementById('main-text').innerHTML = data.text;
+    document.getElementById('main-sprite').src = data.sprite;
 }
 
 function actualizarPantalla(data) {
