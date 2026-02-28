@@ -1,8 +1,8 @@
-// 1. Sonidos (Corregido a tu carpeta 'sng' y rutas limpias)
+// 1. Sonidos (Rutas limpias a tu carpeta 'sng')
 const sonidoBoton = new Audio('assets/sng/clic.mp3');
 const sonidoCaptura = new Audio('assets/sng/captura.wav');
 
-// 2. Base de datos (Nombres en MAYÚSCULAS y extensión .png)
+// 2. Base de datos (Nombres de archivos tal cual están en tu GitHub)
 const pokemonDB = {
     "BEAUTIFLY": { 
         text: "¡MIRA ESA BEAUTIFLY!<br>SUS ALAS SON BELLAS,<br>¡PERO TU ERES MAS<br>QUE CUALQUIER POKEMON!", 
@@ -37,8 +37,8 @@ const pokemonDB = {
 let html5QrCode;
 
 function activarEscaner() {
-    // Intentamos sonar el clic
-    sonidoBoton.play().catch(() => console.log("Audio clic en espera"));
+    // Intentamos reproducir el sonido del clic
+    sonidoBoton.play().catch(() => console.log("Esperando interacción para audio"));
 
     document.getElementById('pokedex-content').style.display = 'none';
     document.getElementById('reader').style.display = 'block';
@@ -58,20 +58,18 @@ function activarEscaner() {
                 actualizarPantalla(pokemonDB[code]);
             } else {
                 actualizarPantalla({ 
-                    text: "QR NO REGISTRADO:<br>" + code, 
+                    text: "QR NO RECONOCIDO:<br>" + code, 
                     sprite: "assets/img/GENGAR.png" 
                 });
             }
             html5QrCode.stop();
         }
-    ).catch((err) => {
-        console.error("Error cámara:", err);
-    });
+    ).catch((err) => console.error("Error de cámara:", err));
 }
 
 function actualizarPantalla(data) {
     // Sonido de captura
-    sonidoCaptura.play().catch(() => console.log("Audio captura en espera"));
+    sonidoCaptura.play().catch(() => console.log("Audio de captura bloqueado"));
 
     document.getElementById('reader').style.display = 'none';
     document.getElementById('pokedex-content').style.display = 'flex';
@@ -79,14 +77,11 @@ function actualizarPantalla(data) {
     
     const imgElement = document.getElementById('main-sprite');
     
-    // Añadimos un pequeño truco para evitar que el navegador use una versión vieja (cache)
-    const timestamp = new Date().getTime();
-    imgElement.src = data.sprite + "?v=" + timestamp;
+    // TRUCO FINAL: Forzamos la carga ignorando la caché anterior
+    imgElement.src = data.sprite + "?v=" + new Date().getTime();
 
-    // SISTEMA DE RESCATE: Si la imagen falla (Error 404)
+    // Si aun así falla, intentamos la extensión en MAYÚSCULAS
     imgElement.onerror = function() {
-        console.log("Fallo al cargar: " + this.src);
-        // Si intentó con .png y falló, intenta con .PNG (mayúsculas)
         if (this.src.includes('.png')) {
             this.src = this.src.replace('.png', '.PNG');
         }
