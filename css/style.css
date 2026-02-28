@@ -6,6 +6,7 @@ body, html {
     width: 100%; height: 100%;
     display: flex; align-items: center; justify-content: center;
     background-color: #000;
+    /* Fondo en assets/img/ */
     background-image: url('../assets/img/fondo-pokemon.jpg'); 
     background-size: cover; 
     background-position: center;
@@ -80,23 +81,23 @@ body, html {
 #reader { width: 100% !important; height: 100% !important; display: none; }
 #reader video { object-fit: cover !important; width: 100% !important; height: 100% !important; }
 
-/* CONTROLES - AJUSTE FINAL */
+/* CONTROLES - BOTÓN NEGRO AJUSTADO */
 .controls { 
     display: flex; 
-    justify-content: center; /* Centra el botón verde */
+    justify-content: center; 
     align-items: flex-end; 
     margin-top: auto; 
     padding-bottom: 20px;
-    position: relative; /* Necesario para que el botón negro se mueva respecto a esto */
-    height: 80px;
+    position: relative; 
+    height: 85px;
 }
 
 .black-circle { 
-    position: absolute; /* Lo sacamos del flujo */
-    left: 10px;        /* Lo pegamos a la izquierda */
-    top: 0px;          /* Lo subimos al tope del contenedor */
-    width: 24px;       /* Más pequeño como en la imagen pokedex.jpg */
-    height: 24px; 
+    position: absolute; 
+    left: 10px;        
+    top: -5px;          /* Ajustado ligeramente por el nuevo tamaño */
+    width: 32px;       /* Un poco más grande como pediste */
+    height: 32px; 
     background: #333; 
     border-radius: 50%; 
     border: 3px solid #1a1a1a; 
@@ -104,15 +105,15 @@ body, html {
 }
 
 .green-button { 
-    width: 90px; height: 45px; 
+    width: 95px; height: 48px; 
     background: linear-gradient(to bottom, #4caf50, #2e7d32); 
-    border: 4px solid #1a1a1a; border-radius: 12px; 
+    border: 4px solid #1a1a1a; border-radius: 10px; 
     box-shadow: 0 5px 0 #1b431e; cursor: pointer; 
 }
 .green-button:active { transform: translateY(4px); box-shadow: 0 1px 0 #1b431e; }
 
 .d-pad { 
-    position: absolute; /* Lo fijamos a la derecha */
+    position: absolute; 
     right: 5px;
     bottom: 10px;
     width: 65px; height: 65px; background: #333; 
