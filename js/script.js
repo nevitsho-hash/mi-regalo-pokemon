@@ -1,7 +1,7 @@
-
+// 1. Sonido inicial (clic del botón verde)
 const sonidoBoton = new Audio('assets/sng/clic.mp3');
 
-
+// 2. Base de datos con gritos personalizados
 const pokemonDB = {
     "BEAUTIFLY": { 
         text: "¡MIRA ESA BEAUTIFLY!<br>SUS ALAS SON BELLAS,<br>¡PERO TU ERES MAS<br>QUE CUALQUIER POKEMON!", 
@@ -43,11 +43,13 @@ const pokemonDB = {
 let html5QrCode;
 
 function activarEscaner() {
-    
+    // Sonido de clic inicial
     sonidoBoton.play().catch(() => {});
     
+    // Activar animación de luces LED
     document.querySelector('.pokedex').classList.add('scanning');
     
+    // Resetear visuales
     document.getElementById('pokedex-content').style.display = 'none';
     document.getElementById('reader').style.display = 'block';
 
@@ -73,12 +75,16 @@ function activarEscaner() {
 }
 
 function actualizarPantalla(data) {
+    // Detener parpadeo de luces LED
     document.querySelector('.pokedex').classList.remove('scanning');
+
+    // Mostrar Pokémon y Texto
     document.getElementById('reader').style.display = 'none';
     document.getElementById('pokedex-content').style.display = 'flex';
     document.getElementById('main-text').innerHTML = data.text;
     document.getElementById('main-sprite').src = data.sprite;
 
+    // Reproducir el grito del Pokémon tras una breve pausa (300ms)
     setTimeout(() => {
         const audioGrito = new Audio(data.cry);
         audioGrito.play().catch(e => console.log("Error al cargar el grito:", e));
