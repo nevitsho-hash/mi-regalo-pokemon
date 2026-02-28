@@ -1,8 +1,7 @@
-// 1. Sonidos base
+// 1. Sonido inicial (clic del botón verde)
 const sonidoBoton = new Audio('assets/sng/clic.mp3');
-const sonidoCaptura = new Audio('assets/sng/captura.wav');
 
-// 2. Base de datos (Asegúrate de que los archivos coincidan en Assets/Img y Assets/Sng)
+// 2. Base de datos (Se mantiene igual)
 const pokemonDB = {
     "BEAUTIFLY": { 
         text: "¡MIRA ESA BEAUTIFLY!<br>SUS ALAS SON BELLAS,<br>¡PERO TU ERES MAS<br>QUE CUALQUIER POKEMON!", 
@@ -71,21 +70,15 @@ function activarEscaner() {
 }
 
 function actualizarPantalla(data) {
-    // Primero mostramos la imagen y el texto
+    // 1. Mostrar visualmente al Pokémon
     document.getElementById('reader').style.display = 'none';
     document.getElementById('pokedex-content').style.display = 'flex';
     document.getElementById('main-text').innerHTML = data.text;
     document.getElementById('main-sprite').src = data.sprite;
 
-    // SECUENCIA DE SONIDO CON PAUSA
-    // Esperamos 500ms (medio segundo) para que el ojo vea al Pokémon antes del sonido
+    // 2. Solo suena el grito del Pokémon tras una breve pausa (300ms)
     setTimeout(() => {
-        sonidoCaptura.play().catch(e => console.log("Error captura:", e));
-        
-        // El grito suena 1.2 segundos después de la Pokéball
-        setTimeout(() => {
-            const audioGrito = new Audio(data.cry);
-            audioGrito.play().catch(e => console.log("Grito no encontrado"));
-        }, 1200);
-    }, 500); 
+        const audioGrito = new Audio(data.cry);
+        audioGrito.play().catch(e => console.log("No se pudo reproducir el grito:", e));
+    }, 300); 
 }
