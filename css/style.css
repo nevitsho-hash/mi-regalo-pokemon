@@ -1,30 +1,153 @@
-/* ... (Mantenemos toda la base de Java6) ... */
+/* Reset y Base */
+* { box-sizing: border-box; }
 
-/* ESTILO ESPECÍFICO PARA LA POKÉBALL EN PANTALLA */
-.pokeball-capture {
-    width: 60px !important;
-    height: 60px !important;
-    image-rendering: pixelated; /* Para que tu pixel art se vea nítido */
+body, html {
+    margin: 0; padding: 0;
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    background-color: #000;
+    /* Fondo en assets/img/ */
+    background-image: url('../assets/img/fondo-pokemon.jpg'); 
+    background-size: cover; 
+    background-position: center;
+    background-repeat: no-repeat;
+    font-family: 'Press Start 2P', cursive;
+    overflow: hidden;
 }
 
-/* ANIMACIÓN DE RESISTENCIA */
+/* Estructura Pokédex */
+.pokedex {
+    position: relative;
+    width: 85%;
+    max-width: 340px;
+    min-height: 560px;
+    background: linear-gradient(145deg, #ff4d4d, #b91c1c);
+    border: 5px solid #1a1a1a;
+    border-radius: 25px; 
+    display: flex;
+    flex-direction: column;
+    box-shadow: inset -8px -8px 0px rgba(0,0,0,0.2), 15px 20px 30px rgba(0,0,0,0.6);
+    z-index: 10;
+}
+
+.pokedex-top { display: flex; padding: 20px; border-bottom: 4px solid #1a1a1a; gap: 15px; align-items: center; }
+
+.big-blue-lens { 
+    width: 50px; height: 50px; 
+    background: radial-gradient(circle at 30% 30%, #4cc9f0, #2563eb); 
+    border: 4px solid #fff; border-radius: 50%; 
+    box-shadow: 0 0 15px rgba(76, 201, 240, 0.8); 
+}
+
+.led-container { display: flex; gap: 8px; }
+.led { width: 12px; height: 12px; border-radius: 50%; border: 2px solid #1a1a1a; }
+.red { background: #600; }
+.yellow { background: #660; }
+.green { background: #060; }
+
+.scanning .red { animation: blink 0.6s infinite 0s; }
+.scanning .yellow { animation: blink 0.6s infinite 0.2s; }
+.scanning .green { animation: blink 0.6s infinite 0.4s; }
+
+@keyframes blink {
+    0%, 100% { filter: brightness(0.5); opacity: 0.5; }
+    50% { filter: brightness(2); opacity: 1; box-shadow: 0 0 10px currentColor; }
+}
+
+.pokedex-body { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; gap: 15px; }
+
+.screen-bezel {
+    background: #e0e0e0; border: 4px solid #1a1a1a;
+    border-radius: 12px 12px 12px 45px; padding: 12px 12px 25px 12px;
+}
+
+.screen-black {
+    background: #000;
+    border-radius: 5px;
+    height: 270px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid #333;
+    overflow: hidden;
+    position: relative;
+}
+
+#pokedex-content { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100%; }
+.pokedex-text { color: #fff; font-size: 11px; line-height: 1.5; text-align: center; margin: 0 0 15px 0; text-transform: uppercase; }
+.pokemon-sprite { width: 130px; image-rendering: pixelated; }
+
+/* CONTROLES */
+.controls { 
+    display: flex; 
+    justify-content: center; 
+    align-items: flex-end; 
+    margin-top: auto; 
+    padding-bottom: 25px;
+    position: relative; 
+    height: 95px;
+}
+
+.black-circle { 
+    position: absolute; 
+    left: 10px;        
+    top: 0px;          
+    width: 32px;       
+    height: 32px; 
+    background: #333; 
+    border-radius: 50%; 
+    border: 3px solid #1a1a1a; 
+    /* Sombra coherente: derecha y abajo (5px) */
+    box-shadow: 5px 5px 0px #111, inset -2px -2px 0px rgba(0,0,0,0.5); 
+    cursor: pointer;
+}
+.black-circle:active { transform: translate(3px, 3px); box-shadow: 2px 2px 0px #111; }
+
+.green-button { 
+    position: relative;
+    width: 95px; height: 48px; 
+    background: linear-gradient(to bottom, #4caf50, #2e7d32); 
+    border: 4px solid #1a1a1a; border-radius: 10px; 
+    /* Sombra coherente: derecha y abajo (5px) */
+    box-shadow: 5px 5px 0px #1b431e; 
+    cursor: pointer; 
+    z-index: 5;
+}
+.green-button:active { transform: translate(3px, 3px); box-shadow: 2px 2px 0px #1b431e; }
+
+/* CRUCETA CON SOMBRA REAL */
+.d-pad { 
+    position: absolute; 
+    right: 5px;
+    bottom: 15px;
+    width: 65px; height: 65px; 
+    background: #333; 
+    /* El clip-path crea la forma */
+    clip-path: polygon(35% 0%, 65% 0%, 65% 35%, 100% 35%, 100% 65%, 65% 65%, 65% 100%, 35% 100%, 35% 65%, 0% 65%, 0% 35%, 35% 35%); 
+    z-index: 5;
+}
+
+/* La sombra de la cruz: desplazada 5px derecha y 5px abajo */
+.d-pad::before {
+    content: "";
+    position: absolute;
+    top: 5px; left: 5px; 
+    width: 65px; height: 65px;
+    background: #111;
+    clip-path: polygon(35% 0%, 65% 0%, 65% 35%, 100% 35%, 100% 65%, 65% 65%, 65% 100%, 35% 100%, 35% 65%, 0% 65%, 0% 35%, 35% 35%);
+    z-index: -1;
+}
+
+/* ANIMACIÓN DE CAPTURA - Pokéball temblando */
 .shaking-ball {
-    animation: shaking 0.5s ease-in-out infinite;
+    animation: shaking 0.4s infinite alternate;
 }
 
 @keyframes shaking {
     0% { transform: translate(0, 0) rotate(0deg); }
-    25% { transform: translate(-10px, 0) rotate(-20deg); }
-    50% { transform: translate(10px, 0) rotate(20deg); }
-    75% { transform: translate(-5px, 0) rotate(-10deg); }
+    25% { transform: translate(-8px, 0) rotate(-15deg); }
+    50% { transform: translate(0, 0) rotate(0deg); }
+    75% { transform: translate(8px, 0) rotate(15deg); }
     100% { transform: translate(0, 0) rotate(0deg); }
-}
-
-/* Botón negro: Estilo de pulsación */
-.black-circle {
-    cursor: pointer;
-    transition: transform 0.1s;
-}
-.black-circle:active {
-    transform: scale(0.9) translate(2px, 2px);
 }
