@@ -43,9 +43,10 @@ let html5QrCode;
 function activarEscaner() {
     sonidoBoton.play().catch(() => {});
     
-    // Activa la animación de las luces
+    // Activa la clase 'scanning' para las luces
     document.querySelector('.pokedex').classList.add('scanning');
     
+    // Cambia a la vista de la cámara
     document.getElementById('pokedex-content').style.display = 'none';
     const readerElement = document.getElementById('reader');
     readerElement.style.display = 'block';
@@ -54,9 +55,16 @@ function activarEscaner() {
         html5QrCode = new Html5Qrcode("reader");
     }
 
+    // Configuración para mayor simetría
+    const config = { 
+        fps: 15, 
+        qrbox: { width: 220, height: 220 }, // Cuadro de escaneo más grande y centrado
+        aspectRatio: 1.0 // Fuerza un visor cuadrado para mayor simetría
+    };
+
     html5QrCode.start(
         { facingMode: "environment" }, 
-        { fps: 15, qrbox: { width: 200, height: 200 } },
+        config,
         (decodedText) => {
             let code = decodedText.toUpperCase().trim();
             if (pokemonDB[code]) {
@@ -70,14 +78,16 @@ function activarEscaner() {
 }
 
 function actualizarPantalla(data) {
-    // Detiene la animación de las luces
+    // Apaga las luces
     document.querySelector('.pokedex').classList.remove('scanning');
 
+    // Muestra al Pokémon
     document.getElementById('reader').style.display = 'none';
     document.getElementById('pokedex-content').style.display = 'flex';
     document.getElementById('main-text').innerHTML = data.text;
     document.getElementById('main-sprite').src = data.sprite;
 
+    // Sonido
     setTimeout(() => {
         const audioGrito = new Audio(data.cry);
         audioGrito.play().catch(e => console.log("Grito no encontrado"));
