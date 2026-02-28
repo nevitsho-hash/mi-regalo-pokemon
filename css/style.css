@@ -2,7 +2,6 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-    /* RUTA CORREGIDA: Entra en assets y luego en img */
     background: url('../assets/img/fondo-pokemon.jpg') no-repeat center center fixed;
     background-size: cover;
     background-color: #78C850;
@@ -14,7 +13,6 @@ body {
     font-family: 'Press Start 2P', cursive;
 }
 
-/* Estructura Pokédex */
 .pokedex {
     width: 320px;
     height: 500px;
@@ -88,7 +86,18 @@ body {
 
 .pokemon-sprite { height: 80px; image-rendering: pixelated; }
 
-#reader { width: 100%; height: 100%; display: none; object-fit: cover; }
+/* Configuración de la cámara */
+#reader { 
+    width: 100% !important; 
+    height: 100% !important; 
+    object-fit: cover;
+}
+
+#reader video {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+}
 
 .controls {
     display: flex;
