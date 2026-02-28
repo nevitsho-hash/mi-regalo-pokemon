@@ -81,7 +81,7 @@ body, html {
 #reader { width: 100% !important; height: 100% !important; display: none; }
 #reader video { object-fit: cover !important; width: 100% !important; height: 100% !important; }
 
-/* CONTROLES - BOTÓN NEGRO AJUSTADO */
+/* CONTROLES */
 .controls { 
     display: flex; 
     justify-content: center; 
@@ -95,8 +95,8 @@ body, html {
 .black-circle { 
     position: absolute; 
     left: 10px;        
-    top: -5px;          /* Ajustado ligeramente por el nuevo tamaño */
-    width: 32px;       /* Un poco más grande como pediste */
+    top: -5px;          
+    width: 32px;       
     height: 32px; 
     background: #333; 
     border-radius: 50%; 
@@ -112,10 +112,14 @@ body, html {
 }
 .green-button:active { transform: translateY(4px); box-shadow: 0 1px 0 #1b431e; }
 
+/* CRUCETA CON SOMBRA DE PROFUNDIDAD */
 .d-pad { 
     position: absolute; 
     right: 5px;
     bottom: 10px;
-    width: 65px; height: 65px; background: #333; 
+    width: 65px; height: 65px; 
+    background: #333; 
+    /* EFECTO SOMBRA: Igual que el botón negro pero adaptado a la forma de cruz */
+    filter: drop-shadow(0 5px 0 #111);
     clip-path: polygon(35% 0%, 65% 0%, 65% 35%, 100% 35%, 100% 65%, 65% 65%, 65% 100%, 35% 100%, 35% 65%, 0% 65%, 0% 35%, 35% 35%); 
 }
