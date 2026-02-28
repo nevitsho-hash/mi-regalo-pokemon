@@ -1,127 +1,85 @@
-/* Reset y Base */
-* { box-sizing: border-box; }
+const sonidoBoton = new Audio('assets/sng/clic.mp3');
 
-body, html {
-    margin: 0; padding: 0;
-    width: 100%; height: 100%;
-    display: flex; align-items: center; justify-content: center;
-    background-color: #000;
-    background-image: url('../assets/img/fondo-pokemon.jpg'); 
-    background-size: cover; 
-    background-position: center;
-    background-repeat: no-repeat;
-    font-family: 'Press Start 2P', cursive;
-    overflow: hidden;
+const pokemonDB = {
+    "BEAUTIFLY": { 
+        text: "¡MIRA ESA BEAUTIFLY!<br>SUS ALAS SON BELLAS,<br>¡PERO TU ERES MAS<br>QUE CUALQUIER POKEMON!", 
+        sprite: "assets/img/BEAUTIFLY.png",
+        cry: "assets/sng/beautifly.mp3" 
+    },
+    "SNORLAX": { 
+        text: "¡HAS ENCONTRADO<br>A SNORLAX!<br>BLOQUEA EL CAMINO,<br>PERO NO A MI CORAZON", 
+        sprite: "assets/img/SNORLAX.png",
+        cry: "assets/sng/snorlax.mp3"
+    },
+    "SWALOT": { 
+        text: "¡HAS ENCONTRADO<br>A SWALOT!<br>EL POKEMON BOLSA", 
+        sprite: "assets/img/SWALOT.png",
+        cry: "assets/sng/swalot.mp3"
+    },
+    "TOTODILE": { 
+        text: "¡HAS ENCONTRADO<br>A TOTODILE!<br>EL COCODRILO ALEGRE", 
+        sprite: "assets/img/TOTODILE.png",
+        cry: "assets/sng/totodile.mp3"
+    },
+    "UMBREON": { 
+        text: "¡HAS ENCONTRADO<br>A UMBREON!<br>LUZ EN LA OSCURIDAD", 
+        sprite: "assets/img/UMBREON.png",
+        cry: "assets/sng/umbreon.mp3"
+    },
+    "JIGGLYPUFF": { 
+        text: "¡HAS ENCONTRADO<br>A JIGGLYPUFF!<br>CUIDADO CON SU CANTO", 
+        sprite: "assets/img/JIGGLYPUFF.png",
+        cry: "assets/sng/jigglypuff.mp3"
+    },
+    "GENGAR": { 
+        text: "¡HAS ENCONTRADO<br>A GENGAR!<br>LA SOMBRA TRAVIESA", 
+        sprite: "assets/img/GENGAR.png",
+        cry: "assets/sng/gengar.mp3"
+    }
+};
+
+let html5QrCode;
+
+function activarEscaner() {
+    sonidoBoton.play().catch(() => {});
+    
+    // Activa la animación de las luces
+    document.querySelector('.pokedex').classList.add('scanning');
+    
+    document.getElementById('pokedex-content').style.display = 'none';
+    const readerElement = document.getElementById('reader');
+    readerElement.style.display = 'block';
+
+    if (!html5QrCode) {
+        html5QrCode = new Html5Qrcode("reader");
+    }
+
+    html5QrCode.start(
+        { facingMode: "environment" }, 
+        { fps: 15, qrbox: { width: 200, height: 200 } },
+        (decodedText) => {
+            let code = decodedText.toUpperCase().trim();
+            if (pokemonDB[code]) {
+                const data = pokemonDB[code];
+                html5QrCode.stop().then(() => {
+                    actualizarPantalla(data);
+                });
+            }
+        }
+    ).catch((err) => console.error(err));
 }
 
-/* Estructura Pokédex */
-.pokedex {
-    position: relative;
-    width: 85%;
-    max-width: 340px;
-    min-height: 560px;
-    background: linear-gradient(145deg, #ff4d4d, #b91c1c);
-    border: 5px solid #1a1a1a;
-    border-radius: 25px; 
-    display: flex;
-    flex-direction: column;
-    box-shadow: inset -8px -8px 0px rgba(0,0,0,0.2), 15px 20px 30px rgba(0,0,0,0.6);
-    z-index: 10;
-}
+function actualizarPantalla(data) {
+    // Detiene la animación de las luces
+    document.querySelector('.pokedex').classList.remove('scanning');
 
-.pokedex-top { display: flex; padding: 20px; border-bottom: 4px solid #1a1a1a; gap: 15px; align-items: center; }
+    document.getElementById('reader').style.display = 'none';
+    document.getElementById('pokedex-content').style.display = 'flex';
+    document.getElementById('main-text').innerHTML = data.text;
+    document.getElementById('main-sprite').src = data.sprite;
 
-.big-blue-lens { 
-    width: 50px; height: 50px; 
-    background: radial-gradient(circle at 30% 30%, #4cc9f0, #2563eb); 
-    border: 4px solid #fff; border-radius: 50%; 
-    box-shadow: 0 0 15px rgba(76, 201, 240, 0.8); 
-}
-
-.led-container { display: flex; gap: 8px; }
-.led { width: 12px; height: 12px; border-radius: 50%; border: 2px solid #1a1a1a; }
-.red { background: #600; }
-.yellow { background: #660; }
-.green { background: #060; }
-
-.scanning .red { animation: blink 0.6s infinite 0s; }
-.scanning .yellow { animation: blink 0.6s infinite 0.2s; }
-.scanning .green { animation: blink 0.6s infinite 0.4s; }
-
-@keyframes blink {
-    0%, 100% { filter: brightness(0.5); opacity: 0.5; }
-    50% { filter: brightness(2); opacity: 1; box-shadow: 0 0 10px currentColor; }
-}
-
-.pokedex-body { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; gap: 15px; }
-
-.screen-bezel {
-    background: #e0e0e0; border: 4px solid #1a1a1a;
-    border-radius: 12px 12px 12px 45px; padding: 12px 12px 25px 12px;
-}
-
-.screen-black {
-    background: #000;
-    border-radius: 5px;
-    height: 270px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    border: 3px solid #333;
-    overflow: hidden;
-    position: relative;
-}
-
-#pokedex-content { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100%; }
-.pokedex-text { color: #fff; font-size: 11px; line-height: 1.5; text-align: center; margin: 0 0 15px 0; text-transform: uppercase; }
-.pokemon-sprite { width: 130px; image-rendering: pixelated; }
-
-/* CONTROLES */
-.controls { 
-    display: flex; 
-    justify-content: center; 
-    align-items: flex-end; 
-    margin-top: auto; 
-    padding-bottom: 20px;
-    position: relative; 
-    height: 85px;
-}
-
-.black-circle { 
-    position: absolute; 
-    left: 10px;        
-    top: -5px;          
-    width: 32px;       
-    height: 32px; 
-    background: #333; 
-    border-radius: 50%; 
-    border: 3px solid #1a1a1a; 
-    box-shadow: 4px 4px 0px #111, inset -2px -2px 0px rgba(0,0,0,0.5); 
-}
-
-.green-button { 
-    width: 95px; height: 48px; 
-    background: linear-gradient(to bottom, #4caf50, #2e7d32); 
-    border: 4px solid #1a1a1a; border-radius: 10px; 
-    box-shadow: 0 5px 0 #1b431e; cursor: pointer; 
-}
-.green-button:active { transform: translateY(4px); box-shadow: 0 1px 0 #1b431e; }
-
-/* LA CRUZ - NUEVA TÉCNICA DE SOMBRA */
-.d-pad-container {
-    position: absolute;
-    right: 5px;
-    bottom: 10px;
-    width: 65px;
-    height: 65px;
-    /* Aplicamos la sombra al contenedor para que no se corte */
-    filter: drop-shadow(4px 4px 0px #111);
-}
-
-.d-pad { 
-    width: 100%; 
-    height: 100%; 
-    background: #333; 
-    clip-path: polygon(35% 0%, 65% 0%, 65% 35%, 100% 35%, 100% 65%, 65% 65%, 65% 100%, 35% 100%, 35% 65%, 0% 65%, 0% 35%, 35% 35%); 
+    setTimeout(() => {
+        const audioGrito = new Audio(data.cry);
+        audioGrito.play().catch(e => console.log("Grito no encontrado"));
+    }, 300); 
 }
