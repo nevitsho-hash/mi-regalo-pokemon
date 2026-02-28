@@ -1,8 +1,8 @@
-// 1. Sonidos (Rutas limpias a tu carpeta 'sng')
+// 1. Sonidos (Confirmado en tu captura: carpeta 'sng' en minúsculas)
 const sonidoBoton = new Audio('assets/sng/clic.mp3');
 const sonidoCaptura = new Audio('assets/sng/captura.wav');
 
-// 2. Base de datos (Nombres de archivos tal cual están en tu GitHub)
+// 2. Base de datos (Ruta: assets/img/NOMBRE.png)
 const pokemonDB = {
     "BEAUTIFLY": { 
         text: "¡MIRA ESA BEAUTIFLY!<br>SUS ALAS SON BELLAS,<br>¡PERO TU ERES MAS<br>QUE CUALQUIER POKEMON!", 
@@ -37,8 +37,7 @@ const pokemonDB = {
 let html5QrCode;
 
 function activarEscaner() {
-    // Intentamos reproducir el sonido del clic
-    sonidoBoton.play().catch(() => console.log("Esperando interacción para audio"));
+    sonidoBoton.play().catch(() => console.log("Audio clic listo"));
 
     document.getElementById('pokedex-content').style.display = 'none';
     document.getElementById('reader').style.display = 'block';
@@ -58,18 +57,17 @@ function activarEscaner() {
                 actualizarPantalla(pokemonDB[code]);
             } else {
                 actualizarPantalla({ 
-                    text: "QR NO RECONOCIDO:<br>" + code, 
+                    text: "QR NO REGISTRADO:<br>" + code, 
                     sprite: "assets/img/GENGAR.png" 
                 });
             }
             html5QrCode.stop();
         }
-    ).catch((err) => console.error("Error de cámara:", err));
+    ).catch((err) => console.error(err));
 }
 
 function actualizarPantalla(data) {
-    // Sonido de captura (Ya sabemos que funciona, ¡genial!)
-    sonidoCaptura.play().catch(() => console.log("Audio de captura bloqueado"));
+    sonidoCaptura.play().catch(() => console.log("Audio captura listo"));
 
     document.getElementById('reader').style.display = 'none';
     document.getElementById('pokedex-content').style.display = 'flex';
@@ -77,20 +75,6 @@ function actualizarPantalla(data) {
     
     const imgElement = document.getElementById('main-sprite');
     
-    // 1. Intentamos la ruta que me dijiste: BEAUTIFLY.png
+    // IMPORTANTE: Quitamos cualquier punto o barra extra al principio
     imgElement.src = data.sprite;
-
-    // 2. SISTEMA DE RESCATE AUTOMÁTICO
-    imgElement.onerror = function() {
-        console.log("Fallo con .png, intentando variantes...");
-        
-        // Si falló con .png, intenta con .PNG (mayúsculas)
-        if (this.src.includes('.png')) {
-            this.src = this.src.replace('.png', '.PNG');
-        } 
-        // Si aun así falla, podría ser que el archivo no tiene la ruta assets/ delante
-        else if (!this.src.includes('assets/img/')) {
-            this.src = 'assets/img/' + data.sprite.split('/').pop();
-        }
-    };
 }
