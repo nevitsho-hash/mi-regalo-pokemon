@@ -1,5 +1,7 @@
+// 1. Sonido inicial (clic del botón verde)
 const sonidoBoton = new Audio('assets/sng/clic.mp3');
 
+// 2. Base de datos (Se mantiene igual)
 const pokemonDB = {
     "BEAUTIFLY": { 
         text: "¡MIRA ESA BEAUTIFLY!<br>SUS ALAS SON BELLAS,<br>¡PERO TU ERES MAS<br>QUE CUALQUIER POKEMON!", 
@@ -41,26 +43,16 @@ const pokemonDB = {
 let html5QrCode;
 
 function activarEscaner() {
-    // Reproducir sonido de clic
     sonidoBoton.play().catch(() => {});
     
-    // Iniciar parpadeo de LEDs
-    document.querySelector('.pokedex').classList.add('scanning');
-    
-    // Cambiar vista de pantalla
     document.getElementById('pokedex-content').style.display = 'none';
-    const readerElement = document.getElementById('reader');
-    readerElement.style.display = 'block';
+    document.getElementById('reader').style.display = 'block';
 
     if (!html5QrCode) {
         html5QrCode = new Html5Qrcode("reader");
     }
 
-    const config = { 
-        fps: 10, 
-        qrbox: { width: 150, height: 150 }, // Cuadro de escaneo ajustado a la pantalla pequeña
-        aspectRatio: 1.0 
-    };
+    const config = { fps: 10, qrbox: { width: 250, height: 250 } };
 
     html5QrCode.start(
         { facingMode: "environment" }, 
@@ -71,31 +63,22 @@ function activarEscaner() {
                 const data = pokemonDB[code];
                 html5QrCode.stop().then(() => {
                     actualizarPantalla(data);
-                }).catch(err => console.error("Error al detener:", err));
+                });
             }
-        },
-        (errorMessage) => {
-            // Error de escaneo silencioso (mientras busca)
         }
-    ).catch((err) => {
-        console.error("No se pudo iniciar la cámara:", err);
-        alert("Asegúrate de dar permisos de cámara.");
-    });
+    ).catch((err) => console.error(err));
 }
 
 function actualizarPantalla(data) {
-    // Detener parpadeo
-    document.querySelector('.pokedex').classList.remove('scanning');
-
-    // Restaurar elementos visuales
+    // 1. Mostrar visualmente al Pokémon
     document.getElementById('reader').style.display = 'none';
     document.getElementById('pokedex-content').style.display = 'flex';
     document.getElementById('main-text').innerHTML = data.text;
     document.getElementById('main-sprite').src = data.sprite;
 
-    // Sonido del Pokémon
+    // 2. Solo suena el grito del Pokémon tras una breve pausa (300ms)
     setTimeout(() => {
         const audioGrito = new Audio(data.cry);
-        audioGrito.play().catch(e => console.log("Grito no encontrado"));
+        audioGrito.play().catch(e => console.log("No se pudo reproducir el grito:", e));
     }, 300); 
 }
