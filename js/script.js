@@ -1,7 +1,5 @@
-// 1. Sonido inicial (clic del botón verde)
 const sonidoBoton = new Audio('assets/sng/clic.mp3');
 
-// 2. Base de datos (Se mantiene igual)
 const pokemonDB = {
     "BEAUTIFLY": { 
         text: "¡MIRA ESA BEAUTIFLY!<br>SUS ALAS SON BELLAS,<br>¡PERO TU ERES MAS<br>QUE CUALQUIER POKEMON!", 
@@ -45,18 +43,20 @@ let html5QrCode;
 function activarEscaner() {
     sonidoBoton.play().catch(() => {});
     
+    // Activa la animación de las luces
+    document.querySelector('.pokedex').classList.add('scanning');
+    
     document.getElementById('pokedex-content').style.display = 'none';
-    document.getElementById('reader').style.display = 'block';
+    const readerElement = document.getElementById('reader');
+    readerElement.style.display = 'block';
 
     if (!html5QrCode) {
         html5QrCode = new Html5Qrcode("reader");
     }
 
-    const config = { fps: 10, qrbox: { width: 250, height: 250 } };
-
     html5QrCode.start(
         { facingMode: "environment" }, 
-        config,
+        { fps: 15, qrbox: { width: 200, height: 200 } },
         (decodedText) => {
             let code = decodedText.toUpperCase().trim();
             if (pokemonDB[code]) {
@@ -70,15 +70,16 @@ function activarEscaner() {
 }
 
 function actualizarPantalla(data) {
-    // 1. Mostrar visualmente al Pokémon
+    // Detiene la animación de las luces
+    document.querySelector('.pokedex').classList.remove('scanning');
+
     document.getElementById('reader').style.display = 'none';
     document.getElementById('pokedex-content').style.display = 'flex';
     document.getElementById('main-text').innerHTML = data.text;
     document.getElementById('main-sprite').src = data.sprite;
 
-    // 2. Solo suena el grito del Pokémon tras una breve pausa (300ms)
     setTimeout(() => {
         const audioGrito = new Audio(data.cry);
-        audioGrito.play().catch(e => console.log("No se pudo reproducir el grito:", e));
+        audioGrito.play().catch(e => console.log("Grito no encontrado"));
     }, 300); 
 }
