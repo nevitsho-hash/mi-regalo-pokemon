@@ -4,7 +4,7 @@ const sonidoCaptura = new Audio('assets/snd/CAPTURA.WAV');
 const pokemonDB = {
     "BEAUTIFLY": { 
         text: "¡MIRA ESA BEAUTIFLY!<br>SUS ALAS SON BELLAS,<br>¡PERO TU ERES MAS<br>QUE CUALQUIER POKEMON!", 
-        sprite: "assets/img/BEAUTIFLY.PNG" 
+        sprite: "assets/img/BEAUTIFLY.png" 
     },
     "SNORLAX": { 
         text: "¡HAS ENCONTRADO<br>A SNORLAX!<br>BLOQUEA EL CAMINO,<br>PERO NO A MI CORAZON", 
