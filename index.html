@@ -4,8 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Pokédex Scanner</title>
+    
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    
     <script src="https://unpkg.com/html5-qrcode"></script>
+    
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -13,16 +16,12 @@
     <div class="pokedex">
         <div class="pokedex-top">
             <div class="big-blue-lens"></div>
-            <div class="led-container">
-                <div class="led red"></div>
-                <div class="led yellow"></div>
-                <div class="led green"></div>
-            </div>
         </div>
 
         <div class="pokedex-body">
             <div class="screen-bezel">
                 <div class="screen-black">
+                    
                     <div id="pokedex-content">
                         <p id="main-text" class="pokedex-text">
                             UM SENTIMENTO<br>ESTRANHO...<br>GENGAR POR PERTO!
@@ -30,13 +29,16 @@
                         <img id="main-sprite" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/94.png" class="pokemon-sprite">
                     </div>
                     
-                    <div id="reader" style="width: 100%; height: 100%; display: none;"></div>
+                    <div id="reader"></div>
+
                 </div>
             </div>
 
             <div class="controls">
                 <div class="black-circle"></div>
+                
                 <div class="green-button" onclick="activarEscaner()"></div>
+                
                 <div class="d-pad"></div>
             </div>
         </div>
