@@ -30,7 +30,7 @@ const pokemonDB = {
     },
     "GENGAR": { 
         text: "¡HAS ENCONTRADO<br>A GENGAR!<br>LA SOMBRA TRAVIESA", 
-        sprite: "assets/img/GENGAR.png" 
+        sprite: "assets/img/GENGAR.png" // Esta es la versión nítida de tu carpeta
     }
 };
 
