@@ -6,7 +6,6 @@
     <title>Pokédex Scanner</title>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/html5-qrcode"></script>
-    
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -23,7 +22,12 @@
                         <p id="main-text" class="pokedex-text">UM SENTIMENTO<br>ESTRANHO...<br>GENGAR POR PERTO!</p>
                         <img id="main-sprite" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/94.png" class="pokemon-sprite">
                     </div>
+                    
                     <div id="reader"></div>
+
+                    <button id="btn-capturar" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10; padding: 10px; background: #ff0000; color: white; border: 3px solid white; font-family: 'Press Start 2P', cursive; font-size: 10px; cursor: pointer;">
+                        ¡CAPTURAR!
+                    </button>
                 </div>
             </div>
 
