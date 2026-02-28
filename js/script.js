@@ -1,13 +1,39 @@
-// Prueba rápida de sonido y ruta
-const sonidoBoton = new Audio('assets/snd/clic.mp3'); // Asegúrate que en GitHub sea clic.mp3 en minúsculas
-const sonidoCaptura = new Audio('assets/snd/captura.wav');
+// CORRECCIÓN: Cambiado 'snd' por 'sng' para que coincida con tu carpeta real
+const sonidoBoton = new Audio('./assets/sng/clic.mp3');
+const sonidoCaptura = new Audio('./assets/sng/captura.wav');
 
 const pokemonDB = {
     "BEAUTIFLY": { 
-        text: "¡PRUEBA DE RUTA CORRECTA!", 
-        sprite: "assets/img/BEAUTIFLY.png" // Exactamente como me dijiste
+        text: "¡MIRA ESA BEAUTIFLY!<br>SUS ALAS SON BELLAS,<br>¡PERO TU ERES MAS<br>QUE CUALQUIER POKEMON!", 
+        sprite: "./assets/img/BEAUTIFLY.png" 
+    },
+    "SNORLAX": { 
+        text: "¡HAS ENCONTRADO<br>A SNORLAX!<br>BLOQUEA EL CAMINO,<br>PERO NO A MI CORAZON", 
+        sprite: "./assets/img/SNORLAX.png" 
+    },
+    "SWALOT": { 
+        text: "¡HAS ENCONTRADO<br>A SWALOT!<br>EL POKEMON BOLSA", 
+        sprite: "./assets/img/SWALOT.png" 
+    },
+    "TOTODILE": { 
+        text: "¡HAS ENCONTRADO<br>A TOTODILE!<br>EL COCODRILO ALEGRE", 
+        sprite: "./assets/img/TOTODILE.png" 
+    },
+    "UMBREON": { 
+        text: "¡HAS ENCONTRADO<br>A UMBREON!<br>LUZ EN LA OSCURIDAD", 
+        sprite: "./assets/img/UMBREON.png" 
+    },
+    "JIGGLYPUFF": { 
+        text: "¡HAS ENCONTRADO<br>A JIGGLYPUFF!<br>CUIDADO CON SU CANTO", 
+        sprite: "./assets/img/JIGGLYPUFF.png" 
+    },
+    "GENGAR": { 
+        text: "¡HAS ENCONTRADO<br>A GENGAR!<br>LA SOMBRA TRAVIESA", 
+        sprite: "./assets/img/GENGAR.png" 
     }
 };
+
+// ... el resto de las funciones activarEscaner() y actualizarPantalla() se mantienen igual ...
 
 function actualizarPantalla(data) {
     sonidoCaptura.play().catch(e => console.log("Error sonido:", e));
