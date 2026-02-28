@@ -42,10 +42,7 @@ let html5QrCode;
 
 function activarEscaner() {
     sonidoBoton.play().catch(() => {});
-    
-    // Activar luces parpadeantes
     document.querySelector('.pokedex').classList.add('scanning');
-    
     document.getElementById('pokedex-content').style.display = 'none';
     document.getElementById('reader').style.display = 'block';
 
@@ -69,9 +66,7 @@ function activarEscaner() {
 }
 
 function actualizarPantalla(data) {
-    // Apagar luces parpadeantes
     document.querySelector('.pokedex').classList.remove('scanning');
-
     document.getElementById('reader').style.display = 'none';
     document.getElementById('pokedex-content').style.display = 'flex';
     document.getElementById('main-text').innerHTML = data.text;
