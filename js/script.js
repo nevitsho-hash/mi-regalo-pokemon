@@ -1,36 +1,36 @@
-// 1. Sonidos (Corregido a tu carpeta 'sng')
-const sonidoBoton = new Audio('./assets/sng/clic.mp3');
-const sonidoCaptura = new Audio('./assets/sng/captura.wav');
+// 1. Sonidos (Corregido a tu carpeta 'sng' y rutas limpias)
+const sonidoBoton = new Audio('assets/sng/clic.mp3');
+const sonidoCaptura = new Audio('assets/sng/captura.wav');
 
 // 2. Base de datos (Nombres en MAYÚSCULAS y extensión .png)
 const pokemonDB = {
     "BEAUTIFLY": { 
         text: "¡MIRA ESA BEAUTIFLY!<br>SUS ALAS SON BELLAS,<br>¡PERO TU ERES MAS<br>QUE CUALQUIER POKEMON!", 
-        sprite: "./assets/img/BEAUTIFLY.png" 
+        sprite: "assets/img/BEAUTIFLY.png" 
     },
     "SNORLAX": { 
         text: "¡HAS ENCONTRADO<br>A SNORLAX!<br>BLOQUEA EL CAMINO,<br>PERO NO A MI CORAZON", 
-        sprite: "./assets/img/SNORLAX.png" 
+        sprite: "assets/img/SNORLAX.png" 
     },
     "SWALOT": { 
         text: "¡HAS ENCONTRADO<br>A SWALOT!<br>EL POKEMON BOLSA", 
-        sprite: "./assets/img/SWALOT.png" 
+        sprite: "assets/img/SWALOT.png" 
     },
     "TOTODILE": { 
         text: "¡HAS ENCONTRADO<br>A TOTODILE!<br>EL COCODRILO ALEGRE", 
-        sprite: "./assets/img/TOTODILE.png" 
+        sprite: "assets/img/TOTODILE.png" 
     },
     "UMBREON": { 
         text: "¡HAS ENCONTRADO<br>A UMBREON!<br>LUZ EN LA OSCURIDAD", 
-        sprite: "./assets/img/UMBREON.png" 
+        sprite: "assets/img/UMBREON.png" 
     },
     "JIGGLYPUFF": { 
         text: "¡HAS ENCONTRADO<br>A JIGGLYPUFF!<br>CUIDADO CON SU CANTO", 
-        sprite: "./assets/img/JIGGLYPUFF.png" 
+        sprite: "assets/img/JIGGLYPUFF.png" 
     },
     "GENGAR": { 
         text: "¡HAS ENCONTRADO<br>A GENGAR!<br>LA SOMBRA TRAVIESA", 
-        sprite: "./assets/img/GENGAR.png" 
+        sprite: "assets/img/GENGAR.png" 
     }
 };
 
@@ -59,7 +59,7 @@ function activarEscaner() {
             } else {
                 actualizarPantalla({ 
                     text: "QR NO REGISTRADO:<br>" + code, 
-                    sprite: "./assets/img/GENGAR.png" 
+                    sprite: "assets/img/GENGAR.png" 
                 });
             }
             html5QrCode.stop();
@@ -78,10 +78,15 @@ function actualizarPantalla(data) {
     document.getElementById('main-text').innerHTML = data.text;
     
     const imgElement = document.getElementById('main-sprite');
-    imgElement.src = data.sprite;
+    
+    // Añadimos un pequeño truco para evitar que el navegador use una versión vieja (cache)
+    const timestamp = new Date().getTime();
+    imgElement.src = data.sprite + "?v=" + timestamp;
 
-    // Si la imagen falla, intentamos cargarla en minúsculas por si acaso
+    // SISTEMA DE RESCATE: Si la imagen falla (Error 404)
     imgElement.onerror = function() {
+        console.log("Fallo al cargar: " + this.src);
+        // Si intentó con .png y falló, intenta con .PNG (mayúsculas)
         if (this.src.includes('.png')) {
             this.src = this.src.replace('.png', '.PNG');
         }
