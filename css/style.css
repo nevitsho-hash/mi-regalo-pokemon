@@ -61,9 +61,6 @@ body, html {
     50% { filter: brightness(2); opacity: 1; box-shadow: 0 0 10px currentColor; }
 }
 
-/* Pantalla con efecto Retro Scanline */
-.pokedex-body { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; gap: 15px; }
-
 .screen-bezel {
     background: #e0e0e0; border: 4px solid #1a1a1a;
     border-radius: 12px 12px 12px 45px; padding: 12px 12px 25px 12px;
@@ -83,17 +80,6 @@ body, html {
     position: relative;
 }
 
-/* Capa de líneas de TV antigua */
-.screen-black::after {
-    content: " ";
-    position: absolute;
-    top: 0; left: 0; bottom: 0; right: 0;
-    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
-                linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-    background-size: 100% 4px, 3px 100%;
-    pointer-events: none;
-    z-index: 2;
-}
 
 #pokedex-content { z-index: 1; display: flex; flex-direction: column; align-items: center; width: 100%; }
 
