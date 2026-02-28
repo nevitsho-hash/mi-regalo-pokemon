@@ -1,8 +1,8 @@
-// 1. Sonidos (Confirmado en tu captura: carpeta 'sng' en minúsculas)
+// 1. Sonidos (Rutas corregidas a tu carpeta assets/sng/)
 const sonidoBoton = new Audio('assets/sng/clic.mp3');
 const sonidoCaptura = new Audio('assets/sng/captura.wav');
 
-// 2. Base de datos (Ruta: assets/img/NOMBRE.png)
+// 2. Base de datos (Rutas corregidas incluyendo la subcarpeta /img/)
 const pokemonDB = {
     "BEAUTIFLY": { 
         text: "¡MIRA ESA BEAUTIFLY!<br>SUS ALAS SON BELLAS,<br>¡PERO TU ERES MAS<br>QUE CUALQUIER POKEMON!", 
@@ -57,7 +57,7 @@ function activarEscaner() {
                 actualizarPantalla(pokemonDB[code]);
             } else {
                 actualizarPantalla({ 
-                    text: "QR NO REGISTRADO:<br>" + code, 
+                    text: "QR NO RECONOCIDO:<br>" + code, 
                     sprite: "assets/img/GENGAR.png" 
                 });
             }
@@ -74,7 +74,6 @@ function actualizarPantalla(data) {
     document.getElementById('main-text').innerHTML = data.text;
     
     const imgElement = document.getElementById('main-sprite');
-    
-    // IMPORTANTE: Quitamos cualquier punto o barra extra al principio
+    // Usamos la ruta completa: assets/img/NOMBRE.png
     imgElement.src = data.sprite;
 }
