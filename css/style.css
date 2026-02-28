@@ -2,9 +2,10 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-    /* RUTA CORREGIDA: Apunta exactamente a tu archivo .jpg */
-    background: url('../assets/fondo-pokemon.jpg') no-repeat center center fixed;
+    /* RUTA CORREGIDA: Entra en assets y luego en img */
+    background: url('../assets/img/fondo-pokemon.jpg') no-repeat center center fixed;
     background-size: cover;
+    background-color: #78C850;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -26,7 +27,6 @@ body {
     box-shadow: 10px 10px 0 rgba(0,0,0,0.3);
 }
 
-/* Parte Superior y Luces LED */
 .pokedex-top {
     height: 80px;
     padding: 15px;
@@ -50,7 +50,6 @@ body {
 .yellow { background: #fc0; box-shadow: 0 0 8px #fc0; }
 .green { background: #0f0; box-shadow: 0 0 8px #0f0; }
 
-/* Pantalla */
 .pokedex-body { flex: 1; padding: 20px; display: flex; flex-direction: column; }
 .screen-bezel {
     background-color: #dedede;
@@ -71,7 +70,6 @@ body {
     overflow: hidden;
 }
 
-/* Contenido Interno */
 #pokedex-content {
     display: flex;
     flex-direction: column;
@@ -90,15 +88,8 @@ body {
 
 .pokemon-sprite { height: 80px; image-rendering: pixelated; }
 
-/* Cámara */
-#reader { 
-    width: 100%; 
-    height: 100%; 
-    display: none; 
-    object-fit: cover; 
-}
+#reader { width: 100%; height: 100%; display: none; object-fit: cover; }
 
-/* Controles */
 .controls {
     display: flex;
     justify-content: space-around;
@@ -115,7 +106,6 @@ body {
     border-radius: 10px;
     cursor: pointer;
 }
-.green-button:active { transform: scale(0.95); }
 
 .d-pad {
     width: 60px;
@@ -124,7 +114,6 @@ body {
     clip-path: polygon(33% 0%, 66% 0%, 66% 33%, 100% 33%, 100% 66%, 66% 66%, 66% 100%, 33% 100%, 33% 66%, 0% 66%, 0% 33%, 33% 33%);
 }
 
-/* Animaciones */
 .scanning .led { animation: blink 0.5s infinite alternate; }
 .scanning .yellow { animation-delay: 0.2s; }
 .scanning .green { animation-delay: 0.4s; }
