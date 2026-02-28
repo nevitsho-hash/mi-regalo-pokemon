@@ -41,37 +41,59 @@ const pokemonDB = {
 let html5QrCode;
 
 function activarEscaner() {
+    // Reproducir sonido de clic
     sonidoBoton.play().catch(() => {});
+    
+    // Iniciar parpadeo de LEDs
     document.querySelector('.pokedex').classList.add('scanning');
+    
+    // Cambiar vista de pantalla
     document.getElementById('pokedex-content').style.display = 'none';
-    document.getElementById('reader').style.display = 'block';
+    const readerElement = document.getElementById('reader');
+    readerElement.style.display = 'block';
 
     if (!html5QrCode) {
         html5QrCode = new Html5Qrcode("reader");
     }
 
+    const config = { 
+        fps: 10, 
+        qrbox: { width: 150, height: 150 }, // Cuadro de escaneo ajustado a la pantalla pequeña
+        aspectRatio: 1.0 
+    };
+
     html5QrCode.start(
         { facingMode: "environment" }, 
-        { fps: 10, qrbox: 250 },
+        config,
         (decodedText) => {
             let code = decodedText.toUpperCase().trim();
             if (pokemonDB[code]) {
                 const data = pokemonDB[code];
                 html5QrCode.stop().then(() => {
                     actualizarPantalla(data);
-                });
+                }).catch(err => console.error("Error al detener:", err));
             }
+        },
+        (errorMessage) => {
+            // Error de escaneo silencioso (mientras busca)
         }
-    ).catch((err) => console.error(err));
+    ).catch((err) => {
+        console.error("No se pudo iniciar la cámara:", err);
+        alert("Asegúrate de dar permisos de cámara.");
+    });
 }
 
 function actualizarPantalla(data) {
+    // Detener parpadeo
     document.querySelector('.pokedex').classList.remove('scanning');
+
+    // Restaurar elementos visuales
     document.getElementById('reader').style.display = 'none';
     document.getElementById('pokedex-content').style.display = 'flex';
     document.getElementById('main-text').innerHTML = data.text;
     document.getElementById('main-sprite').src = data.sprite;
 
+    // Sonido del Pokémon
     setTimeout(() => {
         const audioGrito = new Audio(data.cry);
         audioGrito.play().catch(e => console.log("Grito no encontrado"));
