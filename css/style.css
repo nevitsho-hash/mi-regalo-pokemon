@@ -13,13 +13,13 @@ body {
     font-family: 'Press Start 2P', cursive;
 }
 
-/* Estructura Pokédex - AHORA SIMÉTRICA */
+/* Estructura Pokédex */
 .pokedex {
     width: 320px;
     height: 500px;
     background-color: #dc0a2d;
     border: 4px solid #333;
-    /* CAMBIO: Radio uniforme para todas las esquinas */
+    /* CAMBIO: Radio uniforme para simetría */
     border-radius: 10px; 
     position: relative;
     display: flex;
