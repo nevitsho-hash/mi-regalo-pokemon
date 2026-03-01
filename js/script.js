@@ -2,7 +2,6 @@
 const sonidoBoton = new Audio('assets/sng/clic.mp3');
 let html5QrCode;
 let pokemonDetectado = true;
-// Gengar por defecto al iniciar
 let pokemonActualData = { text: "GENGAR POR PERTO!", sprite: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/94.png", catchRate: 0.1, cry: "assets/sng/gengar.mp3" };
 
 const pokemonDB = {
@@ -42,7 +41,7 @@ function actualizarPantalla() {
     const sprite = document.getElementById('main-sprite');
     sprite.src = pokemonActualData.sprite;
     sprite.style.width = "120px";
-    sprite.classList.remove('is-pokeball', 'shaking-hard', 'shaking-slow', 'captured-destellos');
+    sprite.classList.remove('is-pokeball', 'is-greatball', 'shaking-hard', 'shaking-slow', 'captured-success');
     
     // Sonido de grito al aparecer
     new Audio(pokemonActualData.cry).play().catch(() => {});
@@ -50,31 +49,33 @@ function actualizarPantalla() {
 }
 
 // CAPTURA NORMAL
-function capturarPokemon() {
+function capturarNormal() {
     if (!pokemonDetectado || !pokemonActualData) return;
     sonidoBoton.play().catch(() => {});
     const ballImg = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png';
-    iniciarProcesoCaptura(ballImg, pokemonActualData.catchRate, "¡POKÉ BALL VA!");
+    iniciarProcesoCaptura(ballImg, pokemonActualData.catchRate, "¡POKÉ BALL VA!", false);
 }
 
 // SUPER BALL (PROBABILIDAD X2 MEJORADA)
-function usarSuperBall() {
+function capturarSuper() {
     if (!pokemonDetectado || !pokemonActualData) return;
     sonidoBoton.play().catch(() => {});
     const ballImg = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/great-ball.png';
     // Probabilidad doble para la Super Ball
-    iniciarProcesoCaptura(ballImg, (pokemonActualData.catchRate * 2), "¡SUPER BALL VA!");
+    iniciarProcesoCaptura(ballImg, (pokemonActualData.catchRate * 2), "¡SUPER BALL VA!", true);
 }
 
 // FUNCIÓN ÚNICA Y COMPARTIDA PARA LA ANIMACIÓN DE CAPTURA
-function iniciarProcesoCaptura(img, prob, msg) {
+function iniciarProcesoCaptura(img, prob, msg, esSuper) {
     const sprite = document.getElementById('main-sprite');
     const texto = document.getElementById('main-text');
     const oldImg = sprite.src;
     const oldTxt = texto.innerHTML;
 
     sprite.src = img;
-    sprite.classList.add('is-pokeball', 'shaking-hard');
+    sprite.classList.add('is-pokeball');
+    if(esSuper) sprite.classList.add('is-greatball'); // Super Ball visual
+    sprite.classList.add('shaking-hard');
     texto.innerHTML = msg;
 
     // Fase 1: Movimiento brusco (1.5s)
@@ -88,20 +89,36 @@ function iniciarProcesoCaptura(img, prob, msg) {
         sprite.classList.remove('shaking-slow');
         if (Math.random() < prob) {
             
-            // FASE DE ÉXITO CON DESTELLOS DE LUZ COMPARTIDOS
+            // FASE DE ÉXITO CON DESTELOS DE LUZ COMPARTIDOS
             texto.innerHTML = "¡ATRAPADO!";
-            sprite.classList.add('captured-destellos'); // Activamos los destellos de luz compartidos
+            sprite.classList.add('captured-success'); // Activamos los destellos de luz compartidos
             pokemonDetectado = false;
+            
+            // RESTAURACIÓN AUTOMÁTICA DE LA PANTALLA
+            restaurarPantallaAutomaticamente(); 
             
         } else {
             // FASE DE FALLO (Restauramos)
             texto.innerHTML = "¡SE ESCAPÓ!";
             setTimeout(() => {
-                sprite.classList.remove('is-pokeball');
+                sprite.classList.remove('is-pokeball', 'is-greatball');
                 sprite.src = oldImg;
                 sprite.style.width = "120px";
                 texto.innerHTML = oldTxt;
             }, 1500);
         }
     }, 3500);
+}
+
+// Función interna para restaurar la pantalla automáticamente
+function restaurarPantallaAutomaticamente() {
+    setTimeout(() => {
+        document.getElementById('pokedex-content').style.display = 'flex';
+        document.getElementById('main-text').innerHTML = "BUSCANDO POKÉMON...";
+        const sprite = document.getElementById('main-sprite');
+        sprite.classList.remove('is-pokeball', 'is-greatball', 'shaking-hard', 'shaking-slow', 'captured-success');
+        sprite.src = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/94.png"; // Limpiar sprite
+        sprite.style.width = "120px";
+        pokemonDetectado = true;
+    }, 4500); // 1s después de que termine la animación (3.5s + 1s)
 }
