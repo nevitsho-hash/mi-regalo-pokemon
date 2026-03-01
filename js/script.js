@@ -1,21 +1,34 @@
-/* ... (Mantenemos todo el CSS anterior igual) ... */
+// ... (Base de datos y funciones de escáner iguales) ...
 
-.pokemon-sprite { 
-    width: 120px; 
-    image-rendering: pixelated; 
-    display: block; 
-    margin: 0 auto; 
-    transition: all 0.2s ease-out; 
+function capturarSuper() {
+    if (!pokemonDetectado || !pokemonActualData) return;
+    sonidoBoton.play().catch(() => {});
+    
+    // Imagen oficial de la Super Ball (Great Ball) azul y roja
+    const ballImg = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/great-ball.png';
+    
+    // Probabilidad doble para la Super Ball
+    iniciarProcesoCaptura(ballImg, (pokemonActualData.catchRate * 2), "¡SUPER BALL VA!", true);
 }
 
-/* Clase para ambas Balls */
-.is-pokeball { 
-    width: 85px !important; 
-}
+function iniciarProcesoCaptura(img, prob, msg, esSuper) {
+    const sprite = document.getElementById('main-sprite');
+    const texto = document.getElementById('main-text');
+    const oldImg = sprite.src;
+    const oldTxt = texto.innerHTML;
 
-/* Eliminamos el filtro que chocaba con el rojo y aseguramos nitidez */
-.is-greatball { 
-    filter: none !important; 
-}
+    sprite.src = img;
+    sprite.classList.add('is-pokeball');
+    
+    // Aplicamos clase específica si es Super Ball para control visual
+    if(esSuper) {
+        sprite.classList.add('is-greatball');
+    } else {
+        sprite.classList.remove('is-greatball');
+    }
 
-/* ... (Resto del CSS igual) ... */
+    sprite.classList.add('shaking-hard');
+    texto.innerHTML = msg;
+
+    // ... (Resto de la lógica de tiempos de sacudida y éxito igual) ...
+}
