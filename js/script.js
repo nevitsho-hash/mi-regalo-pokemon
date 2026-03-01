@@ -1,80 +1,76 @@
-const sonidoBoton = new Audio('assets/sng/clic.mp3');
 let html5QrCode;
 let pokemonDetectado = true;
-let pokemonActualData = null;
+// Gengar por defecto al iniciar
+let pokemonActualData = { text: "GENGAR POR PERTO!", sprite: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/94.png", catchRate: 0.1 };
 
 const pokemonDB = {
-    "BEAUTIFLY": { text: "¡MIRA ESA BEAUTIFLY!", sprite: "assets/img/BEAUTIFLY.png", cry: "assets/sng/beautifly.mp3", catchRate: 0.5 },
-    "SNORLAX": { text: "¡HAS ENCONTRADO A SNORLAX!", sprite: "assets/img/SNORLAX.png", cry: "assets/sng/snorlax.mp3", catchRate: 0.2 },
-    "SWALOT": { text: "¡HAS ENCONTRADO A SWALOT!", sprite: "assets/img/SWALOT.png", cry: "assets/sng/swalot.mp3", catchRate: 0.4 },
-    "TOTODILE": { text: "¡HAS ENCONTRADO A TOTODILE!", sprite: "assets/img/TOTODILE.png", cry: "assets/sng/totodile.mp3", catchRate: 0.6 },
-    "UMBREON": { text: "¡HAS ENCONTRADO A UMBREON!", sprite: "assets/img/UMBREON.png", cry: "assets/sng/umbreon.mp3", catchRate: 0.3 },
-    "JIGGLYPUFF": { text: "¡HAS ENCONTRADO A JIGGLYPUFF!", sprite: "assets/img/JIGGLYPUFF.png", cry: "assets/sng/jigglypuff.mp3", catchRate: 0.7 },
-    "GENGAR": { text: "¡HAS ENCONTRADO A GENGAR!", sprite: "assets/img/GENGAR.png", cry: "assets/sng/gengar.mp3", catchRate: 0.1 }
+    "BEAUTIFLY": { text: "¡BEAUTIFLY!", sprite: "assets/img/BEAUTIFLY.png", catchRate: 0.5 },
+    "SNORLAX": { text: "¡SNORLAX!", sprite: "assets/img/SNORLAX.png", catchRate: 0.2 },
+    "SWALOT": { text: "¡SWALOT!", sprite: "assets/img/SWALOT.png", catchRate: 0.4 },
+    "TOTODILE": { text: "¡TOTODILE!", sprite: "assets/img/TOTODILE.png", catchRate: 0.6 },
+    "UMBREON": { text: "¡UMBREON!", sprite: "assets/img/UMBREON.png", catchRate: 0.3 },
+    "JIGGLYPUFF": { text: "¡JIGGLYPUFF!", sprite: "assets/img/JIGGLYPUFF.png", catchRate: 0.7 },
+    "GENGAR": { text: "¡GENGAR!", sprite: "assets/img/GENGAR.png", catchRate: 0.1 }
 };
 
 function activarEscaner() {
-    sonidoBoton.play().catch(() => {});
     document.getElementById('pokedex-content').style.display = 'none';
     document.getElementById('reader').style.display = 'block';
-    document.querySelectorAll('.led').forEach(l => l.classList.add('animating'));
+    // Encender LEDs al escanear
+    document.querySelectorAll('.led').forEach(l => {
+        l.classList.remove('success'); // Limpiar éxitos anteriores
+        l.classList.add('animating');
+    });
+
     if (!html5QrCode) { html5QrCode = new Html5Qrcode("reader"); }
-    html5QrCode.start({ facingMode: "environment" }, { fps: 15, qrbox: { width: 250, height: 200 } }, (text) => {
+    html5QrCode.start({ facingMode: "environment" }, { fps: 15, qrbox: 250 }, (text) => {
         let code = text.toUpperCase().trim();
         if (pokemonDB[code]) {
             html5QrCode.stop().then(() => { 
                 pokemonActualData = pokemonDB[code];
-                actualizarPantalla(pokemonActualData); 
+                actualizarPantalla(); 
             });
         }
     }).catch(err => console.error(err));
 }
 
-function actualizarPantalla(data) {
+function actualizarPantalla() {
     document.getElementById('reader').style.display = 'none';
     document.getElementById('pokedex-content').style.display = 'flex';
-    document.getElementById('main-text').innerHTML = data.text;
-    document.querySelectorAll('.led').forEach(l => l.classList.remove('animating'));
-    const sprite = document.getElementById('main-sprite');
-    sprite.src = data.sprite;
-    sprite.style.width = "120px"; 
-    sprite.classList.remove('is-pokeball', 'shaking-hard', 'shaking-slow');
-    pokemonDetectado = true;
-    setTimeout(() => { new Audio(data.cry).play().catch(() => {}); }, 300);
-}
-
-function capturarPokemon() {
-    if (!pokemonDetectado || !pokemonActualData) return;
-    const sprite = document.getElementById('main-sprite');
-    const texto = document.getElementById('main-text');
-    const pokemonActualImg = sprite.src;
-    const textoActualMsg = texto.innerHTML;
-    sprite.src = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png';
-    sprite.classList.add('is-pokeball', 'shaking-hard');
-    texto.innerHTML = "¡ATRÁPALO...!";
-    setTimeout(() => { sprite.classList.remove('shaking-hard'); sprite.classList.add('shaking-slow'); }, 1500);
-    setTimeout(() => {
-        sprite.classList.remove('shaking-slow');
-        const exito = Math.random() < pokemonActualData.catchRate;
-        if (exito) { texto.innerHTML = "¡POKÉMON ATRAPADO!"; pokemonDetectado = false; }
-        else { texto.innerHTML = "¡OH NO! SE ESCAPÓ";
-            setTimeout(() => { sprite.classList.remove('is-pokeball'); sprite.src = pokemonActualImg; sprite.style.width = "120px"; texto.innerHTML = textoActualMsg; }, 1500);
-        }
-    }, 3500);
-}
-
-function usarSuperBall() {
-    if (!pokemonDetectado || !pokemonActualData) return;
+    document.getElementById('main-text').innerHTML = pokemonActualData.text;
+    
+    // Apagar LEDs
+    document.querySelectorAll('.led').forEach(l => l.classList.remove('animating', 'success'));
     
     const sprite = document.getElementById('main-sprite');
-    const texto = document.getElementById('main-text');
-    const pokemonActualImg = sprite.src;
-    const textoActualMsg = texto.innerHTML;
+    sprite.src = pokemonActualData.sprite;
+    sprite.style.width = "120px";
+    sprite.classList.remove('is-pokeball', 'shaking-hard', 'shaking-slow', 'captured-zoom');
+    pokemonDetectado = true;
+}
 
-    // Usamos el sprite oficial de la Super Ball (Great Ball)
-    sprite.src = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/great-ball.png';
+function capturarNormal() {
+    if (!pokemonDetectado) return;
+    const ballImg = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png';
+    iniciarProcesoCaptura(ballImg, pokemonActualData.catchRate, "¡POKÉ BALL VA!");
+}
+
+function capturarSuper() {
+    if (!pokemonDetectado) return;
+    const ballImg = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/great-ball.png';
+    // Probabilidad doble para la Super Ball
+    iniciarProcesoCaptura(ballImg, (pokemonActualData.catchRate * 2), "¡SUPER BALL VA!");
+}
+
+function iniciarProcesoCaptura(img, prob, msg) {
+    const sprite = document.getElementById('main-sprite');
+    const texto = document.getElementById('main-text');
+    const pokeImgAnterior = sprite.src;
+    const pokeTxtAnterior = texto.innerHTML;
+
+    sprite.src = img;
     sprite.classList.add('is-pokeball', 'shaking-hard');
-    texto.innerHTML = "¡SUPER BALL VA!";
+    texto.innerHTML = msg;
 
     setTimeout(() => {
         sprite.classList.remove('shaking-hard');
@@ -83,21 +79,22 @@ function usarSuperBall() {
 
     setTimeout(() => {
         sprite.classList.remove('shaking-slow');
-        
-        // Lógica: La Super Ball multiplica x2 la probabilidad del Pokémon
-        const probabilidadMejorada = Math.min(pokemonActualData.catchRate * 2, 0.9); 
-        const exito = Math.random() < probabilidadMejorada;
-
-        if (exito) {
-            texto.innerHTML = "¡CAPTURADO CON SUPER BALL!";
+        if (Math.random() < prob) {
+            
+            // FASE DE ÉXITO CON ANIMACIÓN [cite: 2026-03-01]
+            texto.innerHTML = "¡ATRAPADO!";
+            sprite.classList.add('captured-zoom'); // Activamos el zoom y opacidad
+            document.querySelectorAll('.led').forEach(l => l.classList.add('success')); // LEDs en verde
             pokemonDetectado = false;
+            
         } else {
-            texto.innerHTML = "¡OH NO! SE ESCAPÓ";
+            // FASE DE FALLO (Restauramos)
+            texto.innerHTML = "¡SE ESCAPÓ!";
             setTimeout(() => {
                 sprite.classList.remove('is-pokeball');
-                sprite.src = pokemonActualImg;
+                sprite.src = pokeImgAnterior;
                 sprite.style.width = "120px";
-                texto.innerHTML = textoActualMsg;
+                texto.innerHTML = pokeTxtAnterior;
             }, 1500);
         }
     }, 3500);
