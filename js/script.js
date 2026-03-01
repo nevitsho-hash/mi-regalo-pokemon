@@ -39,8 +39,8 @@ function capturarPokemon() {
     if (!pokemonDetectado) return;
     const sprite = document.getElementById('main-sprite');
     
-    // RUTA SUPER BALL (AZUL): Transparente y pixelada [cite: 2026-03-01]
-    sprite.src = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/great-ball.png'; 
+    // RUTA LOCAL: Asegúrate de que el archivo se llame pokeball.png en assets/img/ [cite: 2026-02-28]
+    sprite.src = 'assets/img/pokeball.png'; 
     sprite.classList.add('shaking-ball');
     
     document.getElementById('main-text').innerHTML = "¡ATRÁPALO!";
