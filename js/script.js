@@ -61,7 +61,7 @@ function capturarPokemon() {
 
     setTimeout(() => {
         sprite.classList.remove('shaking-slow');
-        const exito = Math.random() > 0.3; 
+        const exito = Math.random() > 0.8; 
 
         if (exito) {
             texto.innerHTML = "¡POKÉMON ATRAPADO!";
