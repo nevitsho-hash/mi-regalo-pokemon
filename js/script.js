@@ -38,85 +38,35 @@ function actualizarPantalla(data) {
     const sprite = document.getElementById('main-sprite');
     sprite.src = data.sprite;
     sprite.style.width = "120px"; 
-    sprite.classList.remove('is-pokeball', 'shaking-hard', 'shaking-slow');
+    sprite.classList.remove('is-pokeball', 'is-superball', 'shaking-hard', 'shaking-slow');
     pokemonDetectado = true;
     setTimeout(() => { new Audio(data.cry).play().catch(() => {}); }, 300);
 }
 
 function capturarPokemon() {
     if (!pokemonDetectado || !pokemonActualData) return;
-    const sprite = document.getElementById('main-sprite');
-    const texto = document.getElementById('main-text');
-    const pokemonActualImg = sprite.src;
-    const textoActualMsg = texto.innerHTML;
-    sprite.src = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png';
-    sprite.classList.add('is-pokeball', 'shaking-hard');
-    texto.innerHTML = "¡ATRÁPALO...!";
-    setTimeout(() => { sprite.classList.remove('shaking-hard'); sprite.classList.add('shaking-slow'); }, 1500);
-    setTimeout(() => {
-        sprite.classList.remove('shaking-slow');
-        const exito = Math.random() < pokemonActualData.catchRate;
-        if (exito) { texto.innerHTML = "¡POKÉMON ATRAPADO!"; pokemonDetectado = false; }
-        else { texto.innerHTML = "¡OH NO! SE ESCAPÓ";
-            setTimeout(() => { sprite.classList.remove('is-pokeball'); sprite.src = pokemonActualImg; sprite.style.width = "120px"; texto.innerHTML = textoActualMsg; }, 1500);
-        }
-    }, 3500);
+    ejecutarAnimacionCaptura('https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png', pokemonActualData.catchRate, "¡POKÉ BALL VA!", false);
 }
 
-// ... (mismo código de base de datos y activarEscaner hasta capturarPokemon) ...
-
-function capturarPokemon() {
-    if (!pokemonDetectado || !pokemonActualData) return;
-    
-    const sprite = document.getElementById('main-sprite');
-    const texto = document.getElementById('main-text');
-    const pokemonActualImg = sprite.src;
-    const textoActualMsg = texto.innerHTML;
-
-    // FASE 1: Lanzamiento y movimiento brusco [cite: 2026-03-01]
-    sprite.src = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png';
-    sprite.classList.add('is-pokeball', 'shaking-hard');
-    texto.innerHTML = "¡POKÉ BALL VA!";
-
-    setTimeout(() => {
-        sprite.classList.remove('shaking-hard');
-        sprite.classList.add('shaking-slow');
-    }, 1500);
-
-    setTimeout(() => {
-        sprite.classList.remove('shaking-slow');
-        
-        // CÁLCULO DE ÉXITO ESTÁNDAR [cite: 2026-03-01]
-        const exito = Math.random() < pokemonActualData.catchRate;
-
-        if (exito) {
-            texto.innerHTML = "¡POKÉMON ATRAPADO!";
-            pokemonDetectado = false;
-        } else {
-            texto.innerHTML = "¡OH NO! SE ESCAPÓ";
-            setTimeout(() => {
-                sprite.classList.remove('is-pokeball');
-                sprite.src = pokemonActualImg;
-                sprite.style.width = "120px";
-                texto.innerHTML = textoActualMsg;
-            }, 1500);
-        }
-    }, 3500);
-}
-
-// NUEVA LÓGICA SUPER BALL (PROBABILIDAD MEJORADA x2) [cite: 2026-03-01]
 function usarSuperBall() {
+    console.log("Botón Azul pulsado: Usando Super Ball"); // Verificación
     if (!pokemonDetectado || !pokemonActualData) return;
-    
+    // Probabilidad doble (catchRate * 2)
+    ejecutarAnimacionCaptura('https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/great-ball.png', (pokemonActualData.catchRate * 2), "¡SUPER BALL VA!", true);
+}
+
+// Función interna para evitar repetir código y errores
+function ejecutarAnimacionCaptura(imgBall, probabilidad, mensajeInicial, esSuperBall) {
     const sprite = document.getElementById('main-sprite');
     const texto = document.getElementById('main-text');
     const pokemonActualImg = sprite.src;
     const textoActualMsg = texto.innerHTML;
 
-    // Usamos el sprite oficial de Super Ball de PokeAPI [cite: 2026-03-01]
-    sprite.src = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/great-ball.png';
-    sprite.classList.add('is-pokeball', 'is-superball', 'shaking-hard');
-    texto.innerHTML = "¡SUPER BALL VA!";
+    sprite.src = imgBall;
+    sprite.classList.add('is-pokeball');
+    if (esSuperBall) sprite.classList.add('is-superball');
+    sprite.classList.add('shaking-hard');
+    texto.innerHTML = mensajeInicial;
 
     setTimeout(() => {
         sprite.classList.remove('shaking-hard');
@@ -125,13 +75,9 @@ function usarSuperBall() {
 
     setTimeout(() => {
         sprite.classList.remove('shaking-slow');
-        
-        // CÁLCULO DE PROBABILIDAD MEJORADA (Catch Rate x 2) [cite: 2026-03-01]
-        // Ejemplo Gengar: 0.1 * 2 = 0.2 (20% de éxito con Super Ball)
-        const exito = Math.random() < (pokemonActualData.catchRate * 2);
-
+        const exito = Math.random() < probabilidad;
         if (exito) {
-            texto.innerHTML = "¡CAPTURADO CON SUPER BALL!";
+            texto.innerHTML = esSuperBall ? "¡CAPTURADO CON SUPER BALL!" : "¡POKÉMON ATRAPADO!";
             pokemonDetectado = false;
         } else {
             texto.innerHTML = "¡OH NO! SE ESCAPÓ";
