@@ -13,24 +13,27 @@ body, html { margin: 0; padding: 0; width: 100%; height: 100%; display: flex; al
 .led { width: 12px; height: 12px; border-radius: 50%; border: 2px solid #1a1a1a; opacity: 0.4; }
 .red { background: #600; } .yellow { background: #660; } .green { background: #060; }
 
-/* Solo parpadean con la clase .animating activada por JS */
+/* Animación de LEDs (Solo al escanear) */
 .led.animating { opacity: 1; }
 .red.animating { background: #ff0000; animation: blink 0.8s infinite; box-shadow: 0 0 10px #f00; }
 .yellow.animating { background: #ffff00; animation: blink 1.2s infinite; box-shadow: 0 0 10px #ff0; }
 .green.animating { background: #00ff00; animation: blink 1s infinite; box-shadow: 0 0 10px #0f0; }
-
 @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
 .pokedex-body { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
 .screen-bezel { background: #e0e0e0; border: 4px solid #1a1a1a; border-radius: 12px 12px 12px 45px; padding: 12px 12px 25px 12px; }
+
+/* PANTALLA: Centrado forzado */
 .screen-black { background: #000; border-radius: 5px; height: 270px; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 3px solid #333; overflow: hidden; position: relative; }
 
-.pokedex-text { color: #fff; font-size: 10px; line-height: 1.6; text-align: center; margin-bottom: 10px; text-transform: uppercase; }
-.pokemon-sprite { width: 120px; image-rendering: pixelated; transition: width 0.3s ease; }
+#pokedex-content { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100%; text-align: center; }
+.pokedex-text { color: #fff; font-size: 10px; line-height: 1.6; margin-bottom: 10px; text-transform: uppercase; width: 100%; }
 
-/* Ajuste para que la Pokéball Píxel no se vea gigante */
+/* SPRITE: Centrado y tamaño */
+.pokemon-sprite { width: 120px; display: block; margin: 0 auto; image-rendering: pixelated; transition: width 0.3s ease; }
 .is-pokeball { width: 60px !important; }
 
+/* Controles */
 .controls { position: relative; height: 110px; width: 100%; z-index: 50; }
 .black-circle { position: absolute; left: 10px; bottom: 65px; width: 35px; height: 35px; background: #333; border-radius: 50%; border: 3px solid #1a1a1a; cursor: pointer; }
 .green-button { position: absolute; left: 50%; transform: translateX(-50%); bottom: 5px; width: 95px; height: 48px; background: linear-gradient(to bottom, #4caf50, #2e7d32); border: 4px solid #1a1a1a; border-radius: 10px; cursor: pointer; }
