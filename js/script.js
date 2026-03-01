@@ -39,11 +39,15 @@ function actualizarPantalla() {
     document.getElementById('reader').style.display = 'none';
     document.getElementById('pokedex-content').style.display = 'flex';
     document.getElementById('main-text').innerHTML = pokemonActualData.text;
+    
+    // Apagamos LEDs de animación [cite: 2026-03-01]
     document.querySelectorAll('.led').forEach(l => l.classList.remove('animating', 'success'));
+    
     const sprite = document.getElementById('main-sprite');
     sprite.src = pokemonActualData.sprite;
     sprite.style.width = "120px";
     sprite.classList.remove('is-pokeball', 'shaking-hard', 'shaking-slow', 'captured-success');
+    
     new Audio(pokemonActualData.cry).play().catch(() => {});
     pokemonDetectado = true;
 }
