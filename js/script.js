@@ -9,22 +9,51 @@ const pokemonDB = {
     "GENGAR": { text: "¡GENGAR!", sprite: "assets/img/GENGAR.png", catchRate: 0.1, cry: "assets/sng/gengar.mp3" }
 };
 
+// ... (Mantén tus constantes de sonido y pokemonDB igual) ...
+
 function activarEscaner() {
     sonidoBoton.play().catch(() => {});
-    document.getElementById('pokedex-content').style.display = 'none';
-    document.getElementById('reader').style.display = 'block';
+    
+    const readerElement = document.getElementById('reader');
+    const contentElement = document.getElementById('pokedex-content');
+    
+    // 1. Cambio de visibilidad crítico para que la cámara detecte el tamaño [cite: 2026-03-01]
+    contentElement.style.display = 'none';
+    readerElement.style.display = 'block';
+    
     document.querySelectorAll('.led').forEach(l => l.classList.add('animating'));
 
-    if (!html5QrCode) { html5QrCode = new Html5Qrcode("reader"); }
-    html5QrCode.start({ facingMode: "environment" }, { fps: 15, qrbox: 250 }, (text) => {
-        let code = text.toUpperCase().trim();
-        if (pokemonDB[code]) {
-            html5QrCode.stop().then(() => { 
-                pokemonActualData = pokemonDB[code];
-                actualizarPantalla(); 
-            });
+    // 2. Reinicio del objeto si ya existía para evitar bloqueos
+    if (html5QrCode) {
+        html5QrCode.clear();
+    }
+    
+    html5QrCode = new Html5Qrcode("reader");
+
+    const config = { 
+        fps: 20, // Aumentamos FPS para mayor fluidez [cite: 2026-03-01]
+        qrbox: { width: 250, height: 250 },
+        aspectRatio: 1.0 
+    };
+
+    html5QrCode.start(
+        { facingMode: "environment" }, 
+        config, 
+        (text) => {
+            let code = text.toUpperCase().trim();
+            if (pokemonDB[code]) {
+                // Éxito: Detenemos cámara y actualizamos [cite: 2026-03-01]
+                html5QrCode.stop().then(() => {
+                    pokemonActualData = pokemonDB[code];
+                    actualizarPantalla();
+                }).catch(err => console.error("Error al detener:", err));
+            }
         }
-    }).catch(err => console.error(err));
+    ).catch(err => {
+        console.error("Error al iniciar cámara:", err);
+        // Si falla, restauramos la pantalla para no dejarla en negro
+        actualizarPantalla();
+    });
 }
 
 function actualizarPantalla() {
