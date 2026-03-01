@@ -44,23 +44,29 @@ function actualizarPantalla(data) {
 
 function capturarPokemon() {
     if (!pokemonDetectado) return;
-    console.log("Iniciando captura...");
+    
     const sprite = document.getElementById('main-sprite');
     const texto = document.getElementById('main-text');
     const pokemonActual = sprite.src;
     const textoActual = texto.innerHTML;
 
+    // FASE 1: Movimiento brusco
     sprite.src = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png';
     sprite.classList.add('is-pokeball', 'shaking-hard');
     texto.innerHTML = "¡ATRÁPALO...!";
 
+    // FASE 2: Baja intensidad (a los 1.5s)
     setTimeout(() => {
         sprite.classList.remove('shaking-hard');
         sprite.classList.add('shaking-slow');
     }, 1500);
 
+    // FASE 3: Resolución de dificultad aumentada [cite: 2026-03-01]
     setTimeout(() => {
         sprite.classList.remove('shaking-slow');
+        
+        // MODIFICACIÓN DE DIFICULTAD: 
+        // Math.random() > 0.8 significa que el Pokémon escapará el 80% de las veces.
         const exito = Math.random() > 0.8; 
 
         if (exito) {
