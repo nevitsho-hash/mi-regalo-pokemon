@@ -7,94 +7,102 @@ body, html {
     display: flex; align-items: center; justify-content: center;
     background-color: #000;
     background-image: url('../assets/img/fondo-pokemon.jpg'); 
-    background-size: cover; background-position: center;
+    background-size: cover; 
+    background-position: center;
+    background-repeat: no-repeat;
     font-family: 'Press Start 2P', cursive;
     overflow: hidden;
 }
 
-/* Estructura Pokédex - Altura fija para evitar que se desplace */
+/* Estructura Pokédex */
 .pokedex {
     position: relative;
-    width: 85%; max-width: 340px; 
-    height: 580px; /* Altura controlada [cite: 2026-03-01] */
+    width: 85%;
+    max-width: 340px;
+    min-height: 560px; /* Restaurado a tu base1 */
     background: linear-gradient(145deg, #ff4d4d, #b91c1c);
-    border: 5px solid #1a1a1a; border-radius: 25px;
-    display: flex; flex-direction: column;
+    border: 5px solid #1a1a1a;
+    border-radius: 25px; 
+    display: flex;
+    flex-direction: column;
     box-shadow: inset -8px -8px 0px rgba(0,0,0,0.2), 15px 20px 30px rgba(0,0,0,0.6);
     z-index: 10;
 }
 
 .pokedex-top { display: flex; padding: 20px; border-bottom: 4px solid #1a1a1a; gap: 15px; align-items: center; }
-.big-blue-lens { width: 45px; height: 45px; background: radial-gradient(circle at 30% 30%, #4cc9f0, #2563eb); border: 4px solid #fff; border-radius: 50%; }
+.big-blue-lens { width: 50px; height: 50px; background: radial-gradient(circle at 30% 30%, #4cc9f0, #2563eb); border: 4px solid #fff; border-radius: 50%; box-shadow: 0 0 15px rgba(76, 201, 240, 0.8); }
 
 .led-container { display: flex; gap: 8px; }
 .led { width: 12px; height: 12px; border-radius: 50%; border: 2px solid #1a1a1a; }
-.red { background: #600; } .yellow { background: #660; } .green { background: #060; }
+.red { background: #600; }
+.yellow { background: #660; }
+.green { background: #060; }
 
-.pokedex-body { 
-    padding: 15px 15px 25px 15px; /* Ajuste de márgenes internos [cite: 2026-03-01] */
-    flex-grow: 1; 
-    display: flex; flex-direction: column; 
-    justify-content: flex-start; 
-}
+.pokedex-body { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; gap: 15px; }
 
 .screen-bezel {
     background: #e0e0e0; border: 4px solid #1a1a1a;
-    border-radius: 12px 12px 12px 45px; padding: 12px 12px 20px 12px;
+    border-radius: 12px 12px 12px 45px; padding: 12px 12px 25px 12px;
 }
 
 .screen-black {
-    background: #000; border-radius: 5px;
-    height: 250px; /* Pantalla rectangular del Base 1 [cite: 2026-03-01] */
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    border: 3px solid #333; overflow: hidden; position: relative;
+    background: #000;
+    border-radius: 5px;
+    height: 270px; /* TAMAÑO RESTAURADO DEL CÓDIGO BASE 1 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid #333;
+    overflow: hidden;
+    position: relative;
 }
 
-.pokedex-text { color: #fff; font-size: 10px; text-align: center; margin-bottom: 10px; text-transform: uppercase; }
-.pokemon-sprite { width: 110px; image-rendering: pixelated; }
+#pokedex-content { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100%; }
+.pokedex-text { color: #fff; font-size: 11px; line-height: 1.5; text-align: center; margin: 0 0 15px 0; text-transform: uppercase; }
+.pokemon-sprite { width: 130px; image-rendering: pixelated; }
 
 #reader { width: 100% !important; height: 100% !important; display: none; }
-#reader video { object-fit: cover !important; width: 100% !important; height: 100% !important; }
 
-/* CONTROLES - POSICIONAMIENTO DENTRO DE LA CARCASA */
+/* CONTROLES - BOTÓN NEGRO ELEVADO SIN AFECTAR PANTALLA */
 .controls { 
+    display: flex; 
+    justify-content: center; 
+    align-items: flex-end; 
+    margin-top: auto; 
+    padding-bottom: 20px;
     position: relative; 
-    height: 100px; 
-    width: 100%;
-    margin-top: 15px;
+    height: 90px;
 }
 
 .black-circle { 
     position: absolute; 
-    left: 10px; bottom: 55px; /* Elevado como pediste [cite: 2026-03-01] */
-    width: 35px; height: 35px; 
-    background: #333; border-radius: 50%; border: 3px solid #1a1a1a; 
+    left: 10px;        
+    bottom: 55px;      /* ELEVADO SEGÚN IMAGEN GGGGG */
+    width: 35px;       
+    height: 35px; 
+    background: #333; 
+    border-radius: 50%; 
+    border: 3px solid #1a1a1a; 
     box-shadow: inset -2px -2px 0px rgba(0,0,0,0.5);
     cursor: pointer;
-    z-index: 20;
 }
 
 .green-button { 
-    position: absolute;
-    left: 50%; transform: translateX(-50%);
-    bottom: 5px;
-    width: 95px; height: 45px; 
+    width: 95px; height: 48px; 
     background: linear-gradient(to bottom, #4caf50, #2e7d32); 
-    border: 4px solid #1a1a1a; border-radius: 12px; 
-    box-shadow: 0 5px 0 #1b431e; cursor: pointer;
-    z-index: 20;
+    border: 4px solid #1a1a1a; border-radius: 10px; 
+    box-shadow: 0 5px 0 #1b431e; cursor: pointer; 
 }
 
 .d-pad { 
     position: absolute; 
-    right: 5px; bottom: 5px;
+    right: 5px;
+    bottom: 10px;
     width: 65px; height: 65px; background: #333; 
     clip-path: polygon(35% 0%, 65% 0%, 65% 35%, 100% 35%, 100% 65%, 65% 65%, 65% 100%, 35% 100%, 35% 65%, 0% 65%, 0% 35%, 35% 35%); 
-    z-index: 20;
 }
 
-/* Animación de captura [cite: 2026-03-01] */
 .shaking-ball { animation: shaking 0.4s infinite alternate; }
 @keyframes shaking {
     0% { transform: translate(0, 0) rotate(0deg); }
