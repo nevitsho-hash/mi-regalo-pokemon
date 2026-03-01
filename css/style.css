@@ -121,4 +121,32 @@ body, html {
     position: absolute; 
     right: 5px;
     bottom: 10px;
-    width: 65px;
+    width: 65px; height: 65px; 
+    background: #333; 
+    clip-path: polygon(35% 0%, 65% 0%, 65% 35%, 100% 35%, 100% 65%, 65% 65%, 65% 100%, 35% 100%, 35% 65%, 0% 65%, 0% 35%, 35% 35%); 
+    z-index: 2;
+}
+
+/* Pseudo-elemento para crear la sombra de la cruz */
+.d-pad::before {
+    content: "";
+    position: absolute;
+    top: 4px; left: 4px; 
+    width: 65px; height: 65px;
+    background: #111;
+    clip-path: polygon(35% 0%, 65% 0%, 65% 35%, 100% 35%, 100% 65%, 65% 65%, 65% 100%, 35% 100%, 35% 65%, 0% 65%, 0% 35%, 35% 35%);
+    z-index: -1;
+}
+
+/* ANIMACIÓN DE CAPTURA - POKÉBALL TEMBLANDO */
+.shaking-ball {
+    animation: shaking 0.4s infinite alternate;
+}
+
+@keyframes shaking {
+    0% { transform: translate(0, 0) rotate(0deg); }
+    25% { transform: translate(-8px, 0) rotate(-15deg); }
+    50% { transform: translate(0, 0) rotate(0deg); }
+    75% { transform: translate(8px, 0) rotate(15deg); }
+    100% { transform: translate(0, 0) rotate(0deg); }
+}
