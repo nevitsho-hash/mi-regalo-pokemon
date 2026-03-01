@@ -1,3 +1,4 @@
+// SONIDOS [cite: 2026-02-27]
 const sonidoBoton = new Audio('assets/sng/clic.mp3');
 let html5QrCode;
 let pokemonDetectado = true;
@@ -6,54 +7,56 @@ let pokemonActualData = { text: "GENGAR POR PERTO!", sprite: "https://raw.github
 const pokemonDB = {
     "BEAUTIFLY": { text: "¡BEAUTIFLY!", sprite: "assets/img/BEAUTIFLY.png", catchRate: 0.5, cry: "assets/sng/beautifly.mp3" },
     "SNORLAX": { text: "¡SNORLAX!", sprite: "assets/img/SNORLAX.png", catchRate: 0.2, cry: "assets/sng/snorlax.mp3" },
+    "SWALOT": { text: "¡SWALOT!", sprite: "assets/img/SWALOT.png", catchRate: 0.4, cry: "assets/sng/swalot.mp3" },
+    "TOTODILE": { text: "¡TOTODILE!", sprite: "assets/img/TOTODILE.png", catchRate: 0.6, cry: "assets/sng/totodile.mp3" },
+    "UMBREON": { text: "¡UMBREON!", sprite: "assets/img/UMBREON.png", catchRate: 0.3, cry: "assets/sng/umbreon.mp3" },
+    "JIGGLYPUFF": { text: "¡JIGGLYPUFF!", sprite: "assets/img/JIGGLYPUFF.png", catchRate: 0.7, cry: "assets/sng/jigglypuff.mp3" },
     "GENGAR": { text: "¡GENGAR!", sprite: "assets/img/GENGAR.png", catchRate: 0.1, cry: "assets/sng/gengar.mp3" }
 };
 
-// ... (Mantén tus constantes de sonido y pokemonDB igual) ...
-
-function activarEscaner() {
+async function activarEscaner() {
     sonidoBoton.play().catch(() => {});
     
-    const readerElement = document.getElementById('reader');
-    const contentElement = document.getElementById('pokedex-content');
-    
-    // 1. Cambio de visibilidad crítico para que la cámara detecte el tamaño [cite: 2026-03-01]
-    contentElement.style.display = 'none';
-    readerElement.style.display = 'block';
-    
+    // 1. Limpieza total de instancias previas para evitar bloqueos de cámara [cite: 2026-03-01]
+    if (html5QrCode) {
+        try { await html5QrCode.stop(); } catch (e) {}
+        html5QrCode = null;
+    }
+
+    // 2. Preparar interfaz
+    document.getElementById('pokedex-content').style.display = 'none';
+    const readerDiv = document.getElementById('reader');
+    readerDiv.style.display = 'block';
     document.querySelectorAll('.led').forEach(l => l.classList.add('animating'));
 
-    // 2. Reinicio del objeto si ya existía para evitar bloqueos
-    if (html5QrCode) {
-        html5QrCode.clear();
-    }
-    
-    html5QrCode = new Html5Qrcode("reader");
+    // 3. RETRASO CRÍTICO: Esperamos a que el DOM procese el cambio de display [cite: 2026-03-01]
+    setTimeout(() => {
+        html5QrCode = new Html5Qrcode("reader");
+        const config = { 
+            fps: 15, 
+            qrbox: { width: 250, height: 250 },
+            aspectRatio: 1.0 
+        };
 
-    const config = { 
-        fps: 20, // Aumentamos FPS para mayor fluidez [cite: 2026-03-01]
-        qrbox: { width: 250, height: 250 },
-        aspectRatio: 1.0 
-    };
-
-    html5QrCode.start(
-        { facingMode: "environment" }, 
-        config, 
-        (text) => {
-            let code = text.toUpperCase().trim();
-            if (pokemonDB[code]) {
-                // Éxito: Detenemos cámara y actualizamos [cite: 2026-03-01]
-                html5QrCode.stop().then(() => {
-                    pokemonActualData = pokemonDB[code];
-                    actualizarPantalla();
-                }).catch(err => console.error("Error al detener:", err));
+        html5QrCode.start(
+            { facingMode: "environment" }, 
+            config, 
+            (text) => {
+                let code = text.toUpperCase().trim();
+                if (pokemonDB[code]) {
+                    html5QrCode.stop().then(() => {
+                        pokemonActualData = pokemonDB[code];
+                        actualizarPantalla();
+                    });
+                }
             }
-        }
-    ).catch(err => {
-        console.error("Error al iniciar cámara:", err);
-        // Si falla, restauramos la pantalla para no dejarla en negro
-        actualizarPantalla();
-    });
+        ).catch(err => {
+            console.error("Error cámara:", err);
+            // Si falla, avisamos al usuario en la pantalla de la Pokédex
+            document.getElementById('main-text').innerHTML = "ERROR DE CÁMARA";
+            actualizarPantalla();
+        });
+    }, 300); // 300ms son suficientes para que el div sea "visible" para el script
 }
 
 function actualizarPantalla() {
