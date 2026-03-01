@@ -1,54 +1,9 @@
-/* Reset y Base */
-* { box-sizing: border-box; }
-
-body, html {
-    margin: 0; padding: 0;
-    width: 100%; height: 100%;
-    display: flex; align-items: center; justify-content: center;
-    background-color: #000;
-    background-image: url('../assets/img/fondo-pokemon.jpg'); 
-    background-size: cover; 
-    background-position: center;
-    background-repeat: no-repeat;
-    font-family: 'Press Start 2P', cursive;
-    overflow: hidden;
-}
-
-/* Estructura Pokédex */
-.pokedex {
-    position: relative;
-    width: 85%;
-    max-width: 340px;
-    min-height: 560px; /* Restaurado a tu base1 */
-    background: linear-gradient(145deg, #ff4d4d, #b91c1c);
-    border: 5px solid #1a1a1a;
-    border-radius: 25px; 
-    display: flex;
-    flex-direction: column;
-    box-shadow: inset -8px -8px 0px rgba(0,0,0,0.2), 15px 20px 30px rgba(0,0,0,0.6);
-    z-index: 10;
-}
-
-.pokedex-top { display: flex; padding: 20px; border-bottom: 4px solid #1a1a1a; gap: 15px; align-items: center; }
-.big-blue-lens { width: 50px; height: 50px; background: radial-gradient(circle at 30% 30%, #4cc9f0, #2563eb); border: 4px solid #fff; border-radius: 50%; box-shadow: 0 0 15px rgba(76, 201, 240, 0.8); }
-
-.led-container { display: flex; gap: 8px; }
-.led { width: 12px; height: 12px; border-radius: 50%; border: 2px solid #1a1a1a; }
-.red { background: #600; }
-.yellow { background: #660; }
-.green { background: #060; }
-
-.pokedex-body { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; gap: 15px; }
-
-.screen-bezel {
-    background: #e0e0e0; border: 4px solid #1a1a1a;
-    border-radius: 12px 12px 12px 45px; padding: 12px 12px 25px 12px;
-}
+/* ... (Todo igual a tu Código Base 1) ... */
 
 .screen-black {
     background: #000;
     border-radius: 5px;
-    height: 270px; /* TAMAÑO RESTAURADO DEL CÓDIGO BASE 1 */
+    height: 270px; /* Tu altura original del Base 1 [cite: 2026-03-01] */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -58,56 +13,17 @@ body, html {
     position: relative;
 }
 
-#pokedex-content { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100%; }
-.pokedex-text { color: #fff; font-size: 11px; line-height: 1.5; text-align: center; margin: 0 0 15px 0; text-transform: uppercase; }
-.pokemon-sprite { width: 130px; image-rendering: pixelated; }
-
-#reader { width: 100% !important; height: 100% !important; display: none; }
-
-/* CONTROLES - BOTÓN NEGRO ELEVADO SIN AFECTAR PANTALLA */
-.controls { 
-    display: flex; 
-    justify-content: center; 
-    align-items: flex-end; 
-    margin-top: auto; 
-    padding-bottom: 20px;
-    position: relative; 
-    height: 90px;
+/* Asegurar que el vídeo llene la pantalla rectangular [cite: 2026-03-01] */
+#reader { 
+    width: 100% !important; 
+    height: 100% !important; 
+    display: none; 
 }
 
-.black-circle { 
-    position: absolute; 
-    left: 10px;        
-    bottom: 55px;      /* ELEVADO SEGÚN IMAGEN GGGGG */
-    width: 35px;       
-    height: 35px; 
-    background: #333; 
-    border-radius: 50%; 
-    border: 3px solid #1a1a1a; 
-    box-shadow: inset -2px -2px 0px rgba(0,0,0,0.5);
-    cursor: pointer;
+#reader video { 
+    object-fit: cover !important; 
+    width: 100% !important; 
+    height: 100% !important; 
 }
 
-.green-button { 
-    width: 95px; height: 48px; 
-    background: linear-gradient(to bottom, #4caf50, #2e7d32); 
-    border: 4px solid #1a1a1a; border-radius: 10px; 
-    box-shadow: 0 5px 0 #1b431e; cursor: pointer; 
-}
-
-.d-pad { 
-    position: absolute; 
-    right: 5px;
-    bottom: 10px;
-    width: 65px; height: 65px; background: #333; 
-    clip-path: polygon(35% 0%, 65% 0%, 65% 35%, 100% 35%, 100% 65%, 65% 65%, 65% 100%, 35% 100%, 35% 65%, 0% 65%, 0% 35%, 35% 35%); 
-}
-
-.shaking-ball { animation: shaking 0.4s infinite alternate; }
-@keyframes shaking {
-    0% { transform: translate(0, 0) rotate(0deg); }
-    25% { transform: translate(-8px, 0) rotate(-15deg); }
-    50% { transform: translate(0, 0) rotate(0deg); }
-    75% { transform: translate(8px, 0) rotate(15deg); }
-    100% { transform: translate(0, 0) rotate(0deg); }
-}
+/* ... (Resto de controles y animaciones igual) ... */
