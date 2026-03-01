@@ -1,24 +1,25 @@
+// SONIDOS [cite: 2026-02-27]
+const sonidoBoton = new Audio('assets/sng/clic.mp3');
 let html5QrCode;
 let pokemonDetectado = true;
-// Gengar por defecto al iniciar
-let pokemonActualData = { text: "GENGAR POR PERTO!", sprite: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/94.png", catchRate: 0.1 };
+let pokemonActualData = { text: "GENGAR POR PERTO!", sprite: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/94.png", catchRate: 0.1, cry: "assets/sng/gengar.mp3" };
 
 const pokemonDB = {
-    "BEAUTIFLY": { text: "¡BEAUTIFLY!", sprite: "assets/img/BEAUTIFLY.png", catchRate: 0.5 },
-    "SNORLAX": { text: "¡SNORLAX!", sprite: "assets/img/SNORLAX.png", catchRate: 0.2 },
-    "SWALOT": { text: "¡SWALOT!", sprite: "assets/img/SWALOT.png", catchRate: 0.4 },
-    "TOTODILE": { text: "¡TOTODILE!", sprite: "assets/img/TOTODILE.png", catchRate: 0.6 },
-    "UMBREON": { text: "¡UMBREON!", sprite: "assets/img/UMBREON.png", catchRate: 0.3 },
-    "JIGGLYPUFF": { text: "¡JIGGLYPUFF!", sprite: "assets/img/JIGGLYPUFF.png", catchRate: 0.7 },
-    "GENGAR": { text: "¡GENGAR!", sprite: "assets/img/GENGAR.png", catchRate: 0.1 }
+    "BEAUTIFLY": { text: "¡BEAUTIFLY!", sprite: "assets/img/BEAUTIFLY.png", catchRate: 0.5, cry: "assets/sng/beautifly.mp3" },
+    "SNORLAX": { text: "¡SNORLAX!", sprite: "assets/img/SNORLAX.png", catchRate: 0.2, cry: "assets/sng/snorlax.mp3" },
+    "SWALOT": { text: "¡SWALOT!", sprite: "assets/img/SWALOT.png", catchRate: 0.4, cry: "assets/sng/swalot.mp3" },
+    "TOTODILE": { text: "¡TOTODILE!", sprite: "assets/img/TOTODILE.png", catchRate: 0.6, cry: "assets/sng/totodile.mp3" },
+    "UMBREON": { text: "¡UMBREON!", sprite: "assets/img/UMBREON.png", catchRate: 0.3, cry: "assets/sng/umbreon.mp3" },
+    "JIGGLYPUFF": { text: "¡JIGGLYPUFF!", sprite: "assets/img/JIGGLYPUFF.png", catchRate: 0.7, cry: "assets/sng/jigglypuff.mp3" },
+    "GENGAR": { text: "¡GENGAR!", sprite: "assets/img/GENGAR.png", catchRate: 0.1, cry: "assets/sng/gengar.mp3" }
 };
 
 function activarEscaner() {
+    sonidoBoton.play().catch(() => {});
     document.getElementById('pokedex-content').style.display = 'none';
     document.getElementById('reader').style.display = 'block';
-    // Encender LEDs al escanear
     document.querySelectorAll('.led').forEach(l => {
-        l.classList.remove('success'); // Limpiar éxitos anteriores
+        l.classList.remove('success');
         l.classList.add('animating');
     });
 
@@ -38,35 +39,36 @@ function actualizarPantalla() {
     document.getElementById('reader').style.display = 'none';
     document.getElementById('pokedex-content').style.display = 'flex';
     document.getElementById('main-text').innerHTML = pokemonActualData.text;
-    
-    // Apagar LEDs
     document.querySelectorAll('.led').forEach(l => l.classList.remove('animating', 'success'));
     
     const sprite = document.getElementById('main-sprite');
     sprite.src = pokemonActualData.sprite;
     sprite.style.width = "120px";
-    sprite.classList.remove('is-pokeball', 'shaking-hard', 'shaking-slow', 'captured-zoom');
+    sprite.classList.remove('is-pokeball', 'shaking-hard', 'shaking-slow', 'captured-anim');
+    
+    // Sonido de grito al aparecer [cite: 2026-03-01]
+    new Audio(pokemonActualData.cry).play().catch(() => {});
     pokemonDetectado = true;
 }
 
 function capturarNormal() {
     if (!pokemonDetectado) return;
-    const ballImg = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png';
-    iniciarProcesoCaptura(ballImg, pokemonActualData.catchRate, "¡POKÉ BALL VA!");
+    sonidoBoton.play().catch(() => {});
+    iniciarCaptura('https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png', pokemonActualData.catchRate, "¡POKÉ BALL VA!");
 }
 
 function capturarSuper() {
     if (!pokemonDetectado) return;
-    const ballImg = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/great-ball.png';
-    // Probabilidad doble para la Super Ball
-    iniciarProcesoCaptura(ballImg, (pokemonActualData.catchRate * 2), "¡SUPER BALL VA!");
+    sonidoBoton.play().catch(() => {});
+    // Probabilidad x2 para la Super Ball
+    iniciarCaptura('https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/great-ball.png', (pokemonActualData.catchRate * 2), "¡SUPER BALL VA!");
 }
 
-function iniciarProcesoCaptura(img, prob, msg) {
+function iniciarCaptura(img, prob, msg) {
     const sprite = document.getElementById('main-sprite');
     const texto = document.getElementById('main-text');
-    const pokeImgAnterior = sprite.src;
-    const pokeTxtAnterior = texto.innerHTML;
+    const oldImg = sprite.src;
+    const oldTxt = texto.innerHTML;
 
     sprite.src = img;
     sprite.classList.add('is-pokeball', 'shaking-hard');
@@ -80,21 +82,17 @@ function iniciarProcesoCaptura(img, prob, msg) {
     setTimeout(() => {
         sprite.classList.remove('shaking-slow');
         if (Math.random() < prob) {
-            
-            // FASE DE ÉXITO CON ANIMACIÓN [cite: 2026-03-01]
             texto.innerHTML = "¡ATRAPADO!";
-            sprite.classList.add('captured-zoom'); // Activamos el zoom y opacidad
-            document.querySelectorAll('.led').forEach(l => l.classList.add('success')); // LEDs en verde
+            sprite.classList.add('captured-anim');
+            document.querySelectorAll('.led').forEach(l => l.classList.add('success'));
             pokemonDetectado = false;
-            
         } else {
-            // FASE DE FALLO (Restauramos)
             texto.innerHTML = "¡SE ESCAPÓ!";
             setTimeout(() => {
                 sprite.classList.remove('is-pokeball');
-                sprite.src = pokeImgAnterior;
+                sprite.src = oldImg;
                 sprite.style.width = "120px";
-                texto.innerHTML = pokeTxtAnterior;
+                texto.innerHTML = oldTxt;
             }, 1500);
         }
     }, 3500);
