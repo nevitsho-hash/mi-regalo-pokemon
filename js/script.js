@@ -1,97 +1,57 @@
-/* Reset y Base */
-* { box-sizing: border-box; }
+const sonidoBoton = new Audio('assets/sng/clic.mp3');
+let html5QrCode;
+let pokemonDetectado = true;
 
-body, html {
-    margin: 0; padding: 0;
-    width: 100%; height: 100%;
-    display: flex; align-items: center; justify-content: center;
-    background-color: #000;
-    background-image: url('../assets/img/fondo-pokemon.jpg'); 
-    background-size: cover; 
-    background-position: center;
-    background-repeat: no-repeat;
-    font-family: 'Press Start 2P', cursive;
-    overflow: hidden;
+const pokemonDB = {
+    "BEAUTIFLY": { text: "¡MIRA ESA BEAUTIFLY!<br>SUS ALAS SON BELLAS", sprite: "assets/img/BEAUTIFLY.png", cry: "assets/sng/beautifly.mp3" },
+    "SNORLAX": { text: "¡HAS ENCONTRADO A SNORLAX!", sprite: "assets/img/SNORLAX.png", cry: "assets/sng/snorlax.mp3" },
+    "SWALOT": { text: "¡HAS ENCONTRADO A SWALOT!", sprite: "assets/img/SWALOT.png", cry: "assets/sng/swalot.mp3" },
+    "TOTODILE": { text: "¡HAS ENCONTRADO A TOTODILE!", sprite: "assets/img/TOTODILE.png", cry: "assets/sng/totodile.mp3" },
+    "UMBREON": { text: "¡HAS ENCONTRADO A UMBREON!", sprite: "assets/img/UMBREON.png", cry: "assets/sng/umbreon.mp3" },
+    "JIGGLYPUFF": { text: "¡HAS ENCONTRADO A JIGGLYPUFF!", sprite: "assets/img/JIGGLYPUFF.png", cry: "assets/sng/jigglypuff.mp3" },
+    "GENGAR": { text: "¡HAS ENCONTRADO A GENGAR!", sprite: "assets/img/GENGAR.png", cry: "assets/sng/gengar.mp3" }
+};
+
+function activarEscaner() {
+    sonidoBoton.play().catch(() => {});
+    document.getElementById('pokedex-content').style.display = 'none';
+    document.getElementById('reader').style.display = 'block';
+    
+    if (!html5QrCode) { html5QrCode = new Html5Qrcode("reader"); }
+    
+    // Ajuste de márgenes del escáner para que sea rectangular [cite: 2026-03-01]
+    html5QrCode.start(
+        { facingMode: "environment" }, 
+        { fps: 15, qrbox: { width: 250, height: 180 } }, 
+        (decodedText) => {
+            let code = decodedText.toUpperCase().trim();
+            if (pokemonDB[code]) {
+                html5QrCode.stop().then(() => { actualizarPantalla(pokemonDB[code]); });
+            }
+        }
+    ).catch((err) => console.error(err));
 }
 
-/* Estructura Pokédex */
-.pokedex {
-    position: relative;
-    width: 85%;
-    max-width: 340px;
-    height: 580px; 
-    background: linear-gradient(145deg, #ff4d4d, #b91c1c);
-    border: 5px solid #1a1a1a;
-    border-radius: 25px; 
-    display: flex;
-    flex-direction: column;
-    box-shadow: inset -8px -8px 0px rgba(0,0,0,0.2), 15px 20px 30px rgba(0,0,0,0.6);
-    z-index: 10;
+function actualizarPantalla(data) {
+    document.getElementById('reader').style.display = 'none';
+    document.getElementById('pokedex-content').style.display = 'flex';
+    document.getElementById('main-text').innerHTML = data.text;
+    document.getElementById('main-sprite').src = data.sprite;
+    document.getElementById('main-sprite').classList.remove('shaking-ball');
+    pokemonDetectado = true;
+    setTimeout(() => { new Audio(data.cry).play().catch(() => {}); }, 300); 
 }
 
-.pokedex-top { display: flex; padding: 20px; border-bottom: 4px solid #1a1a1a; gap: 15px; align-items: center; }
-.big-blue-lens { width: 50px; height: 50px; background: radial-gradient(circle at 30% 30%, #4cc9f0, #2563eb); border: 4px solid #fff; border-radius: 50%; box-shadow: 0 0 15px rgba(76, 201, 240, 0.8); }
-
-.led-container { display: flex; gap: 8px; }
-.led { width: 12px; height: 12px; border-radius: 50%; border: 2px solid #1a1a1a; }
-.red { background: #600; } .yellow { background: #660; } .green { background: #060; }
-
-.pokedex-body { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
-
-.screen-bezel {
-    background: #e0e0e0; border: 4px solid #1a1a1a;
-    border-radius: 12px 12px 12px 45px; padding: 12px 12px 25px 12px;
-}
-
-.screen-black {
-    background: #000;
-    border-radius: 5px;
-    height: 250px; 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    border: 3px solid #333;
-    overflow: hidden;
-    position: relative;
-}
-
-/* SOLUCIÓN BARRA NEGRA */
-#reader { width: 100% !important; height: 100% !important; display: none; }
-#reader video { object-fit: cover !important; width: 100% !important; height: 100% !important; }
-
-#pokedex-content { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100%; }
-.pokedex-text { color: #fff; font-size: 11px; line-height: 1.5; text-align: center; margin: 0 0 15px 0; text-transform: uppercase; }
-.pokemon-sprite { width: 130px; image-rendering: pixelated; }
-
-/* CONTROLES */
-.controls { display: flex; justify-content: center; align-items: flex-end; position: relative; height: 110px; padding-bottom: 10px; }
-
-.black-circle { 
-    position: absolute; left: 10px; bottom: 65px; 
-    width: 35px; height: 35px; background: #333; 
-    border-radius: 50%; border: 3px solid #1a1a1a; 
-    box-shadow: inset -2px -2px 0px rgba(0,0,0,0.5); cursor: pointer;
-}
-
-.green-button { 
-    width: 95px; height: 45px; background: linear-gradient(to bottom, #4caf50, #2e7d32); 
-    border: 4px solid #1a1a1a; border-radius: 12px; 
-    box-shadow: 0 5px 0 #1b431e; cursor: pointer; margin-bottom: 5px;
-}
-
-.d-pad { 
-    position: absolute; right: 10px; bottom: 5px;
-    width: 65px; height: 65px; background: #333; 
-    clip-path: polygon(35% 0%, 65% 0%, 65% 35%, 100% 35%, 100% 65%, 65% 65%, 65% 100%, 35% 100%, 35% 65%, 0% 65%, 0% 35%, 35% 35%); 
-}
-
-/* ANIMACIÓN DE CAPTURA */
-.shaking-ball { animation: shaking 0.4s infinite alternate; }
-@keyframes shaking {
-    0% { transform: translate(0, 0) rotate(0deg); }
-    25% { transform: translate(-8px, 0) rotate(-15deg); }
-    50% { transform: translate(0, 0) rotate(0deg); }
-    75% { transform: translate(8px, 0) rotate(15deg); }
-    100% { transform: translate(0, 0) rotate(0deg); }
+function capturarPokemon() {
+    if (!pokemonDetectado) return;
+    const sprite = document.getElementById('main-sprite');
+    const texto = document.getElementById('main-text');
+    sprite.src = 'assets/img/pokeball.png'; 
+    sprite.classList.add('shaking-ball'); 
+    texto.innerHTML = "¡ATRÁPALO!";
+    setTimeout(() => {
+        sprite.classList.remove('shaking-ball');
+        texto.innerHTML = "¡ATRÁPADO CON ÉXITO!";
+        pokemonDetectado = false;
+    }, 3000);
 }
