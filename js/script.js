@@ -39,8 +39,8 @@ function capturarPokemon() {
     if (!pokemonDetectado) return;
     const sprite = document.getElementById('main-sprite');
     
-    // POKÉBALL ROJA PIXELADA (Sprite de batalla) [cite: 2026-03-01]
-    sprite.src = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/animated/poke-ball.gif';
+    // NUEVA RUTA: Roja, pixelada y 100% transparente [cite: 2026-03-01]
+    sprite.src = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png'; 
     sprite.classList.add('shaking-ball');
     
     document.getElementById('main-text').innerHTML = "¡ATRÁPALO!";
