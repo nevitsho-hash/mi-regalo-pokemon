@@ -37,7 +37,7 @@ setTimeout(() => { new Audio(data.cry).play().catch(() => {}); }, 300);
 function capturarPokemon() {
 if (!pokemonDetectado) return;
 const sprite = document.getElementById('main-sprite');
-sprite.src = 'assets/img/pokeball.png';
+sprite.src = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png';
 sprite.classList.add('shaking-ball');
 document.getElementById('main-text').innerHTML = "¡ATRÁPALO!";
 setTimeout(() => {
