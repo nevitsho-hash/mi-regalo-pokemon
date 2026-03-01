@@ -12,7 +12,7 @@ body, html {
     overflow: hidden;
 }
 
-/* Estructura Pokédex - TUS DIMENSIONES EXACTAS */
+/* Estructura Pokédex - TUS DIMENSIONES DE SEGURIDAD */
 .pokedex {
     position: relative;
     width: 85%;
@@ -34,14 +34,20 @@ body, html {
 .led { width: 12px; height: 12px; border-radius: 50%; border: 2px solid #1a1a1a; }
 .red { background: #600; } .yellow { background: #660; } .green { background: #060; }
 
-.pokedex-body { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; position: relative; }
+.pokedex-body { 
+    padding: 15px; 
+    flex-grow: 1; 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: space-between; /* Distribuye espacio entre pantalla y botones */
+}
 
 .screen-bezel {
     background: #e0e0e0; border: 4px solid #1a1a1a;
     border-radius: 12px 12px 12px 45px; padding: 12px 12px 25px 12px;
 }
 
-/* PANTALLA - TU DIMENSIÓN EXACTA */
+/* PANTALLA - TU DIMENSIÓN DE SEGURIDAD */
 .screen-black {
     background: #000;
     border-radius: 5px;
@@ -55,36 +61,53 @@ body, html {
     position: relative;
 }
 
-/* Solución Barra Negra Escáner */
+#pokedex-content { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100%; }
+
+/* TEXTO CORREGIDO: Más separado */
+.pokedex-text { 
+    color: #fff; 
+    font-size: 10px; 
+    line-height: 1.8; /* Aumentamos interlineado para que no estén juntas */
+    text-align: center; 
+    margin-bottom: 15px; 
+    text-transform: uppercase; 
+    padding: 0 10px;
+}
+
+.pokemon-sprite { width: 120px; image-rendering: pixelated; }
+
+/* Cámara sin barras negras */
 #reader { width: 100% !important; height: 100% !important; display: none; }
 #reader video { object-fit: cover !important; width: 100% !important; height: 100% !important; }
 
-#pokedex-content { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100%; }
-.pokedex-text { color: #fff; font-size: 11px; text-align: center; margin-bottom: 10px; text-transform: uppercase; }
-.pokemon-sprite { width: 130px; image-rendering: pixelated; }
-
-/* CONTROLES - POSICIÓN FIJA */
-.controls { position: relative; height: 100px; width: 100%; margin-top: 10px; }
+/* CONTROLES - CAPA DE CLIC PRIORITARIA */
+.controls { 
+    position: relative; 
+    height: 100px; 
+    width: 100%; 
+    z-index: 50; /* Por encima de cualquier capa invisible */
+}
 
 .black-circle { 
     position: absolute; left: 10px; bottom: 60px; 
     width: 35px; height: 35px; background: #333; 
     border-radius: 50%; border: 3px solid #1a1a1a; 
-    box-shadow: inset -2px -2px 0px rgba(0,0,0,0.5); cursor: pointer; z-index: 20;
+    box-shadow: inset -2px -2px 0px rgba(0,0,0,0.5); 
+    cursor: pointer;
+    pointer-events: auto; /* Asegura que detecte el clic */
 }
 
 .green-button { 
     position: absolute; left: 50%; transform: translateX(-50%); bottom: 5px;
     width: 95px; height: 48px; background: linear-gradient(to bottom, #4caf50, #2e7d32); 
     border: 4px solid #1a1a1a; border-radius: 10px; 
-    box-shadow: 0 5px 0 #1b431e; cursor: pointer; z-index: 20;
+    box-shadow: 0 5px 0 #1b431e; cursor: pointer;
 }
 
 .d-pad { 
     position: absolute; right: 5px; bottom: 10px;
     width: 65px; height: 65px; background: #333; 
     clip-path: polygon(35% 0%, 65% 0%, 65% 35%, 100% 35%, 100% 65%, 65% 65%, 65% 100%, 35% 100%, 35% 65%, 0% 65%, 0% 35%, 35% 35%); 
-    z-index: 20;
 }
 
 .shaking-ball { animation: shaking 0.4s infinite alternate; }
