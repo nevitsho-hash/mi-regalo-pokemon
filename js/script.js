@@ -1,6 +1,6 @@
 const sonidoBoton = new Audio('assets/sng/clic.mp3');
 let html5QrCode;
-let pokemonDetectado = true;
+let pokemonDetectado = true; // Iniciamos con Gengar activo
 
 const pokemonDB = {
     "BEAUTIFLY": { text: "¡MIRA ESA BEAUTIFLY!<br>SUS ALAS SON BELLAS", sprite: "assets/img/BEAUTIFLY.png", cry: "assets/sng/beautifly.mp3" },
@@ -14,6 +14,10 @@ const pokemonDB = {
 
 function activarEscaner() {
     sonidoBoton.play().catch(() => {});
+    
+    // Activa luces
+    document.querySelector('.pokedex').classList.add('scanning');
+    
     document.getElementById('pokedex-content').style.display = 'none';
     document.getElementById('reader').style.display = 'block';
 
@@ -21,12 +25,11 @@ function activarEscaner() {
         html5QrCode = new Html5Qrcode("reader");
     }
 
-    // AJUSTE DE MÁRGENES: qrbox ahora es rectangular y grande [cite: 2026-03-01]
     html5QrCode.start(
         { facingMode: "environment" }, 
         { 
-            fps: 20, 
-            qrbox: { width: 250, height: 200 } // Ajustado al tamaño de tu pantalla [cite: 2026-03-01]
+            fps: 15, 
+            qrbox: { width: 250, height: 180 } 
         },
         (decodedText) => {
             let code = decodedText.toUpperCase().trim();
@@ -40,22 +43,28 @@ function activarEscaner() {
 }
 
 function actualizarPantalla(data) {
+    document.querySelector('.pokedex').classList.remove('scanning');
     document.getElementById('reader').style.display = 'none';
     document.getElementById('pokedex-content').style.display = 'flex';
     document.getElementById('main-text').innerHTML = data.text;
     document.getElementById('main-sprite').src = data.sprite;
     document.getElementById('main-sprite').classList.remove('shaking-ball');
     pokemonDetectado = true;
-    setTimeout(() => { new Audio(data.cry).play().catch(() => {}); }, 300); 
+    setTimeout(() => {
+        new Audio(data.cry).play().catch(() => {});
+    }, 300); 
 }
 
 function capturarPokemon() {
     if (!pokemonDetectado) return;
+    
     const sprite = document.getElementById('main-sprite');
     const texto = document.getElementById('main-text');
-    sprite.src = 'assets/img/pokeball.png'; [cite: 2026-02-28]
-    sprite.classList.add('shaking-ball'); [cite: 2026-02-28]
+
+    sprite.src = 'assets/img/pokeball.png'; 
+    sprite.classList.add('shaking-ball'); 
     texto.innerHTML = "¡ATRÁPALO!";
+
     setTimeout(() => {
         sprite.classList.remove('shaking-ball');
         texto.innerHTML = "¡ATRÁPADO CON ÉXITO!";
