@@ -92,15 +92,22 @@ function iniciarCaptura(img, prob, msg) {
             texto.innerHTML = "¡SE ESCAPÓ!";
             
             // Reintroducimos el zoom y encogimiento
+            sprite.style.transition = "transform 1.0s ease"; // Ralentizamos zoom
             sprite.style.transform = "scale(0.5)"; // Zoom/Encogimiento
+
+            // DESTELLO DE LUZ INTERMEDIO
+            setTimeout(() => {
+                sprite.style.filter = "brightness(2.5) contrast(1.5)";
+            }, 500); // 0.5s después del zoom
 
             setTimeout(() => {
                 sprite.classList.remove('is-pokeball');
                 sprite.style.transform = "scale(1)"; // Restauramos zoom
+                sprite.style.filter = "none"; // Eliminamos destello
                 sprite.src = oldImg;
                 sprite.style.width = "120px";
                 texto.innerHTML = oldTxt;
-            }, 1000);
+            }, 1500); // 1.5s totales (zoom + destello)
         }
     }, 3500);
 }
