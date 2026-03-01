@@ -16,13 +16,27 @@ function activarEscaner() {
     sonidoBoton.play().catch(() => {});
     document.getElementById('pokedex-content').style.display = 'none';
     document.getElementById('reader').style.display = 'block';
-    if (!html5QrCode) { html5QrCode = new Html5Qrcode("reader"); }
-    html5QrCode.start({ facingMode: "environment" }, { fps: 15, qrbox: 200 }, (decodedText) => {
-        let code = decodedText.toUpperCase().trim();
-        if (pokemonDB[code]) {
-            html5QrCode.stop().then(() => { actualizarPantalla(pokemonDB[code]); });
+
+    if (!html5QrCode) {
+        html5QrCode = new Html5Qrcode("reader");
+    }
+
+    // AJUSTE DE MÁRGENES: qrbox ahora es rectangular y grande [cite: 2026-03-01]
+    html5QrCode.start(
+        { facingMode: "environment" }, 
+        { 
+            fps: 20, 
+            qrbox: { width: 250, height: 200 } // Ajustado al tamaño de tu pantalla [cite: 2026-03-01]
+        },
+        (decodedText) => {
+            let code = decodedText.toUpperCase().trim();
+            if (pokemonDB[code]) {
+                html5QrCode.stop().then(() => {
+                    actualizarPantalla(pokemonDB[code]);
+                });
+            }
         }
-    }).catch((err) => console.error(err));
+    ).catch((err) => console.error(err));
 }
 
 function actualizarPantalla(data) {
@@ -39,8 +53,8 @@ function capturarPokemon() {
     if (!pokemonDetectado) return;
     const sprite = document.getElementById('main-sprite');
     const texto = document.getElementById('main-text');
-    sprite.src = 'assets/img/pokeball.png'; 
-    sprite.classList.add('shaking-ball'); 
+    sprite.src = 'assets/img/pokeball.png'; [cite: 2026-02-28]
+    sprite.classList.add('shaking-ball'); [cite: 2026-02-28]
     texto.innerHTML = "¡ATRÁPALO!";
     setTimeout(() => {
         sprite.classList.remove('shaking-ball');
