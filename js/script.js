@@ -19,7 +19,6 @@ function activarEscaner() {
     
     if (!html5QrCode) { html5QrCode = new Html5Qrcode("reader"); }
     
-    // Ajuste de márgenes del escáner para que sea rectangular [cite: 2026-03-01]
     html5QrCode.start(
         { facingMode: "environment" }, 
         { fps: 15, qrbox: { width: 250, height: 180 } }, 
