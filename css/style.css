@@ -6,19 +6,24 @@ body, html {
     width: 100%; height: 100%;
     display: flex; align-items: center; justify-content: center;
     background-color: #000;
+    /* Fondo del mapa Base 2 */
     background-image: url('../assets/img/fondo-pokemon.jpg'); 
     background-size: cover; background-position: center;
     font-family: 'Press Start 2P', cursive;
     overflow: hidden;
 }
 
-/* Estructura Pokédex - SÓLIDA [cite: 2026-03-01] */
+/* Estructura Pokédex - SÓLIDA Y OPACA */
 .pokedex {
     position: relative;
-    width: 85%; max-width: 340px; min-height: 560px;
-    background: #dc0a2d; /* Rojo sólido */
-    border: 5px solid #1a1a1a; border-radius: 25px;
-    display: flex; flex-direction: column;
+    width: 85%;
+    max-width: 340px;
+    min-height: 560px; /* Dimensión Base 2 */
+    background: #dc0a2d; /* Rojo sólido NO TRANSPARENTE */
+    border: 5px solid #1a1a1a;
+    border-radius: 25px; 
+    display: flex;
+    flex-direction: column;
     box-shadow: inset -8px -8px 0px rgba(0,0,0,0.2), 15px 20px 30px rgba(0,0,0,0.6);
     z-index: 10;
 }
@@ -37,42 +42,59 @@ body, html {
     border-radius: 12px 12px 12px 45px; padding: 12px 12px 25px 12px;
 }
 
+/* PANTALLA RECTANGULAR */
 .screen-black {
-    background: #000; border-radius: 5px; height: 270px;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    border: 3px solid #333; overflow: hidden; position: relative;
+    background: #000;
+    border-radius: 5px;
+    height: 270px; /* Dimensión Base 2 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid #333;
+    overflow: hidden;
+    position: relative;
 }
 
 #pokedex-content { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100%; }
 .pokedex-text { color: #fff; font-size: 10px; line-height: 1.6; text-align: center; margin-bottom: 10px; text-transform: uppercase; }
 .pokemon-sprite { width: 120px; image-rendering: pixelated; }
 
-/* Cámara Full [cite: 2026-03-01] */
+/* Cámara sin barras negras */
 #reader { width: 100% !important; height: 100% !important; display: none; }
 #reader video { object-fit: cover !important; width: 100% !important; height: 100% !important; }
 
-/* CONTROLES [cite: 2026-03-01] */
+/* CONTROLES - FUNCIONALES */
 .controls { position: relative; height: 110px; width: 100%; z-index: 50; }
+
 .black-circle { 
     position: absolute; left: 10px; bottom: 65px; 
-    width: 35px; height: 35px; background: #333; border-radius: 50%; 
-    border: 3px solid #1a1a1a; cursor: pointer;
+    width: 35px; height: 35px; background: #333; 
+    border-radius: 50%; border: 3px solid #1a1a1a; 
+    box-shadow: inset -2px -2px 0px rgba(0,0,0,0.5); cursor: pointer;
+    pointer-events: auto; /* Asegura el clic */
 }
+
 .green-button { 
     position: absolute; left: 50%; transform: translateX(-50%); bottom: 5px;
     width: 95px; height: 48px; background: linear-gradient(to bottom, #4caf50, #2e7d32); 
-    border: 4px solid #1a1a1a; border-radius: 10px; cursor: pointer;
+    border: 4px solid #1a1a1a; border-radius: 10px; 
+    box-shadow: 0 5px 0 #1b431e; cursor: pointer;
+    pointer-events: auto;
 }
+
 .d-pad { 
     position: absolute; right: 5px; bottom: 5px;
     width: 65px; height: 65px; background: #333; 
     clip-path: polygon(35% 0%, 65% 0%, 65% 35%, 100% 35%, 100% 65%, 65% 65%, 65% 100%, 35% 100%, 35% 65%, 0% 65%, 0% 35%, 35% 35%); 
 }
 
-/* ANIMACIÓN RESTAURADA CON FONDO TRANSPARENTE [cite: 2026-03-01] */
+/* SOLUCIÓN FINAL: Fondo blanco circular y animación restaurada */
 .shaking-ball { 
-    background: transparent !important; /* Asegura que no haya fondo en la imagen [cite: 2026-03-01] */
-    animation: shaking 0.4s infinite alternate; 
+    background: #fff; /* Fondo blanco sólido y opaco */
+    border-radius: 50%; /* Hace el fondo circular */
+    padding: 10px; /* Crea un borde blanco alrededor de la Pokéball */
+    animation: shaking 0.4s infinite alternate; /* Restaurada la animación de vibración */
 }
 
 @keyframes shaking {
