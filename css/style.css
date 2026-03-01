@@ -12,17 +12,13 @@ body, html {
     overflow: hidden;
 }
 
-/* Estructura Pokédex - COLOR ORIGINAL RESTAURADO */
+/* Estructura Pokédex */
 .pokedex {
     position: relative;
-    width: 85%;
-    max-width: 340px;
-    min-height: 560px;
+    width: 85%; max-width: 340px; min-height: 560px;
     background: linear-gradient(145deg, #ff4d4d, #b91c1c);
-    border: 5px solid #1a1a1a;
-    border-radius: 25px; 
-    display: flex;
-    flex-direction: column;
+    border: 5px solid #1a1a1a; border-radius: 25px; 
+    display: flex; flex-direction: column;
     box-shadow: inset -8px -8px 0px rgba(0,0,0,0.2), 15px 20px 30px rgba(0,0,0,0.6);
     z-index: 10;
 }
@@ -30,60 +26,41 @@ body, html {
 .pokedex-top { display: flex; padding: 20px; border-bottom: 4px solid #1a1a1a; gap: 15px; align-items: center; }
 .big-blue-lens { width: 50px; height: 50px; background: radial-gradient(circle at 30% 30%, #4cc9f0, #2563eb); border: 4px solid #fff; border-radius: 50%; box-shadow: 0 0 15px rgba(76, 201, 240, 0.8); }
 
-.led-container { display: flex; gap: 8px; }
-.led { width: 12px; height: 12px; border-radius: 50%; border: 2px solid #1a1a1a; }
-.red { background: #600; } .yellow { background: #660; } .green { background: #060; }
-
 .pokedex-body { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
 
-.screen-bezel {
-    background: #e0e0e0; border: 4px solid #1a1a1a;
-    border-radius: 12px 12px 12px 45px; padding: 12px 12px 25px 12px;
-}
-
 .screen-black {
-    background: #000;
-    border-radius: 5px;
-    height: 270px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    border: 3px solid #333;
-    overflow: hidden;
-    position: relative;
+    background: #000; border-radius: 5px; height: 270px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    border: 3px solid #333; overflow: hidden; position: relative;
 }
 
-#pokedex-content { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100%; }
-
-/* LETRAS RESTAURADAS AL TAMAÑO ANTERIOR */
+/* TEXTO: Restaurado al tamaño que te gusta [cite: 2026-03-01] */
 .pokedex-text { 
-    color: #fff; 
-    font-size: 10px; 
-    line-height: 1.6; /* Volvemos al interlineado original */
-    text-align: center; 
-    margin-bottom: 10px; 
-    text-transform: uppercase; 
+    color: #fff; font-size: 10px; line-height: 1.6; 
+    text-align: center; margin-bottom: 10px; text-transform: uppercase; 
 }
 
-/* GENGAR RESTAURADO AL TAMAÑO ANTERIOR */
+/* SPRITES: Gengar y otros Pokémon [cite: 2026-03-01] */
 .pokemon-sprite { 
-    width: 120px; /* Volvemos a los 120px de la Base 2 */
+    width: 120px; /* Tamaño grande original */
     image-rendering: pixelated; 
+    transition: width 0.3s ease; /* Transición suave al cambiar de tamaño */
 }
 
-/* Cámara sin barras negras */
-#reader { width: 100% !important; height: 100% !important; display: none; }
-#reader video { object-fit: cover !important; width: 100% !important; height: 100% !important; }
+/* CLASE ESPECIAL: Solo para la Pokéball [cite: 2026-03-01] */
+.is-pokeball {
+    width: 60px !important; /* Forzamos tamaño pequeño */
+}
 
-/* CONTROLES */
-.controls { position: relative; height: 110px; width: 100%; z-index: 50; }
-.black-circle { position: absolute; left: 10px; bottom: 65px; width: 35px; height: 35px; background: #333; border-radius: 50%; border: 3px solid #1a1a1a; cursor: pointer; }
-.green-button { position: absolute; left: 50%; transform: translateX(-50%); bottom: 5px; width: 95px; height: 48px; background: linear-gradient(to bottom, #4caf50, #2e7d32); border: 4px solid #1a1a1a; border-radius: 10px; cursor: pointer; }
-.d-pad { position: absolute; right: 5px; bottom: 5px; width: 65px; height: 65px; background: #333; clip-path: polygon(35% 0%, 65% 0%, 65% 35%, 100% 35%, 100% 65%, 65% 65%, 65% 100%, 35% 100%, 35% 65%, 0% 65%, 0% 35%, 35% 35%); }
-
+/* Animación de vibración */
 .shaking-ball { animation: shaking 0.4s infinite alternate; }
 @keyframes shaking {
     0% { transform: translate(0, 0) rotate(0deg); }
     100% { transform: translate(8px, 0) rotate(15deg); }
 }
+
+/* Resto de controles... */
+.controls { position: relative; height: 110px; width: 100%; z-index: 50; }
+.black-circle { position: absolute; left: 10px; bottom: 65px; width: 35px; height: 35px; background: #333; border-radius: 50%; border: 3px solid #1a1a1a; cursor: pointer; }
+.green-button { position: absolute; left: 50%; transform: translateX(-50%); bottom: 5px; width: 95px; height: 48px; background: linear-gradient(to bottom, #4caf50, #2e7d32); border: 4px solid #1a1a1a; border-radius: 10px; cursor: pointer; }
+.d-pad { position: absolute; right: 5px; bottom: 5px; width: 65px; height: 65px; background: #333; clip-path: polygon(35% 0%, 65% 0%, 65% 35%, 100% 35%, 100% 65%, 65% 65%, 65% 100%, 35% 100%, 35% 65%, 0% 65%, 0% 35%, 35% 35%); }
