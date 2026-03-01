@@ -1,5 +1,5 @@
 const sonidoBoton = new Audio('assets/sng/clic.mp3');
-let pokemonDetectado = true; // Empieza en true porque Gengar ya está en pantalla
+let pokemonDetectado = true;
 let html5QrCode;
 
 const pokemonDB = {
@@ -18,7 +18,7 @@ function activarEscaner() {
     
     if (!html5QrCode) { html5QrCode = new Html5Qrcode("reader"); }
     
-    html5QrCode.start({ facingMode: "environment" }, { fps: 15, qrbox: { width: 200, height: 200 } }, (decodedText) => {
+    html5QrCode.start({ facingMode: "environment" }, { fps: 15, qrbox: { width: 180, height: 180 } }, (decodedText) => {
         let code = decodedText.toUpperCase().trim();
         if (pokemonDB[code]) {
             const data = pokemonDB[code];
