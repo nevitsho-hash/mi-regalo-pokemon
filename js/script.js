@@ -62,6 +62,7 @@ function capturarNormal() {
 function capturarSuper() {
     if (!pokemonDetectado) return;
     sonidoBoton.play().catch(() => {});
+    // Probabilidad x2 para la Super Ball
     iniciarCaptura('https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/great-ball.png', (pokemonActualData.catchRate * 2), "¡SUPER BALL!");
 }
 
@@ -84,7 +85,7 @@ function iniciarCaptura(img, prob, msg) {
         sprite.classList.remove('shaking-slow');
         if (Math.random() < prob) {
             texto.innerHTML = "¡ATRAPADO!";
-            sprite.classList.add('captured-success'); // Brilla y vuelve a la normalidad [cite: 2026-03-01]
+            sprite.classList.add('captured-success'); // Brillo temporal [cite: 2026-03-01]
             document.querySelectorAll('.led').forEach(l => l.classList.add('success'));
             pokemonDetectado = false;
         } else {
