@@ -1,13 +1,8 @@
-// CONFIGURACIÓN DE SONIDOS Y VARIABLES GLOBALES [cite: 2026-03-01]
+// SONIDOS [cite: 2026-02-27]
 const sonidoBoton = new Audio('assets/sng/clic.mp3');
 let html5QrCode;
 let pokemonDetectado = true;
-let pokemonActualData = { 
-    text: "GENGAR POR PERTO!", 
-    sprite: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/94.png", 
-    catchRate: 0.1, 
-    cry: "assets/sng/gengar.mp3" 
-};
+let pokemonActualData = { text: "GENGAR POR PERTO!", sprite: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/94.png", catchRate: 0.1, cry: "assets/sng/gengar.mp3" };
 
 const pokemonDB = {
     "BEAUTIFLY": { text: "¡BEAUTIFLY!", sprite: "assets/img/BEAUTIFLY.png", catchRate: 0.5, cry: "assets/sng/beautifly.mp3" },
@@ -19,49 +14,45 @@ const pokemonDB = {
     "GENGAR": { text: "¡GENGAR!", sprite: "assets/img/GENGAR.png", catchRate: 0.1, cry: "assets/sng/gengar.mp3" }
 };
 
-// 1. INICIALIZACIÓN ÚNICA (Evita que el escáner se duplique) [cite: 2026-03-01]
-window.addEventListener('DOMContentLoaded', () => {
-    html5QrCode = new Html5Qrcode("reader");
-});
-
 async function activarEscaner() {
     sonidoBoton.play().catch(() => {});
     
-    // Preparar interfaz visual
+    if (html5QrCode) {
+        try { await html5QrCode.stop(); } catch (e) {}
+        html5QrCode = null;
+    }
+
     document.getElementById('pokedex-content').style.display = 'none';
-    document.getElementById('reader').style.display = 'block';
+    const readerDiv = document.getElementById('reader');
+    readerDiv.style.display = 'block';
     document.querySelectorAll('.led').forEach(l => l.classList.add('animating'));
 
-    const config = { 
-        fps: 20, 
-        qrbox: { width: 250, height: 250 }
-    };
+    setTimeout(() => {
+        html5QrCode = new Html5Qrcode("reader");
+        const config = { 
+            fps: 15, 
+            qrbox: { width: 250, height: 250 },
+            aspectRatio: 1.0 
+        };
 
-    // 2. INICIO SEGURO: Solo arranca si no está ya funcionando
-    try {
-        await html5QrCode.start(
+        html5QrCode.start(
             { facingMode: "environment" }, 
             config, 
             (text) => {
                 let code = text.toUpperCase().trim();
                 if (pokemonDB[code]) {
-                    detenerEscanerYMostrar(code);
+                    html5QrCode.stop().then(() => {
+                        pokemonActualData = pokemonDB[code];
+                        actualizarPantalla();
+                    });
                 }
             }
-        );
-    } catch (err) {
-        console.error("No se pudo iniciar el escáner:", err);
-        // Si hay error (como cámara ya abierta), intentamos resetear
-        restaurarInterfaz();
-    }
-}
-
-async function detenerEscanerYMostrar(code) {
-    if (html5QrCode) {
-        await html5QrCode.stop();
-        pokemonActualData = pokemonDB[code];
-        actualizarPantalla();
-    }
+        ).catch(err => {
+            console.error("Error cámara:", err);
+            document.getElementById('main-text').innerHTML = "ERROR DE CÁMARA";
+            actualizarPantalla();
+        });
+    }, 300); 
 }
 
 function actualizarPantalla() {
@@ -79,25 +70,22 @@ function actualizarPantalla() {
     pokemonDetectado = true;
 }
 
-function restaurarInterfaz() {
-    document.getElementById('reader').style.display = 'none';
-    document.getElementById('pokedex-content').style.display = 'flex';
-    document.querySelectorAll('.led').forEach(l => l.classList.remove('animating'));
-}
-
-// LÓGICA DE CAPTURA (Se mantiene estable) [cite: 2026-03-01]
-function capturarNormal() {
-    if (!pokemonDetectado) return;
+function capturarPokemon() {
+    if (!pokemonDetectado || !pokemonActualData) return;
     sonidoBoton.play().catch(() => {});
-    iniciarCaptura('https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png', pokemonActualData.catchRate, "¡POKÉ BALL!");
+    const ballImg = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png';
+    iniciarCaptura(ballImg, pokemonActualData.catchRate, "¡POKÉ BALL!");
 }
 
-function capturarSuper() {
-    if (!pokemonDetectado) return;
+function usarSuperBall() {
+    if (!pokemonDetectado || !pokemonActualData) return;
     sonidoBoton.play().catch(() => {});
-    iniciarCaptura('https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/great-ball.png', (pokemonActualData.catchRate * 2), "¡SUPER BALL!");
+    const ballImg = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/great-ball.png';
+    // Probabilidad doble para la Super Ball
+    iniciarCaptura(ballImg, (pokemonActualData.catchRate * 2), "¡SUPER BALL!");
 }
 
+// FUNCIÓN ÚNICA Y COMPARTIDA PARA LA ANIMACIÓN DE CAPTURA
 function iniciarCaptura(img, prob, msg) {
     const sprite = document.getElementById('main-sprite');
     const texto = document.getElementById('main-text');
@@ -116,11 +104,15 @@ function iniciarCaptura(img, prob, msg) {
     setTimeout(() => {
         sprite.classList.remove('shaking-slow');
         if (Math.random() < prob) {
+            
+            // FASE DE ÉXITO CON SACUDIDA FINAL
             texto.innerHTML = "¡ATRAPADO!";
-            sprite.classList.add('captured-success');
-            document.querySelectorAll('.led').forEach(l => l.classList.add('success'));
+            sprite.classList.add('captured-success'); // Activamos la nueva animación limpia (encogimiento)
+            document.querySelectorAll('.led').forEach(l => l.classList.add('success')); // LEDs en verde
             pokemonDetectado = false;
+            
         } else {
+            // FASE DE FALLO (Restauramos)
             texto.innerHTML = "¡SE ESCAPÓ!";
             setTimeout(() => {
                 sprite.classList.remove('is-pokeball');
