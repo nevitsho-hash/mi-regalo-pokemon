@@ -16,19 +16,13 @@ function activarEscaner() {
     sonidoBoton.play().catch(() => {});
     document.getElementById('pokedex-content').style.display = 'none';
     document.getElementById('reader').style.display = 'block';
-    
     if (!html5QrCode) { html5QrCode = new Html5Qrcode("reader"); }
-    
-    html5QrCode.start(
-        { facingMode: "environment" }, 
-        { fps: 15, qrbox: { width: 250, height: 200 } }, 
-        (decodedText) => {
-            let code = decodedText.toUpperCase().trim();
-            if (pokemonDB[code]) {
-                html5QrCode.stop().then(() => { actualizarPantalla(pokemonDB[code]); });
-            }
+    html5QrCode.start({ facingMode: "environment" }, { fps: 15, qrbox: { width: 250, height: 200 } }, (text) => {
+        let code = text.toUpperCase().trim();
+        if (pokemonDB[code]) {
+            html5QrCode.stop().then(() => { actualizarPantalla(pokemonDB[code]); });
         }
-    ).catch((err) => console.error(err));
+    }).catch(err => console.error(err));
 }
 
 function actualizarPantalla(data) {
@@ -36,7 +30,6 @@ function actualizarPantalla(data) {
     document.getElementById('pokedex-content').style.display = 'flex';
     document.getElementById('main-text').innerHTML = data.text;
     document.getElementById('main-sprite').src = data.sprite;
-    document.getElementById('main-sprite').classList.remove('shaking-ball');
     pokemonDetectado = true;
     setTimeout(() => { new Audio(data.cry).play().catch(() => {}); }, 300); 
 }
@@ -44,13 +37,12 @@ function actualizarPantalla(data) {
 function capturarPokemon() {
     if (!pokemonDetectado) return;
     const sprite = document.getElementById('main-sprite');
-    const texto = document.getElementById('main-text');
-    sprite.src = 'assets/img/pokeball.png'; [cite: 2026-02-28]
+    sprite.src = 'assets/img/pokeball.png'; 
     sprite.classList.add('shaking-ball'); 
-    texto.innerHTML = "¡ATRÁPALO!";
+    document.getElementById('main-text').innerHTML = "¡ATRÁPALO!";
     setTimeout(() => {
         sprite.classList.remove('shaking-ball');
-        texto.innerHTML = "¡ATRÁPADO CON ÉXITO!";
+        document.getElementById('main-text').innerHTML = "¡POKÉMON ATRAPADO!";
         pokemonDetectado = false;
     }, 3000);
 }
