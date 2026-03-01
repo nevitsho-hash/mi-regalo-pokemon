@@ -1,13 +1,7 @@
 const sonidoBoton = new Audio('assets/sng/clic.mp3');
 let html5QrCode;
 let pokemonDetectado = true;
-// Texto inicial restaurado según tu cambio [cite: 2026-03-01]
-let pokemonActualData = { 
-    text: "UM SENTIMENTO<br>ESTRANHO...<br>GENGAR POR PERTO!", 
-    sprite: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/94.png", 
-    catchRate: 0.1, 
-    cry: "assets/sng/gengar.mp3" 
-};
+let pokemonActualData = { text: "GENGAR POR PERTO!", sprite: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/94.png", catchRate: 0.1, cry: "assets/sng/gengar.mp3" };
 
 const pokemonDB = {
     "BEAUTIFLY": { text: "¡BEAUTIFLY!", sprite: "assets/img/BEAUTIFLY.png", catchRate: 0.5, cry: "assets/sng/beautifly.mp3" },
@@ -49,7 +43,7 @@ function actualizarPantalla() {
     const sprite = document.getElementById('main-sprite');
     sprite.src = pokemonActualData.sprite;
     sprite.style.width = "120px";
-    sprite.classList.remove('is-pokeball', 'shaking-hard', 'shaking-slow', 'captured-success', 'pokemon-escape');
+    sprite.classList.remove('is-pokeball', 'shaking-hard', 'shaking-slow', 'captured-success');
     new Audio(pokemonActualData.cry).play().catch(() => {});
     pokemonDetectado = true;
 }
@@ -74,8 +68,8 @@ function capturarSuper() {
 function iniciarCaptura(img, prob, msg) {
     const sprite = document.getElementById('main-sprite');
     const texto = document.getElementById('main-text');
-    const pokemonSpriteURL = pokemonActualData.sprite; 
-    const fraseGengar = "UM SENTIMENTO<br>ESTRANHO...<br>GENGAR POR PERTO!";
+    const oldImg = sprite.src;
+    const oldTxt = texto.innerHTML;
 
     sprite.src = img;
     sprite.classList.add('is-pokeball', 'shaking-hard');
@@ -90,25 +84,22 @@ function iniciarCaptura(img, prob, msg) {
         sprite.classList.remove('shaking-slow');
         if (Math.random() < prob) {
             texto.innerHTML = "¡ATRAPADO!";
-            sprite.classList.add('captured-success');
+            sprite.classList.add('captured-success'); // Brillo temporal
             document.querySelectorAll('.led').forEach(l => l.classList.add('success'));
             pokemonDetectado = false;
         } else {
-            // LÓGICA DE ESCAPE ANIMADO [cite: 2026-03-01]
+            // LÓGICA DE ESCAPE REINTEGRADA
             texto.innerHTML = "¡SE ESCAPÓ!";
-            sprite.classList.remove('is-pokeball');
-            sprite.src = pokemonSpriteURL;
             
-            setTimeout(() => {
-                sprite.classList.add('pokemon-escape');
-            }, 50);
+            // Reintroducimos el zoom y encogimiento
+            sprite.style.transform = "scale(0.5)"; // Zoom/Encogimiento
 
-            // Restauramos todo tras la huida
             setTimeout(() => {
-                sprite.classList.remove('pokemon-escape');
-                sprite.src = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/94.png";
-                texto.innerHTML = fraseGengar;
+                sprite.classList.remove('is-pokeball');
+                sprite.style.transform = "scale(1)"; // Restauramos zoom
+                sprite.src = oldImg;
                 sprite.style.width = "120px";
+                texto.innerHTML = oldTxt;
             }, 1000);
         }
     }, 3500);
