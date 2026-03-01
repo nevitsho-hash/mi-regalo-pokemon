@@ -1,7 +1,13 @@
 const sonidoBoton = new Audio('assets/sng/clic.mp3');
 let html5QrCode;
 let pokemonDetectado = true;
-let pokemonActualData = { text: "GENGAR POR PERTO!", sprite: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/94.png", catchRate: 0.1, cry: "assets/sng/gengar.mp3" };
+// Texto inicial restaurado según tu cambio [cite: 2026-03-01]
+let pokemonActualData = { 
+    text: "UM SENTIMENTO<br>ESTRANHO...<br>GENGAR POR PERTO!", 
+    sprite: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/94.png", 
+    catchRate: 0.1, 
+    cry: "assets/sng/gengar.mp3" 
+};
 
 const pokemonDB = {
     "BEAUTIFLY": { text: "¡BEAUTIFLY!", sprite: "assets/img/BEAUTIFLY.png", catchRate: 0.5, cry: "assets/sng/beautifly.mp3" },
@@ -39,15 +45,11 @@ function actualizarPantalla() {
     document.getElementById('reader').style.display = 'none';
     document.getElementById('pokedex-content').style.display = 'flex';
     document.getElementById('main-text').innerHTML = pokemonActualData.text;
-    
-    // Apagamos LEDs de animación [cite: 2026-03-01]
     document.querySelectorAll('.led').forEach(l => l.classList.remove('animating', 'success'));
-    
     const sprite = document.getElementById('main-sprite');
     sprite.src = pokemonActualData.sprite;
     sprite.style.width = "120px";
-    sprite.classList.remove('is-pokeball', 'shaking-hard', 'shaking-slow', 'captured-success');
-    
+    sprite.classList.remove('is-pokeball', 'shaking-hard', 'shaking-slow', 'captured-success', 'pokemon-escape');
     new Audio(pokemonActualData.cry).play().catch(() => {});
     pokemonDetectado = true;
 }
@@ -66,15 +68,14 @@ function capturarNormal() {
 function capturarSuper() {
     if (!pokemonDetectado) return;
     sonidoBoton.play().catch(() => {});
-    // Probabilidad x2 para la Super Ball
     iniciarCaptura('https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/great-ball.png', (pokemonActualData.catchRate * 2), "¡SUPER BALL!");
 }
 
 function iniciarCaptura(img, prob, msg) {
     const sprite = document.getElementById('main-sprite');
     const texto = document.getElementById('main-text');
-    const oldImg = sprite.src;
-    const oldTxt = texto.innerHTML;
+    const pokemonSpriteURL = pokemonActualData.sprite; 
+    const fraseGengar = "UM SENTIMENTO<br>ESTRANHO...<br>GENGAR POR PERTO!";
 
     sprite.src = img;
     sprite.classList.add('is-pokeball', 'shaking-hard');
@@ -89,17 +90,26 @@ function iniciarCaptura(img, prob, msg) {
         sprite.classList.remove('shaking-slow');
         if (Math.random() < prob) {
             texto.innerHTML = "¡ATRAPADO!";
-            sprite.classList.add('captured-success'); // Brillo temporal [cite: 2026-03-01]
+            sprite.classList.add('captured-success');
             document.querySelectorAll('.led').forEach(l => l.classList.add('success'));
             pokemonDetectado = false;
         } else {
+            // LÓGICA DE ESCAPE ANIMADO [cite: 2026-03-01]
             texto.innerHTML = "¡SE ESCAPÓ!";
+            sprite.classList.remove('is-pokeball');
+            sprite.src = pokemonSpriteURL;
+            
             setTimeout(() => {
-                sprite.classList.remove('is-pokeball');
-                sprite.src = oldImg;
+                sprite.classList.add('pokemon-escape');
+            }, 50);
+
+            // Restauramos todo tras la huida
+            setTimeout(() => {
+                sprite.classList.remove('pokemon-escape');
+                sprite.src = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/94.png";
+                texto.innerHTML = fraseGengar;
                 sprite.style.width = "120px";
-                texto.innerHTML = oldTxt;
-            }, 1500);
+            }, 1000);
         }
     }, 3500);
 }
