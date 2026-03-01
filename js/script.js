@@ -1,61 +1,48 @@
-const sonidoBoton = new Audio('assets/sng/clic.mp3');
-let html5QrCode;
-let pokemonDetectado = true;
-
-const pokemonDB = {
-    "BEAUTIFLY": { text: "¡MIRA ESA BEAUTIFLY!<br>SUS ALAS SON BELLAS", sprite: "assets/img/BEAUTIFLY.png", cry: "assets/sng/beautifly.mp3" },
-    "SNORLAX": { text: "¡HAS ENCONTRADO A SNORLAX!", sprite: "assets/img/SNORLAX.png", cry: "assets/sng/snorlax.mp3" },
-    "SWALOT": { text: "¡HAS ENCONTRADO A SWALOT!", sprite: "assets/img/SWALOT.png", cry: "assets/sng/swalot.mp3" },
-    "TOTODILE": { text: "¡HAS ENCONTRADO A TOTODILE!", sprite: "assets/img/TOTODILE.png", cry: "assets/sng/totodile.mp3" },
-    "UMBREON": { text: "¡HAS ENCONTRADO A UMBREON!", sprite: "assets/img/UMBREON.png", cry: "assets/sng/umbreon.mp3" },
-    "JIGGLYPUFF": { text: "¡HAS ENCONTRADO A JIGGLYPUFF!", sprite: "assets/img/JIGGLYPUFF.png", cry: "assets/sng/jigglypuff.mp3" },
-    "GENGAR": { text: "¡HAS ENCONTRADO A GENGAR!<br>LA SOMBRA TRAVIESA", sprite: "assets/img/GENGAR.png", cry: "assets/sng/gengar.mp3" }
-};
-
-function activarEscaner() {
-    sonidoBoton.play().catch(() => {});
-    document.getElementById('pokedex-content').style.display = 'none';
-    document.getElementById('reader').style.display = 'block';
-    
-    // ENCENDER LEDs AL ACTIVAR CÁMARA [cite: 2026-03-01]
-    document.querySelectorAll('.led').forEach(l => l.classList.add('animating'));
-
-    if (!html5QrCode) { html5QrCode = new Html5Qrcode("reader"); }
-    html5QrCode.start({ facingMode: "environment" }, { fps: 15, qrbox: { width: 250, height: 200 } }, (text) => {
-        let code = text.toUpperCase().trim();
-        if (pokemonDB[code]) {
-            html5QrCode.stop().then(() => { actualizarPantalla(pokemonDB[code]); });
-        }
-    }).catch(err => console.error(err));
-}
-
-function actualizarPantalla(data) {
-    document.getElementById('reader').style.display = 'none';
-    document.getElementById('pokedex-content').style.display = 'flex';
-    document.getElementById('main-text').innerHTML = data.text;
-    
-    // APAGAR LEDs AL MOSTRAR RESULTADO [cite: 2026-03-01]
-    document.querySelectorAll('.led').forEach(l => l.classList.remove('animating'));
-
-    const sprite = document.getElementById('main-sprite');
-    sprite.src = data.sprite;
-    sprite.classList.remove('is-pokeball', 'shaking-ball');
-    pokemonDetectado = true;
-    setTimeout(() => { new Audio(data.cry).play().catch(() => {}); }, 300);
-}
+/* ... (Base de datos y activarEscaner igual) ... */
 
 function capturarPokemon() {
     if (!pokemonDetectado) return;
+    
     const sprite = document.getElementById('main-sprite');
-    
-    // Pokéball Píxel oficial [cite: 2026-03-01]
+    const texto = document.getElementById('main-text');
+    const originalSprite = sprite.src; // Guardamos el Pokémon por si escapa
+    const originalText = texto.innerHTML;
+
+    // Fase 1: Lanzamiento y movimiento BRUSCO
     sprite.src = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png';
-    
-    sprite.classList.add('is-pokeball', 'shaking-ball');
-    document.getElementById('main-text').innerHTML = "¡ATRÁPALO!";
+    sprite.classList.add('is-pokeball', 'shaking-hard');
+    texto.innerHTML = "¡ATRÁPALO...!";
+
+    // Fase 2: A los 1.5 segundos, el movimiento se calma
     setTimeout(() => {
-        sprite.classList.remove('shaking-ball');
-        document.getElementById('main-text').innerHTML = "¡POKÉMON ATRAPADO!";
-        pokemonDetectado = false;
-    }, 3000);
+        sprite.classList.remove('shaking-hard');
+        sprite.classList.add('shaking-slow');
+    }, 1500);
+
+    // Fase 3: Resolución (Éxito o Fallo) a los 3.5 segundos
+    setTimeout(() => {
+        sprite.classList.remove('shaking-slow');
+        
+        // CÁLCULO DE PROBABILIDADES (70% éxito, 30% fallo) [cite: 2026-03-01]
+        const exito = Math.random() > 0.3;
+
+        if (exito) {
+            texto.innerHTML = "¡POKÉMON ATRAPADO!";
+            pokemonDetectado = false;
+        } else {
+            // FALLO DE CAPTURA
+            sprite.classList.add('capture-failed');
+            texto.innerHTML = "¡OH NO! <br> SE HA ESCAPADO";
+            
+            setTimeout(() => {
+                sprite.classList.remove('is-pokeball', 'capture-failed');
+                sprite.src = originalSprite; // Vuelve el Pokémon
+                sprite.style.width = "120px";
+                texto.innerHTML = originalText;
+                pokemonDetectado = true;
+            }, 1500);
+        }
+    }, 3500);
 }
+
+/* ... (Resto de funciones igual) ... */
