@@ -19,7 +19,7 @@ body, html {
     position: relative;
     width: 85%;
     max-width: 340px;
-    height: 580px; 
+    min-height: 560px; /* Restaurado a tu base1 */
     background: linear-gradient(145deg, #ff4d4d, #b91c1c);
     border: 5px solid #1a1a1a;
     border-radius: 25px; 
@@ -30,13 +30,7 @@ body, html {
 }
 
 .pokedex-top { display: flex; padding: 20px; border-bottom: 4px solid #1a1a1a; gap: 15px; align-items: center; }
-
-.big-blue-lens { 
-    width: 50px; height: 50px; 
-    background: radial-gradient(circle at 30% 30%, #4cc9f0, #2563eb); 
-    border: 4px solid #fff; border-radius: 50%; 
-    box-shadow: 0 0 15px rgba(76, 201, 240, 0.8); 
-}
+.big-blue-lens { width: 50px; height: 50px; background: radial-gradient(circle at 30% 30%, #4cc9f0, #2563eb); border: 4px solid #fff; border-radius: 50%; box-shadow: 0 0 15px rgba(76, 201, 240, 0.8); }
 
 .led-container { display: flex; gap: 8px; }
 .led { width: 12px; height: 12px; border-radius: 50%; border: 2px solid #1a1a1a; }
@@ -44,16 +38,7 @@ body, html {
 .yellow { background: #660; }
 .green { background: #060; }
 
-.scanning .red { animation: blink 0.6s infinite 0s; }
-.scanning .yellow { animation: blink 0.6s infinite 0.2s; }
-.scanning .green { animation: blink 0.6s infinite 0.4s; }
-
-@keyframes blink {
-    0%, 100% { filter: brightness(0.5); opacity: 0.5; }
-    50% { filter: brightness(2); opacity: 1; box-shadow: 0 0 10px currentColor; }
-}
-
-.pokedex-body { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
+.pokedex-body { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; gap: 15px; }
 
 .screen-bezel {
     background: #e0e0e0; border: 4px solid #1a1a1a;
@@ -63,7 +48,7 @@ body, html {
 .screen-black {
     background: #000;
     border-radius: 5px;
-    height: 250px; 
+    height: 270px; /* TAMAÑO RESTAURADO DEL CÓDIGO BASE 1 */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -78,22 +63,22 @@ body, html {
 .pokemon-sprite { width: 130px; image-rendering: pixelated; }
 
 #reader { width: 100% !important; height: 100% !important; display: none; }
-#reader video { object-fit: cover !important; width: 100% !important; height: 100% !important; }
 
-/* CONTROLES */
+/* CONTROLES - BOTÓN NEGRO ELEVADO SIN AFECTAR PANTALLA */
 .controls { 
     display: flex; 
     justify-content: center; 
     align-items: flex-end; 
+    margin-top: auto; 
+    padding-bottom: 20px;
     position: relative; 
-    height: 110px;
-    padding-bottom: 10px;
+    height: 90px;
 }
 
 .black-circle { 
     position: absolute; 
     left: 10px;        
-    bottom: 65px;      /* Posición elevada según imagen GGGGG */
+    bottom: 55px;      /* ELEVADO SEGÚN IMAGEN GGGGG */
     width: 35px;       
     height: 35px; 
     background: #333; 
@@ -104,27 +89,21 @@ body, html {
 }
 
 .green-button { 
-    width: 95px; height: 45px; 
+    width: 95px; height: 48px; 
     background: linear-gradient(to bottom, #4caf50, #2e7d32); 
-    border: 4px solid #1a1a1a; border-radius: 12px; 
-    box-shadow: 0 5px 0 #1b431e; cursor: pointer;
-    margin-bottom: 5px;
+    border: 4px solid #1a1a1a; border-radius: 10px; 
+    box-shadow: 0 5px 0 #1b431e; cursor: pointer; 
 }
-.green-button:active { transform: translateY(4px); box-shadow: 0 1px 0 #1b431e; }
 
 .d-pad { 
     position: absolute; 
-    right: 10px;
-    bottom: 5px;
+    right: 5px;
+    bottom: 10px;
     width: 65px; height: 65px; background: #333; 
     clip-path: polygon(35% 0%, 65% 0%, 65% 35%, 100% 35%, 100% 65%, 65% 65%, 65% 100%, 35% 100%, 35% 65%, 0% 65%, 0% 35%, 35% 35%); 
 }
 
-/* ANIMACIÓN DE CAPTURA */
-.shaking-ball {
-    animation: shaking 0.4s infinite alternate;
-}
-
+.shaking-ball { animation: shaking 0.4s infinite alternate; }
 @keyframes shaking {
     0% { transform: translate(0, 0) rotate(0deg); }
     25% { transform: translate(-8px, 0) rotate(-15deg); }
