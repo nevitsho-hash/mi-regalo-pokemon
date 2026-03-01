@@ -3,7 +3,7 @@ let html5QrCode;
 let pokemonDetectado = true;
 
 const pokemonDB = {
-    "BEAUTIFLY": { text: "¡MIRA ESA BEAUTIFLY!", sprite: "assets/img/BEAUTIFLY.png", cry: "assets/sng/beautifly.mp3" },
+    "BEAUTIFLY": { text: "¡MIRA ESA BEAUTIFLY!<br>SUS ALAS SON BELLAS", sprite: "assets/img/BEAUTIFLY.png", cry: "assets/sng/beautifly.mp3" },
     "SNORLAX": { text: "¡HAS ENCONTRADO A SNORLAX!", sprite: "assets/img/SNORLAX.png", cry: "assets/sng/snorlax.mp3" },
     "SWALOT": { text: "¡HAS ENCONTRADO A SWALOT!", sprite: "assets/img/SWALOT.png", cry: "assets/sng/swalot.mp3" },
     "TOTODILE": { text: "¡HAS ENCONTRADO A TOTODILE!", sprite: "assets/img/TOTODILE.png", cry: "assets/sng/totodile.mp3" },
@@ -21,7 +21,7 @@ function activarEscaner() {
     
     html5QrCode.start(
         { facingMode: "environment" }, 
-        { fps: 15, qrbox: { width: 250, height: 180 } }, 
+        { fps: 15, qrbox: { width: 250, height: 200 } }, 
         (decodedText) => {
             let code = decodedText.toUpperCase().trim();
             if (pokemonDB[code]) {
@@ -36,6 +36,7 @@ function actualizarPantalla(data) {
     document.getElementById('pokedex-content').style.display = 'flex';
     document.getElementById('main-text').innerHTML = data.text;
     document.getElementById('main-sprite').src = data.sprite;
+    document.getElementById('main-sprite').classList.remove('shaking-ball');
     pokemonDetectado = true;
     setTimeout(() => { new Audio(data.cry).play().catch(() => {}); }, 300); 
 }
@@ -43,12 +44,13 @@ function actualizarPantalla(data) {
 function capturarPokemon() {
     if (!pokemonDetectado) return;
     const sprite = document.getElementById('main-sprite');
-    sprite.src = 'assets/img/pokeball.png'; 
+    const texto = document.getElementById('main-text');
+    sprite.src = 'assets/img/pokeball.png'; [cite: 2026-02-28]
     sprite.classList.add('shaking-ball'); 
-    document.getElementById('main-text').innerHTML = "¡ATRÁPALO!";
+    texto.innerHTML = "¡ATRÁPALO!";
     setTimeout(() => {
         sprite.classList.remove('shaking-ball');
-        document.getElementById('main-text').innerHTML = "¡POKÉMON ATRAPADO!";
+        texto.innerHTML = "¡ATRÁPADO CON ÉXITO!";
         pokemonDetectado = false;
     }, 3000);
 }
