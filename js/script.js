@@ -1,9 +1,9 @@
 const sonidoBoton = new Audio('assets/sng/clic.mp3');
 let html5QrCode;
-let pokemonDetectado = true; // Iniciamos con Gengar cargado
+let pokemonDetectado = true;
 
 const pokemonDB = {
-    "BEAUTIFLY": { text: "¡MIRA ESA BEAUTIFLY!", sprite: "assets/img/BEAUTIFLY.png", cry: "assets/sng/beautifly.mp3" },
+    "BEAUTIFLY": { text: "¡MIRA ESA BEAUTIFLY!<br>SUS ALAS SON BELLAS", sprite: "assets/img/BEAUTIFLY.png", cry: "assets/sng/beautifly.mp3" },
     "SNORLAX": { text: "¡HAS ENCONTRADO A SNORLAX!", sprite: "assets/img/SNORLAX.png", cry: "assets/sng/snorlax.mp3" },
     "SWALOT": { text: "¡HAS ENCONTRADO A SWALOT!", sprite: "assets/img/SWALOT.png", cry: "assets/sng/swalot.mp3" },
     "TOTODILE": { text: "¡HAS ENCONTRADO A TOTODILE!", sprite: "assets/img/TOTODILE.png", cry: "assets/sng/totodile.mp3" },
@@ -14,55 +14,34 @@ const pokemonDB = {
 
 function activarEscaner() {
     sonidoBoton.play().catch(() => {});
-    document.querySelector('.pokedex').classList.add('scanning');
     document.getElementById('pokedex-content').style.display = 'none';
     document.getElementById('reader').style.display = 'block';
-
-    if (!html5QrCode) {
-        html5QrCode = new Html5Qrcode("reader");
-    }
-
-    html5QrCode.start(
-        { facingMode: "environment" }, 
-        { fps: 15, qrbox: 200 },
-        (decodedText) => {
-            let code = decodedText.toUpperCase().trim();
-            if (pokemonDB[code]) {
-                html5QrCode.stop().then(() => {
-                    actualizarPantalla(pokemonDB[code]);
-                });
-            }
+    if (!html5QrCode) { html5QrCode = new Html5Qrcode("reader"); }
+    html5QrCode.start({ facingMode: "environment" }, { fps: 15, qrbox: 200 }, (decodedText) => {
+        let code = decodedText.toUpperCase().trim();
+        if (pokemonDB[code]) {
+            html5QrCode.stop().then(() => { actualizarPantalla(pokemonDB[code]); });
         }
-    ).catch((err) => console.error(err));
+    }).catch((err) => console.error(err));
 }
 
 function actualizarPantalla(data) {
-    document.querySelector('.pokedex').classList.remove('scanning');
     document.getElementById('reader').style.display = 'none';
     document.getElementById('pokedex-content').style.display = 'flex';
     document.getElementById('main-text').innerHTML = data.text;
-    
-    const sprite = document.getElementById('main-sprite');
-    sprite.src = data.sprite;
-    sprite.classList.remove('shaking-ball');
-    
+    document.getElementById('main-sprite').src = data.sprite;
+    document.getElementById('main-sprite').classList.remove('shaking-ball');
     pokemonDetectado = true;
-    setTimeout(() => {
-        new Audio(data.cry).play().catch(() => {});
-    }, 300); 
+    setTimeout(() => { new Audio(data.cry).play().catch(() => {}); }, 300); 
 }
 
-// UTILIDAD DEL BOTÓN NEGRO
 function capturarPokemon() {
     if (!pokemonDetectado) return;
-
     const sprite = document.getElementById('main-sprite');
     const texto = document.getElementById('main-text');
-
-    sprite.src = 'assets/img/pokeball.png'; //
+    sprite.src = 'assets/img/pokeball.png'; 
     sprite.classList.add('shaking-ball'); 
     texto.innerHTML = "¡ATRÁPALO!";
-
     setTimeout(() => {
         sprite.classList.remove('shaking-ball');
         texto.innerHTML = "¡ATRÁPADO CON ÉXITO!";
