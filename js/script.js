@@ -1,5 +1,5 @@
 const sonidoBoton = new Audio('assets/sng/clic.mp3');
-let pokemonDetectado = null; // Guardará el Pokémon que esté en pantalla
+let pokemonDetectado = false; // Control de estado
 let html5QrCode;
 
 const pokemonDB = {
@@ -8,12 +8,7 @@ const pokemonDB = {
         sprite: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/94.png",
         cry: "assets/sng/gengar.mp3"
     },
-    "UMBREON": { 
-        text: "¡HAS ENCONTRADO<br>A UMBREON!<br>LUZ EN LA OSCURIDAD", 
-        sprite: "assets/img/UMBREON.png",
-        cry: "assets/sng/umbreon.mp3"
-    }
-    // ... el resto de tu DB se mantiene igual [cite: 2026-02-27]
+    // Puedes añadir aquí el resto de tus Pokémon
 };
 
 function activarEscaner() {
@@ -22,17 +17,23 @@ function activarEscaner() {
     document.getElementById('pokedex-content').style.display = 'none';
     document.getElementById('reader').style.display = 'block';
     
-    if (!html5QrCode) { html5QrCode = new Html5Qrcode("reader"); }
+    if (!html5QrCode) { 
+        html5QrCode = new Html5Qrcode("reader"); 
+    }
     
-    html5QrCode.start({ facingMode: "environment" }, { fps: 15, qrbox: { width: 200, height: 200 } }, (decodedText) => {
-        let code = decodedText.toUpperCase().trim();
-        if (pokemonDB[code]) {
-            const data = pokemonDB[code];
-            html5QrCode.stop().then(() => { 
-                actualizarPantalla(data); 
-            });
+    html5QrCode.start(
+        { facingMode: "environment" }, 
+        { fps: 15, qrbox: { width: 200, height: 200 } },
+        (decodedText) => {
+            let code = decodedText.toUpperCase().trim();
+            if (pokemonDB[code]) {
+                const data = pokemonDB[code];
+                html5QrCode.stop().then(() => { 
+                    actualizarPantalla(data); 
+                });
+            }
         }
-    }).catch((err) => console.error(err));
+    ).catch((err) => console.error(err));
 }
 
 function actualizarPantalla(data) {
@@ -43,35 +44,37 @@ function actualizarPantalla(data) {
     
     const sprite = document.getElementById('main-sprite');
     sprite.src = data.sprite;
-    sprite.classList.remove('shaking-ball'); // Limpiar por si acaso
+    sprite.classList.remove('shaking-ball'); // Limpiar animaciones previas
     
-    pokemonDetectado = data; // Marcamos que hay un Pokémon listo para atrapar [cite: 2026-02-28]
+    pokemonDetectado = true; // Ahora el botón negro tiene permiso para actuar
+    console.log("Pokémon listo para ser capturado");
 
     setTimeout(() => {
         new Audio(data.cry).play().catch(() => {});
     }, 300); 
 }
 
-// NUEVA FUNCIÓN PARA EL BOTÓN NEGRO
+// ESTA FUNCIÓN ES LA QUE ACTIVA EL BOTÓN NEGRO
 function capturarPokemon() {
-    if (!pokemonDetectado) return; // Si no hay Pokémon, no hace nada
+    console.log("Botón negro presionado");
+
+    if (!pokemonDetectado) {
+        console.log("No hay ningún Pokémon en pantalla para atrapar");
+        return;
+    }
 
     const sprite = document.getElementById('main-sprite');
     const texto = document.getElementById('main-text');
 
-    // 1. Cambiamos a la Pokéball pixelada
+    // Cambiamos el Pokémon por tu Pokéball pixelada
     sprite.src = 'assets/img/pokeball.png'; 
-    
-    // 2. Activamos la animación de CSS que ya definimos
-    sprite.classList.add('shaking-ball'); 
-    
-    // 3. Cambiamos el texto para dar tensión
-    texto.innerHTML = "¡CAPTURANDO...!";
+    sprite.classList.add('shaking-ball'); // Inicia tu animación CSS
+    texto.innerHTML = "¡ATRÁPALO!";
 
-    // 4. Simulamos los 3 segundos de resistencia
+    // Simulamos la resistencia por 3 segundos
     setTimeout(() => {
-        sprite.classList.remove('shaking-ball'); // Para el movimiento
-        texto.innerHTML = `¡${pokemonDetectado.text.split('<')[0]}<br>CAPTURADO CON ÉXITO!`;
-        pokemonDetectado = null; // Reset para el próximo escaneo
+        sprite.classList.remove('shaking-ball');
+        texto.innerHTML = "¡POKÉMON ATRAPADO!<br>REGISTRADO CON ÉXITO";
+        pokemonDetectado = false; // Reset de estado
     }, 3000);
 }
