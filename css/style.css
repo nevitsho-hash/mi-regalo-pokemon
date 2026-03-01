@@ -1,188 +1,91 @@
-/* Reset básico para asegurar consistencia */
-* {
-    box-sizing: border-box;
-}
+/* Reset y Base */
+* { box-sizing: border-box; }
 
 body, html {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    /* Flexbox para centrar la Pokédex en la pantalla */
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    margin: 0; padding: 0;
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
     background-color: #000;
-    /* IMAGEN DE FONDO: Mapa del juego (asegúrate de tenerla en esta ruta) */
-    background-image: url('../assets/img/mapa-juego.png'); 
-    background-size: cover; /* Cubre toda la pantalla */
-    background-position: center;
-    background-repeat: no-repeat;
-    /* Fuente pixelada */
+    /* Fondo del mapa en assets/img/ */
+    background-image: url('../assets/img/fondo-pokemon.jpg'); 
+    background-size: cover; background-position: center;
     font-family: 'Press Start 2P', cursive;
-    overflow: hidden; /* Evita scrolls no deseados */
+    overflow: hidden;
 }
 
-/* Estructura principal de la Pokédex - AHORA TOTALMENTE OPACA */
+/* Estructura Pokédex - AHORA TRANSPARENTE */
 .pokedex {
     position: relative;
-    width: 90%;
-    max-width: 380px; /* Tamaño máximo para que no se vea gigante en PC */
-    height: auto;
-    /* COLOR ROJO SÓLIDO (sin transparencias) */
-    background-color: #dc0a2d; 
-    border: 6px solid #1a1a1a; /* Borde oscuro grueso */
-    border-radius: 30px; /* Bordes redondeados */
+    width: 85%;
+    max-width: 340px;
+    min-height: 560px; /* Tu dimensión de seguridad */
+    background: transparent; /* ELIMINADO EL COLOR ROJO */
+    border: none; /* Quitamos el borde para que sea invisible */
     display: flex;
     flex-direction: column;
-    /* Sombra para dar efecto de profundidad sobre el mapa */
-    box-shadow: 0 20px 40px rgba(0,0,0,0.8);
     z-index: 10;
-    opacity: 1; /* Forzamos opacidad total */
 }
 
-/* Parte superior con la lente y LEDs */
-.pokedex-top {
-    display: flex;
-    padding: 20px;
-    border-bottom: 5px solid #1a1a1a;
-    gap: 15px;
-    align-items: center;
-}
+/* Los elementos internos (Lente, Pantalla, Botones) SÍ mantienen su color */
+.pokedex-top { display: flex; padding: 20px; gap: 15px; align-items: center; }
+.big-blue-lens { width: 50px; height: 50px; background: radial-gradient(circle at 30% 30%, #4cc9f0, #2563eb); border: 4px solid #fff; border-radius: 50%; box-shadow: 0 0 15px rgba(76, 201, 240, 0.8); }
 
-.big-blue-lens {
-    width: 60px;
-    height: 60px;
-    background: radial-gradient(circle at 30% 30%, #4cc9f0, #2563eb); /* Radial para brillo */
-    border: 5px solid #fff;
-    border-radius: 50%;
-    box-shadow: 0 0 15px rgba(76, 201, 240, 0.8);
-}
+.led-container { display: flex; gap: 8px; }
+.led { width: 12px; height: 12px; border-radius: 50%; border: 2px solid #1a1a1a; }
+.red { background: #600; } .yellow { background: #660; } .green { background: #060; }
 
-.led-container {
-    display: flex;
-    gap: 8px;
-}
+.pokedex-body { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
 
-.led {
-    width: 15px;
-    height: 15px;
-    border-radius: 50%;
-    border: 3px solid #1a1a1a;
-}
-
-/* Colores de los LEDs apagados */
-.red { background: #600; }
-.yellow { background: #660; }
-.green { background: #060; }
-
-/* Animación de escaneo (se activa con JS) */
-.scanning .red { animation: blink 0.6s infinite 0s; }
-.scanning .yellow { animation: blink 0.6s infinite 0.2s; }
-.scanning .green { animation: blink 0.6s infinite 0.4s; }
-
-@keyframes blink {
-    0%, 100% { filter: brightness(0.5); opacity: 0.5; }
-    50% { filter: brightness(2); opacity: 1; box-shadow: 0 0 10px currentColor; }
-}
-
-/* Cuerpo principal */
-.pokedex-body {
-    padding: 25px;
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-/* Bisel de la pantalla (gris claro) */
 .screen-bezel {
-    background: #e0e0e0;
-    border: 5px solid #1a1a1a;
-    border-radius: 15px 15px 15px 50px; /* Forma asimétrica clásica */
-    padding: 15px 15px 30px 15px;
+    background: #e0e0e0; border: 4px solid #1a1a1a;
+    border-radius: 12px 12px 12px 45px; padding: 12px 12px 25px 12px;
 }
 
-/* Contenedor negro de la pantalla */
 .screen-black {
     background: #000;
-    border-radius: 10px;
-    height: 300px;
+    border-radius: 5px;
+    height: 270px; /* Tu dimensión de seguridad */
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    border: 4px solid #333;
+    border: 3px solid #333;
     overflow: hidden;
     position: relative;
 }
 
-/* Texto dentro de la pantalla */
-.pokedex-text {
-    color: #fff;
-    font-size: 14px;
-    line-height: 1.6;
-    text-align: center;
-    margin: 0 0 20px 0;
-    text-transform: uppercase;
+#reader { width: 100% !important; height: 100% !important; display: none; }
+#reader video { object-fit: cover !important; width: 100% !important; height: 100% !important; }
+
+#pokedex-content { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100%; }
+.pokedex-text { color: #fff; font-size: 10px; line-height: 1.8; text-align: center; margin-bottom: 10px; text-transform: uppercase; }
+.pokemon-sprite { width: 120px; image-rendering: pixelated; }
+
+/* CONTROLES - FLOTANDO SOBRE EL MAPA */
+.controls { position: relative; height: 110px; width: 100%; z-index: 50; }
+
+.black-circle { 
+    position: absolute; left: 10px; bottom: 65px; 
+    width: 35px; height: 35px; background: #333; 
+    border-radius: 50%; border: 3px solid #1a1a1a; 
+    box-shadow: inset -2px -2px 0px rgba(0,0,0,0.5); cursor: pointer;
 }
 
-/* Imagen del Pokémon */
-.pokemon-sprite {
-    width: 160px;
-    image-rendering: pixelated; /* Mantiene bordes afilados en sprites */
+.green-button { 
+    position: absolute; left: 50%; transform: translateX(-50%); bottom: 5px;
+    width: 95px; height: 48px; background: linear-gradient(to bottom, #4caf50, #2e7d32); 
+    border: 4px solid #1a1a1a; border-radius: 10px; 
+    box-shadow: 0 5px 0 #1b431e; cursor: pointer;
 }
 
-/* Contenedor de la cámara/lector QR (oculto por defecto) */
-#reader {
-    width: 100% !important;
-    height: 100% !important;
-    display: none;
+.d-pad { 
+    position: absolute; right: 5px; bottom: 5px;
+    width: 65px; height: 65px; background: #333; 
+    clip-path: polygon(35% 0%, 65% 0%, 65% 35%, 100% 35%, 100% 65%, 65% 65%, 65% 100%, 35% 100%, 35% 65%, 0% 65%, 0% 35%, 35% 35%); 
 }
 
-/* Asegurar que el vídeo ocupe toda la pantalla negra */
-#reader video {
-    object-fit: cover !important;
-    width: 100% !important;
-    height: 100% !important;
-}
-
-/* Zona de controles inferiores */
-.controls {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-top: 10px;
-}
-
-.black-circle {
-    width: 40px;
-    height: 40px;
-    background: #1a1a1a;
-    border-radius: 50%;
-    border: 4px solid #000;
-}
-
-.green-button {
-    width: 120px;
-    height: 60px;
-    background: linear-gradient(to bottom, #4caf50, #2e7d32);
-    border: 5px solid #1a1a1a;
-    border-radius: 15px;
-    box-shadow: 0 6px 0 #1b431e;
-    cursor: pointer;
-}
-
-.green-button:active {
-    transform: translateY(4px);
-    box-shadow: 0 2px 0 #1b431e;
-}
-
-.d-pad {
-    position: relative;
-    width: 80px;
-    height: 80px;
-    background: #1a1a1a;
-    /* Clip-path para crear la forma de cruz */
-    clip-path: polygon(35% 0%, 65% 0%, 65% 35%, 100% 35%, 100% 65%, 65% 65%, 65% 100%, 35% 100%, 35% 65%, 0% 65%, 0% 35%, 35% 35%);
+.shaking-ball { animation: shaking 0.4s infinite alternate; }
+@keyframes shaking {
+    0% { transform: translate(0, 0) rotate(0deg); }
+    100% { transform: translate(5px, 0) rotate(15deg); }
 }
