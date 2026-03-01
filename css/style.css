@@ -1,68 +1,141 @@
-/* ... (Base igual hasta .pokedex-body) ... */
+/* Reset y Base */
+* { box-sizing: border-box; }
 
+body, html {
+    margin: 0; padding: 0;
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    background-color: #000;
+    /* Fondo en assets/img/ */
+    background-image: url('../assets/img/fondo-pokemon.jpg'); 
+    background-size: cover; 
+    background-position: center;
+    background-repeat: no-repeat;
+    font-family: 'Press Start 2P', cursive;
+    overflow: hidden;
+}
+
+/* Estructura Pokédex */
+.pokedex {
+    position: relative;
+    width: 85%;
+    max-width: 340px;
+    height: 560px; /* Altura fija para controlar el espacio */
+    background: linear-gradient(145deg, #ff4d4d, #b91c1c);
+    border: 5px solid #1a1a1a;
+    border-radius: 25px; 
+    display: flex;
+    flex-direction: column;
+    box-shadow: inset -8px -8px 0px rgba(0,0,0,0.2), 15px 20px 30px rgba(0,0,0,0.6);
+    z-index: 10;
+}
+
+.pokedex-top { display: flex; padding: 15px; border-bottom: 4px solid #1a1a1a; gap: 15px; align-items: center; }
+
+.big-blue-lens { 
+    width: 45px; height: 45px; 
+    background: radial-gradient(circle at 30% 30%, #4cc9f0, #2563eb); 
+    border: 4px solid #fff; border-radius: 50%; 
+    box-shadow: 0 0 10px rgba(76, 201, 240, 0.8); 
+}
+
+.led-container { display: flex; gap: 5px; }
+.led { width: 10px; height: 10px; border-radius: 50%; border: 2px solid #1a1a1a; }
+.red { background: #600; }
+.yellow { background: #660; }
+.green { background: #060; }
+
+.scanning .red { animation: blink 0.6s infinite 0s; }
+.scanning .yellow { animation: blink 0.6s infinite 0.2s; }
+.scanning .green { animation: blink 0.6s infinite 0.4s; }
+
+@keyframes blink {
+    0%, 100% { filter: brightness(0.5); opacity: 0.5; }
+    50% { filter: brightness(2); opacity: 1; box-shadow: 0 0 10px currentColor; }
+}
+
+/* Cuerpo ajustado para recuperar las proporciones */
 .pokedex-body { 
-    padding: 15px; 
+    padding: 15px 15px 30px 15px; /* Aumentamos espacio abajo para subir controles */
     flex-grow: 1; 
     display: flex; 
     flex-direction: column; 
-    align-items: center;
-    position: relative; /* Clave para mover botones libremente */
+    gap: 10px; 
+    justify-content: flex-start;
 }
 
 .screen-bezel {
     background: #e0e0e0; border: 4px solid #1a1a1a;
     border-radius: 12px 12px 12px 45px; 
-    padding: 12px 12px 20px 12px;
-    width: 100%;
+    padding: 10px 10px 20px 10px;
 }
 
 .screen-black {
-    background: #000; border-radius: 5px;
-    height: 220px; /* Rectangular como querías */
-    display: flex; align-items: center; justify-content: center;
-    border: 3px solid #333; position: relative; overflow: hidden;
-}
-
-/* CONTROLES - POSICIONAMIENTO MANUAL EXACTO */
-.controls { 
-    width: 100%;
-    height: 120px;
+    background: #000;
+    border-radius: 5px;
+    height: 200px; /* Recuperamos la forma rectangular */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid #333;
+    overflow: hidden;
     position: relative;
-    margin-top: 20px;
 }
 
-/* BOTÓN NEGRO - ELEVADO SEGÚN TU IMAGEN */
+#pokedex-content { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100%; }
+.pokedex-text { color: #fff; font-size: 11px; line-height: 1.5; text-align: center; margin: 0 0 15px 0; text-transform: uppercase; }
+.pokemon-sprite { width: 130px; image-rendering: pixelated; }
+
+#reader { width: 100% !important; height: 100% !important; display: none; }
+#reader video { object-fit: cover !important; width: 100% !important; height: 100% !important; }
+
+/* CONTROLES - POSICIONAMIENTO CORREGIDO */
+.controls { 
+    display: flex; 
+    justify-content: center; 
+    align-items: flex-end; 
+    margin-top: 15px; /* Espacio controlado con la pantalla */
+    position: relative; 
+    height: 100px;
+}
+
 .black-circle { 
     position: absolute; 
     left: 10px;        
-    bottom: 75px; /* Más arriba que el resto */
-    width: 38px; height: 38px; 
-    background: #333; border-radius: 50%; border: 4px solid #1a1a1a; 
-    box-shadow: inset -3px -3px 0px rgba(0,0,0,0.5);
+    top: 0px;          
+    width: 32px;       
+    height: 32px; 
+    background: #333; 
+    border-radius: 50%; 
+    border: 3px solid #1a1a1a; 
+    box-shadow: 5px 5px 0px #111, inset -2px -2px 0px rgba(0,0,0,0.5); 
     cursor: pointer;
-    z-index: 10;
 }
 
-/* BOTÓN VERDE - SIN TOCAR POSICIÓN */
 .green-button { 
-    position: absolute;
-    left: 50%;
-    bottom: 15px;
-    transform: translateX(-50%);
-    width: 100px; height: 48px; 
+    width: 95px; height: 48px; 
     background: linear-gradient(to bottom, #4caf50, #2e7d32); 
-    border: 4px solid #1a1a1a; border-radius: 12px; 
-    box-shadow: 0 5px 0 #1b431e; cursor: pointer;
+    border: 4px solid #1a1a1a; border-radius: 10px; 
+    box-shadow: 5px 5px 0px #1b431e; cursor: pointer;
+    margin-bottom: 5px;
 }
+.green-button:active { transform: translateY(4px); box-shadow: 0 1px 0 #1b431e; }
 
-/* CRUZ - SIN TOCAR POSICIÓN */
 .d-pad { 
     position: absolute; 
-    right: 10px;
-    bottom: 15px;
-    width: 70px; height: 70px; 
-    background: #333; 
+    right: 5px;
+    bottom: 10px;
+    width: 65px; height: 65px; background: #333; 
     clip-path: polygon(35% 0%, 65% 0%, 65% 35%, 100% 35%, 100% 65%, 65% 65%, 65% 100%, 35% 100%, 35% 65%, 0% 65%, 0% 35%, 35% 35%); 
+    z-index: 5;
 }
 
-/* ... (Resto de animaciones shaking igual) ... */
+/* La sombra de la cruz: desplazada 5px derecha y 5px abajo */
+.d-pad::before {
+    content: "";
+    position: absolute;
+    top: 5px; left: 5px; 
+    width: 65px; height: 65px;
+    background: #111;
+    clip-path: polygon(35% 0%, 65% 0%, 65% 35%, 100% 35%, 100% 65%, 65% 65%, 65% 100%, 35% 100%, 35% 65%, 0% 65%, 0% 35%, 35% 35%);
+    z-index
