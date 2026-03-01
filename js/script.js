@@ -63,17 +63,42 @@ function capturarPokemon() {
     }, 3500);
 }
 
-function usarMasterBall() {
+function usarSuperBall() {
     if (!pokemonDetectado || !pokemonActualData) return;
+    
     const sprite = document.getElementById('main-sprite');
     const texto = document.getElementById('main-text');
-    sprite.src = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/master-ball.png';
-    sprite.classList.add('is-pokeball', 'shaking-hard');
-    texto.innerHTML = "¡MASTER BALL VA!";
-    setTimeout(() => { sprite.classList.remove('shaking-hard'); sprite.classList.add('shaking-slow'); }, 1500);
+    const pokemonActualImg = sprite.src;
+    const textoActualMsg = texto.innerHTML;
+
+    // Usamos el sprite oficial de Super Ball de PokeAPI [cite: 2026-03-01]
+    sprite.src = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/great-ball.png';
+    sprite.classList.add('is-pokeball', 'is-superball', 'shaking-hard');
+    texto.innerHTML = "¡SUPER BALL VA!";
+
+    setTimeout(() => {
+        sprite.classList.remove('shaking-hard');
+        sprite.classList.add('shaking-slow');
+    }, 1500);
+
     setTimeout(() => {
         sprite.classList.remove('shaking-slow');
-        texto.innerHTML = "¡CAPTURA CRÍTICA!<br>POKÉMON ATRAPADO";
-        pokemonDetectado = false;
+        
+        // CÁLCULO DE PROBABILIDAD MEJORADA (Catch Rate x 2) [cite: 2026-03-01]
+        // Ejemplo Gengar: 0.1 * 2 = 0.2 (20% de éxito con Super Ball)
+        const exito = Math.random() < (pokemonActualData.catchRate * 2);
+
+        if (exito) {
+            texto.innerHTML = "¡CAPTURADO CON SUPER BALL!";
+            pokemonDetectado = false;
+        } else {
+            texto.innerHTML = "¡OH NO! SE ESCAPÓ";
+            setTimeout(() => {
+                sprite.classList.remove('is-pokeball', 'is-superball');
+                sprite.src = pokemonActualImg;
+                sprite.style.width = "120px";
+                texto.innerHTML = textoActualMsg;
+            }, 1500);
+        }
     }, 3500);
 }
