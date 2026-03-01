@@ -63,6 +63,48 @@ function capturarPokemon() {
     }, 3500);
 }
 
+// ... (mismo código de base de datos y activarEscaner hasta capturarPokemon) ...
+
+function capturarPokemon() {
+    if (!pokemonDetectado || !pokemonActualData) return;
+    
+    const sprite = document.getElementById('main-sprite');
+    const texto = document.getElementById('main-text');
+    const pokemonActualImg = sprite.src;
+    const textoActualMsg = texto.innerHTML;
+
+    // FASE 1: Lanzamiento y movimiento brusco [cite: 2026-03-01]
+    sprite.src = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png';
+    sprite.classList.add('is-pokeball', 'shaking-hard');
+    texto.innerHTML = "¡POKÉ BALL VA!";
+
+    setTimeout(() => {
+        sprite.classList.remove('shaking-hard');
+        sprite.classList.add('shaking-slow');
+    }, 1500);
+
+    setTimeout(() => {
+        sprite.classList.remove('shaking-slow');
+        
+        // CÁLCULO DE ÉXITO ESTÁNDAR [cite: 2026-03-01]
+        const exito = Math.random() < pokemonActualData.catchRate;
+
+        if (exito) {
+            texto.innerHTML = "¡POKÉMON ATRAPADO!";
+            pokemonDetectado = false;
+        } else {
+            texto.innerHTML = "¡OH NO! SE ESCAPÓ";
+            setTimeout(() => {
+                sprite.classList.remove('is-pokeball');
+                sprite.src = pokemonActualImg;
+                sprite.style.width = "120px";
+                texto.innerHTML = textoActualMsg;
+            }, 1500);
+        }
+    }, 3500);
+}
+
+// NUEVA LÓGICA SUPER BALL (PROBABILIDAD MEJORADA x2) [cite: 2026-03-01]
 function usarSuperBall() {
     if (!pokemonDetectado || !pokemonActualData) return;
     
