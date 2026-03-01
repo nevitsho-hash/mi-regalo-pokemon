@@ -6,7 +6,7 @@ const pokemonDB = {
 "BEAUTIFLY": { text: "¡MIRA ESA BEAUTIFLY!<br>SUS ALAS SON BELLAS", sprite: "assets/img/BEAUTIFLY.png", cry: "assets/sng/beautifly.mp3" },
 "SNORLAX": { text: "¡HAS ENCONTRADO A SNORLAX!", sprite: "assets/img/SNORLAX.png", cry: "assets/sng/snorlax.mp3" },
 "SWALOT": { text: "¡HAS ENCONTRADO A SWALOT!", sprite: "assets/img/SWALOT.png", cry: "assets/sng/swalot.mp3" },
-"TOTODILE": { text: "¡HAS ENCONTRADO A TOTODILE!", sprite: "assets/img/totodile.mp3" },
+"TOTODILE": { text: "¡HAS ENCONTRADO A TOTODILE!", sprite: "assets/img/TOTODILE.png", cry: "assets/sng/totodile.mp3" },
 "UMBREON": { text: "¡HAS ENCONTRADO A UMBREON!", sprite: "assets/img/UMBREON.png", cry: "assets/sng/umbreon.mp3" },
 "JIGGLYPUFF": { text: "¡HAS ENCONTRADO A JIGGLYPUFF!", sprite: "assets/img/JIGGLYPUFF.png", cry: "assets/sng/jigglypuff.mp3" },
 "GENGAR": { text: "¡HAS ENCONTRADO A GENGAR!<br>LA SOMBRA TRAVIESA", sprite: "assets/img/GENGAR.png", cry: "assets/sng/gengar.mp3" }
@@ -39,8 +39,8 @@ function capturarPokemon() {
     if (!pokemonDetectado) return;
     const sprite = document.getElementById('main-sprite');
     
-    // RUTA LOCAL: Asegúrate de que el archivo se llame pokeball.png en assets/img/ [cite: 2026-02-28]
-    sprite.src = 'assets/img/pokeball.png'; 
+    // USAMOS POKÉBALL EXTERNA CON TRANSPARENCIA GARANTIZADA [cite: 2026-03-01]
+    sprite.src = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png';
     sprite.classList.add('shaking-ball');
     
     document.getElementById('main-text').innerHTML = "¡ATRÁPALO!";
