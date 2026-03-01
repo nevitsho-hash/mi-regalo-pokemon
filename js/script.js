@@ -63,17 +63,42 @@ function capturarPokemon() {
     }, 3500);
 }
 
-function usarMasterBall() {
+function usarSuperBall() {
     if (!pokemonDetectado || !pokemonActualData) return;
+    
     const sprite = document.getElementById('main-sprite');
     const texto = document.getElementById('main-text');
-    sprite.src = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/master-ball.png';
+    const pokemonActualImg = sprite.src;
+    const textoActualMsg = texto.innerHTML;
+
+    // Usamos el sprite oficial de la Super Ball (Great Ball)
+    sprite.src = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/great-ball.png';
     sprite.classList.add('is-pokeball', 'shaking-hard');
-    texto.innerHTML = "¡MASTER BALL VA!";
-    setTimeout(() => { sprite.classList.remove('shaking-hard'); sprite.classList.add('shaking-slow'); }, 1500);
+    texto.innerHTML = "¡SUPER BALL VA!";
+
+    setTimeout(() => {
+        sprite.classList.remove('shaking-hard');
+        sprite.classList.add('shaking-slow');
+    }, 1500);
+
     setTimeout(() => {
         sprite.classList.remove('shaking-slow');
-        texto.innerHTML = "¡CAPTURA CRÍTICA!<br>POKÉMON ATRAPADO";
-        pokemonDetectado = false;
+        
+        // Lógica: La Super Ball multiplica x2 la probabilidad del Pokémon
+        const probabilidadMejorada = Math.min(pokemonActualData.catchRate * 2, 0.9); 
+        const exito = Math.random() < probabilidadMejorada;
+
+        if (exito) {
+            texto.innerHTML = "¡CAPTURADO CON SUPER BALL!";
+            pokemonDetectado = false;
+        } else {
+            texto.innerHTML = "¡OH NO! SE ESCAPÓ";
+            setTimeout(() => {
+                sprite.classList.remove('is-pokeball');
+                sprite.src = pokemonActualImg;
+                sprite.style.width = "120px";
+                texto.innerHTML = textoActualMsg;
+            }, 1500);
+        }
     }, 3500);
 }
