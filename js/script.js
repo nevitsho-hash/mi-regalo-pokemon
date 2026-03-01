@@ -1,48 +1,40 @@
-/* ... (Base de datos y activarEscaner igual) ... */
-
-function capturarPokemon() {
-    if (!pokemonDetectado) return;
-    
-    const sprite = document.getElementById('main-sprite');
-    const texto = document.getElementById('main-text');
-    const originalSprite = sprite.src; // Guardamos el Pokémon por si escapa
-    const originalText = texto.innerHTML;
-
-    // Fase 1: Lanzamiento y movimiento BRUSCO
-    sprite.src = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png';
-    sprite.classList.add('is-pokeball', 'shaking-hard');
-    texto.innerHTML = "¡ATRÁPALO...!";
-
-    // Fase 2: A los 1.5 segundos, el movimiento se calma
-    setTimeout(() => {
-        sprite.classList.remove('shaking-hard');
-        sprite.classList.add('shaking-slow');
-    }, 1500);
-
-    // Fase 3: Resolución (Éxito o Fallo) a los 3.5 segundos
-    setTimeout(() => {
-        sprite.classList.remove('shaking-slow');
-        
-        // CÁLCULO DE PROBABILIDADES (70% éxito, 30% fallo) [cite: 2026-03-01]
-        const exito = Math.random() > 0.3;
-
-        if (exito) {
-            texto.innerHTML = "¡POKÉMON ATRAPADO!";
-            pokemonDetectado = false;
-        } else {
-            // FALLO DE CAPTURA
-            sprite.classList.add('capture-failed');
-            texto.innerHTML = "¡OH NO! <br> SE HA ESCAPADO";
-            
-            setTimeout(() => {
-                sprite.classList.remove('is-pokeball', 'capture-failed');
-                sprite.src = originalSprite; // Vuelve el Pokémon
-                sprite.style.width = "120px";
-                texto.innerHTML = originalText;
-                pokemonDetectado = true;
-            }, 1500);
-        }
-    }, 3500);
-}
-
-/* ... (Resto de funciones igual) ... */
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Pokédex Scanner</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="pokedex">
+        <div class="pokedex-top">
+            <div class="big-blue-lens"></div>
+            <div class="led-container">
+                <div class="led red"></div>
+                <div class="led yellow"></div>
+                <div class="led green"></div>
+            </div>
+        </div>
+        <div class="pokedex-body">
+            <div class="screen-bezel">
+                <div class="screen-black">
+                    <div id="pokedex-content">
+                        <p id="main-text" class="pokedex-text">UM SENTIMENTO<br>ESTRANHO...<br>GENGAR POR PERTO!</p>
+                        <img id="main-sprite" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/94.png" class="pokemon-sprite">
+                    </div>
+                    <div id="reader"></div>
+                </div>
+            </div>
+            <div class="controls">
+                <div class="black-circle" onclick="capturarPokemon()"></div>
+                <div class="green-button" onclick="activarEscaner()"></div>
+                <div class="d-pad"></div>
+            </div>
+        </div>
+    </div>
+    <script src="js/script.js"></script>
+</body>
+</html>
