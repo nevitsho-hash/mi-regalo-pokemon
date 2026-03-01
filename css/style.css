@@ -29,23 +29,16 @@ body, html { margin: 0; padding: 0; width: 100%; height: 100%; display: flex; al
 .pokemon-sprite { width: 120px; image-rendering: pixelated; transition: width 0.10s ease; display: block; margin: 0 auto; }
 .is-pokeball { width: 85px !important; }
 
-/* ANIMACIONES DE CAPTURA BRUSCA Y SUAVE */
+/* ANIMACIONES DE CAPTURA */
 .shaking-hard { animation: shaking-hard-anim 0.15s infinite alternate; }
-@keyframes shaking-hard-anim { 
-    0% { transform: translate(-8px, 0) rotate(-10deg); } 
-    100% { transform: translate(8px, 0) rotate(10deg); } 
-}
-
+@keyframes shaking-hard-anim { 0% { transform: translate(-8px, 0) rotate(-10deg); } 100% { transform: translate(8px, 0) rotate(10deg); } }
 .shaking-slow { animation: shaking-slow-anim 0.6s infinite alternate; }
-@keyframes shaking-slow-anim { 
-    0% { transform: translate(-2px, 0) rotate(-3deg); } 
-    100% { transform: translate(2px, 0) rotate(3deg); } 
-}
+@keyframes shaking-slow-anim { 0% { transform: translate(-2px, 0) rotate(-3deg); } 100% { transform: translate(2px, 0) rotate(3deg); } }
 
-/* Controles */
-.controls { position: relative; height: 110px; width: 100%; z-index: 50; }
-.black-circle { position: absolute; left: 10px; bottom: 65px; width: 35px; height: 35px; background: #333; border-radius: 50%; border: 3px solid #1a1a1a; cursor: pointer; }
-.green-button { position: absolute; left: 50%; transform: translateX(-50%); bottom: 5px; width: 95px; height: 48px; background: linear-gradient(to bottom, #4caf50, #2e7d32); border: 4px solid #1a1a1a; border-radius: 10px; cursor: pointer; }
+/* CONTROLES - CORREGIDOS PARA CLIC */
+.controls { position: relative; height: 110px; width: 100%; z-index: 999; pointer-events: auto; }
+.black-circle { position: absolute; left: 10px; bottom: 65px; width: 35px; height: 35px; background: #333; border-radius: 50%; border: 3px solid #1a1a1a; cursor: pointer; pointer-events: auto; }
+.green-button { position: absolute; left: 50%; transform: translateX(-50%); bottom: 5px; width: 95px; height: 48px; background: linear-gradient(to bottom, #4caf50, #2e7d32); border: 4px solid #1a1a1a; border-radius: 10px; cursor: pointer; pointer-events: auto; }
 .d-pad { position: absolute; right: 5px; bottom: 5px; width: 65px; height: 65px; background: #333; clip-path: polygon(35% 0%, 65% 0%, 65% 35%, 100% 35%, 100% 65%, 65% 65%, 65% 100%, 35% 100%, 35% 65%, 0% 65%, 0% 35%, 35% 35%); }
 
 #reader { width: 100% !important; height: 100% !important; display: none; }
