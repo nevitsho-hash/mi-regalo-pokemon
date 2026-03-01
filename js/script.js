@@ -1,16 +1,16 @@
 const sonidoBoton = new Audio('assets/sng/clic.mp3');
 let html5QrCode;
 let pokemonDetectado = true;
-let pokemonActualData = null;
+let pokemonActualData = { text: "GENGAR", sprite: "assets/img/GENGAR.png", catchRate: 0.1 };
 
 const pokemonDB = {
-    "BEAUTIFLY": { text: "¡MIRA ESA BEAUTIFLY!", sprite: "assets/img/BEAUTIFLY.png", cry: "assets/sng/beautifly.mp3", catchRate: 0.5 },
-    "SNORLAX": { text: "¡HAS ENCONTRADO A SNORLAX!", sprite: "assets/img/SNORLAX.png", cry: "assets/sng/snorlax.mp3", catchRate: 0.2 },
-    "SWALOT": { text: "¡HAS ENCONTRADO A SWALOT!", sprite: "assets/img/SWALOT.png", cry: "assets/sng/swalot.mp3", catchRate: 0.4 },
-    "TOTODILE": { text: "¡HAS ENCONTRADO A TOTODILE!", sprite: "assets/img/TOTODILE.png", cry: "assets/sng/totodile.mp3", catchRate: 0.6 },
-    "UMBREON": { text: "¡HAS ENCONTRADO A UMBREON!", sprite: "assets/img/UMBREON.png", cry: "assets/sng/umbreon.mp3", catchRate: 0.3 },
-    "JIGGLYPUFF": { text: "¡HAS ENCONTRADO A JIGGLYPUFF!", sprite: "assets/img/JIGGLYPUFF.png", cry: "assets/sng/jigglypuff.mp3", catchRate: 0.7 },
-    "GENGAR": { text: "¡HAS ENCONTRADO A GENGAR!", sprite: "assets/img/GENGAR.png", cry: "assets/sng/gengar.mp3", catchRate: 0.1 }
+    "BEAUTIFLY": { text: "¡BEAUTIFLY!", sprite: "assets/img/BEAUTIFLY.png", catchRate: 0.5 },
+    "SNORLAX": { text: "¡SNORLAX!", sprite: "assets/img/SNORLAX.png", catchRate: 0.2 },
+    "SWALOT": { text: "¡SWALOT!", sprite: "assets/img/SWALOT.png", catchRate: 0.4 },
+    "TOTODILE": { text: "¡TOTODILE!", sprite: "assets/img/TOTODILE.png", catchRate: 0.6 },
+    "UMBREON": { text: "¡UMBREON!", sprite: "assets/img/UMBREON.png", catchRate: 0.3 },
+    "JIGGLYPUFF": { text: "¡JIGGLYPUFF!", sprite: "assets/img/JIGGLYPUFF.png", catchRate: 0.7 },
+    "GENGAR": { text: "¡GENGAR!", sprite: "assets/img/GENGAR.png", catchRate: 0.1 }
 };
 
 function activarEscaner() {
@@ -40,33 +40,31 @@ function actualizarPantalla(data) {
     sprite.style.width = "120px"; 
     sprite.classList.remove('is-pokeball', 'is-superball', 'shaking-hard', 'shaking-slow');
     pokemonDetectado = true;
-    setTimeout(() => { new Audio(data.cry).play().catch(() => {}); }, 300);
 }
 
 function capturarPokemon() {
-    if (!pokemonDetectado || !pokemonActualData) return;
-    ejecutarAnimacionCaptura('https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png', pokemonActualData.catchRate, "¡POKÉ BALL VA!", false);
+    if (!pokemonDetectado) return;
+    const prob = pokemonActualData.catchRate;
+    ejecutarCaptura('https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png', prob, false);
 }
 
 function usarSuperBall() {
-    console.log("Botón Azul pulsado: Usando Super Ball"); // Verificación
-    if (!pokemonDetectado || !pokemonActualData) return;
-    // Probabilidad doble (catchRate * 2)
-    ejecutarAnimacionCaptura('https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/great-ball.png', (pokemonActualData.catchRate * 2), "¡SUPER BALL VA!", true);
+    if (!pokemonDetectado) return;
+    const prob = pokemonActualData.catchRate * 2; // Doble probabilidad
+    ejecutarCaptura('https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/great-ball.png', prob, true);
 }
 
-// Función interna para evitar repetir código y errores
-function ejecutarAnimacionCaptura(imgBall, probabilidad, mensajeInicial, esSuperBall) {
+function ejecutarCaptura(img, prob, esSuper) {
     const sprite = document.getElementById('main-sprite');
     const texto = document.getElementById('main-text');
-    const pokemonActualImg = sprite.src;
-    const textoActualMsg = texto.innerHTML;
+    const pokeImg = sprite.src;
+    const pokeTxt = texto.innerHTML;
 
-    sprite.src = imgBall;
+    sprite.src = img;
     sprite.classList.add('is-pokeball');
-    if (esSuperBall) sprite.classList.add('is-superball');
+    if(esSuper) sprite.classList.add('is-superball');
     sprite.classList.add('shaking-hard');
-    texto.innerHTML = mensajeInicial;
+    texto.innerHTML = esSuper ? "¡SUPER BALL VA!" : "¡POKÉ BALL VA!";
 
     setTimeout(() => {
         sprite.classList.remove('shaking-hard');
@@ -75,17 +73,16 @@ function ejecutarAnimacionCaptura(imgBall, probabilidad, mensajeInicial, esSuper
 
     setTimeout(() => {
         sprite.classList.remove('shaking-slow');
-        const exito = Math.random() < probabilidad;
-        if (exito) {
-            texto.innerHTML = esSuperBall ? "¡CAPTURADO CON SUPER BALL!" : "¡POKÉMON ATRAPADO!";
+        if (Math.random() < prob) {
+            texto.innerHTML = "¡ATRAPADO!";
             pokemonDetectado = false;
         } else {
-            texto.innerHTML = "¡OH NO! SE ESCAPÓ";
+            texto.innerHTML = "¡SE ESCAPÓ!";
             setTimeout(() => {
                 sprite.classList.remove('is-pokeball', 'is-superball');
-                sprite.src = pokemonActualImg;
+                sprite.src = pokeImg;
                 sprite.style.width = "120px";
-                texto.innerHTML = textoActualMsg;
+                texto.innerHTML = pokeTxt;
             }, 1500);
         }
     }, 3500);
