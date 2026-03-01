@@ -3,13 +3,13 @@ let html5QrCode;
 let pokemonDetectado = true;
 
 const pokemonDB = {
-"BEAUTIFLY": { text: "¡MIRA ESA BEAUTIFLY!<br>SUS ALAS SON BELLAS", sprite: "assets/img/BEAUTIFLY.png", cry: "assets/sng/beautifly.mp3" },
-"SNORLAX": { text: "¡HAS ENCONTRADO A SNORLAX!", sprite: "assets/img/SNORLAX.png", cry: "assets/sng/snorlax.mp3" },
-"SWALOT": { text: "¡HAS ENCONTRADO A SWALOT!", sprite: "assets/img/SWALOT.png", cry: "assets/sng/swalot.mp3" },
-"TOTODILE": { text: "¡HAS ENCONTRADO A TOTODILE!", sprite: "assets/img/TOTODILE.png", cry: "assets/sng/totodile.mp3" },
-"UMBREON": { text: "¡HAS ENCONTRADO A UMBREON!", sprite: "assets/img/UMBREON.png", cry: "assets/sng/umbreon.mp3" },
-"JIGGLYPUFF": { text: "¡HAS ENCONTRADO A JIGGLYPUFF!", sprite: "assets/img/JIGGLYPUFF.png", cry: "assets/sng/jigglypuff.mp3" },
-"GENGAR": { text: "¡HAS ENCONTRADO A GENGAR!<br>LA SOMBRA TRAVIESA", sprite: "assets/img/GENGAR.png", cry: "assets/sng/gengar.mp3" }
+    "BEAUTIFLY": { text: "¡MIRA ESA BEAUTIFLY!<br>SUS ALAS SON BELLAS", sprite: "assets/img/BEAUTIFLY.png", cry: "assets/sng/beautifly.mp3" },
+    "SNORLAX": { text: "¡HAS ENCONTRADO A SNORLAX!", sprite: "assets/img/SNORLAX.png", cry: "assets/sng/snorlax.mp3" },
+    "SWALOT": { text: "¡HAS ENCONTRADO A SWALOT!", sprite: "assets/img/SWALOT.png", cry: "assets/sng/swalot.mp3" },
+    "TOTODILE": { text: "¡HAS ENCONTRADO A TOTODILE!", sprite: "assets/img/totodile.mp3" },
+    "UMBREON": { text: "¡HAS ENCONTRADO A UMBREON!", sprite: "assets/img/UMBREON.png", cry: "assets/sng/umbreon.mp3" },
+    "JIGGLYPUFF": { text: "¡HAS ENCONTRADO A JIGGLYPUFF!", sprite: "assets/img/jigglypuff.mp3" },
+    "GENGAR": { text: "¡HAS ENCONTRADO A GENGAR!<br>LA SOMBRA TRAVIESA", sprite: "assets/img/GENGAR.png", cry: "assets/sng/gengar.mp3" }
 };
 
 function activarEscaner() {
@@ -29,8 +29,10 @@ function actualizarPantalla(data) {
     document.getElementById('reader').style.display = 'none';
     document.getElementById('pokedex-content').style.display = 'flex';
     document.getElementById('main-text').innerHTML = data.text;
-    document.getElementById('main-sprite').src = data.sprite;
-    document.getElementById('main-sprite').classList.remove('shaking-ball');
+    const sprite = document.getElementById('main-sprite');
+    sprite.src = data.sprite;
+    sprite.classList.remove('is-pokeball');
+    sprite.classList.remove('shaking-ball');
     pokemonDetectado = true;
     setTimeout(() => { new Audio(data.cry).play().catch(() => {}); }, 300);
 }
@@ -38,11 +40,9 @@ function actualizarPantalla(data) {
 function capturarPokemon() {
     if (!pokemonDetectado) return;
     const sprite = document.getElementById('main-sprite');
-    
-    // USAMOS POKÉBALL EXTERNA CON TRANSPARENCIA GARANTIZADA [cite: 2026-03-01]
     sprite.src = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png';
+    sprite.classList.add('is-pokeball');
     sprite.classList.add('shaking-ball');
-    
     document.getElementById('main-text').innerHTML = "¡ATRÁPALO!";
     setTimeout(() => {
         sprite.classList.remove('shaking-ball');
