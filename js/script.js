@@ -38,10 +38,24 @@ function desbloquearAudio() {
         audioDesbloqueado = true;
     }
 }
-
+let html5QrCode = null;
 async function activarEscaner() {
     desbloquearAudio(); 
+
+    const readerDiv = document.getElementById('reader');
+    const pokedexContent = document.getElementById('pokedex-content');
     
+    // 1. Limpieza absoluta de cualquier rastro previo
+    if (html5QrCode) {
+        try {
+            await html5QrCode.stop();
+            await html5QrCode.clear();
+        } catch (e) {
+            // Si falla al parar, intentamos limpiar el contenedor manualmente
+            readerDiv.innerHTML = ""; 
+        }
+        html5QrCode = null;
+    }
     // RESET VISUAL Y DE LÓGICA
     pokemonDetectado = true;
     const sprite = document.getElementById('main-sprite');
