@@ -94,31 +94,30 @@ function iniciarCaptura(img, prob, msg) {
     setTimeout(() => {
         sprite.classList.remove('shaking-slow');
         if (Math.random() < prob) {
+            // ÉXITO: AÑADIDO SONIDO DE CAPTURA
             texto.innerHTML = "¡ATRAPADO!";
+            sonidoBoton.play().catch(() => {}); // Feedback sonoro de éxito
             sprite.classList.add('captured-success');
             document.querySelectorAll('.led').forEach(l => l.classList.add('success'));
             pokemonDetectado = false;
         } else {
-            // LÓGICA DE ESCAPE MEJORADA [cite: 2026-03-01]
+            // FALLO (SE MANTIENE IGUAL A BASE 7.1)
             texto.innerHTML = "¡SE ESCAPÓ!";
             sprite.style.transform = "scale(0.35)";
-
             setTimeout(() => {
                 sprite.style.filter = "brightness(2.5) contrast(1.2)";
                 sprite.classList.remove('is-pokeball');
                 sprite.src = pokemonSpriteURL;
                 sprite.style.transform = "scale(1)"; 
-                
-                // Mantenemos al Pokémon visible un poco más antes de desvanecerlo
                 setTimeout(() => {
-                    sprite.style.opacity = "0"; // Desvanecimiento suave
+                    sprite.style.opacity = "0"; 
                     setTimeout(() => {
                         sprite.src = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/94.png";
                         texto.innerHTML = fraseGengar;
-                        sprite.style.opacity = "1"; // Aparece Gengar suavemente
+                        sprite.style.opacity = "1"; 
                         sprite.style.filter = "none";
                     }, 500);
-                }, 1500); // 1.5 segundos de gloria para el Pokémon
+                }, 1500);
             }, 600);
         }
     }, 3500);
