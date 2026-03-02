@@ -10,7 +10,6 @@ let pokemonActualData = {
     cry: "assets/sng/gengar.mp3" 
 };
 
-// BASE DE DATOS RESTAURADA CON LOS 7 POKÉMON [cite: 2026-03-01]
 const pokemonDB = {
     "BEAUTIFLY": { text: "¡BEAUTIFLY!", sprite: "assets/img/BEAUTIFLY.png", catchRate: 0.5, cry: "assets/sng/beautifly.mp3" },
     "SNORLAX": { text: "¡SNORLAX!", sprite: "assets/img/SNORLAX.png", catchRate: 0.2, cry: "assets/sng/snorlax.mp3" },
@@ -54,6 +53,7 @@ function actualizarPantalla() {
     document.querySelectorAll('.led').forEach(l => l.classList.remove('animating', 'success'));
     const sprite = document.getElementById('main-sprite');
     sprite.src = pokemonActualData.sprite;
+    sprite.style.opacity = "1";
     sprite.style.transform = "scale(1)";
     sprite.classList.remove('is-pokeball', 'shaking-hard', 'shaking-slow', 'captured-success');
     new Audio(pokemonActualData.cry).play().catch(() => {});
@@ -99,21 +99,27 @@ function iniciarCaptura(img, prob, msg) {
             document.querySelectorAll('.led').forEach(l => l.classList.add('success'));
             pokemonDetectado = false;
         } else {
+            // LÓGICA DE ESCAPE MEJORADA [cite: 2026-03-01]
             texto.innerHTML = "¡SE ESCAPÓ!";
             sprite.style.transform = "scale(0.35)";
+
             setTimeout(() => {
                 sprite.style.filter = "brightness(2.5) contrast(1.2)";
                 sprite.classList.remove('is-pokeball');
                 sprite.src = pokemonSpriteURL;
                 sprite.style.transform = "scale(1)"; 
-            }, 600);
-            setTimeout(() => {
-                sprite.style.filter = "none";
+                
+                // Mantenemos al Pokémon visible un poco más antes de desvanecerlo
                 setTimeout(() => {
-                    sprite.src = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/94.png";
-                    texto.innerHTML = fraseGengar;
-                }, 1400);
-            }, 1000);
+                    sprite.style.opacity = "0"; // Desvanecimiento suave
+                    setTimeout(() => {
+                        sprite.src = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/94.png";
+                        texto.innerHTML = fraseGengar;
+                        sprite.style.opacity = "1"; // Aparece Gengar suavemente
+                        sprite.style.filter = "none";
+                    }, 500);
+                }, 1500); // 1.5 segundos de gloria para el Pokémon
+            }, 600);
         }
     }, 3500);
 }
