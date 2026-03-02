@@ -1,13 +1,14 @@
-// Audios y Precarga
 const sonidoBoton = new Audio('assets/sng/clic.mp3');
 const sonidoCaptura = new Audio('assets/sng/captura.wav'); 
 const sonidoEspera = new Audio('assets/sng/espera-pokeball.mp3'); 
 
-sonidoCaptura.load();
-sonidoEspera.load();
+// Precarga de imágenes críticas
+const preAnillo = new Image(); preAnillo.src = "assets/img/anillo.png"; 
+const preCofre = new Image(); preCofre.src = "assets/img/gengar-cofre.png";
 
 let html5QrCode;
-let pokemonDetectado = true; // Permite usar los botones desde el inicio con Gengar
+let pokemonDetectado = true;
+let audioDesbloqueado = false; // Control de seguridad para el primer toque
 
 let pokemonActualData = { 
     text: "GENGAR", 
@@ -30,11 +31,27 @@ window.addEventListener('DOMContentLoaded', () => {
     html5QrCode = new Html5Qrcode("reader");
 });
 
+// FUNCIÓN PARA DESBLOQUEAR EL AUDIO EN EL PRIMER CLIC
+function desbloquearAudio() {
+    if (!audioDesbloqueado) {
+        // Reproducimos y pausamos instantáneamente todos los audios
+        [sonidoBoton, sonidoCaptura, sonidoEspera].forEach(audio => {
+            audio.play().then(() => {
+                audio.pause();
+                audio.currentTime = 0;
+            }).catch(() => {});
+        });
+        audioDesbloqueado = true;
+    }
+}
+
 async function activarEscaner() {
+    desbloquearAudio(); // Desbloqueamos el canal al primer toque del botón verde
     sonidoBoton.play().catch(() => {}); 
+    
     document.getElementById('pokedex-content').style.display = 'none';
     document.getElementById('reader').style.display = 'block';
-    // Animación LEDs
+    
     document.querySelectorAll('.led').forEach(l => {
         l.classList.remove('success');
         l.classList.add('animating');
@@ -57,21 +74,21 @@ function actualizarPantalla() {
     document.getElementById('reader').style.display = 'none';
     document.getElementById('pokedex-content').style.display = 'flex';
     document.getElementById('main-text').innerHTML = pokemonActualData.text;
-    
-    // Reset de LEDs
     document.querySelectorAll('.led').forEach(l => l.classList.remove('animating', 'success'));
     
     const sprite = document.getElementById('main-sprite');
     sprite.src = pokemonActualData.sprite;
     sprite.style.opacity = "1";
     sprite.style.transform = "scale(1)";
-    
-    // IMPORTANTE: Limpiar eventos y clases de Gengar/Anillo
     sprite.onclick = null; 
-    sprite.style.cursor = "default";
     sprite.classList.remove('is-pokeball', 'shaking-hard', 'shaking-slow', 'clickable-chest', 'ring-reveal');
     
-    new Audio(pokemonActualData.cry).play().catch(() => {});
+    // Reproducción del grito con un pequeño delay para asegurar el enfoque
+    setTimeout(() => {
+        const grito = new Audio(pokemonActualData.cry);
+        grito.play().catch(e => console.log("Audio bloqueado:", e));
+    }, 100);
+    
     pokemonDetectado = true;
 }
 
