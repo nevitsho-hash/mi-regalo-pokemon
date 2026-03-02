@@ -1,4 +1,5 @@
 const sonidoBoton = new Audio('assets/sng/clic.mp3');
+const sonidoCaptura = new Audio('assets/sng/captura.mp3'); // Nuevo sonido de éxito [cite: 2026-03-01]
 let html5QrCode;
 let pokemonDetectado = true;
 const fraseGengar = "UM SENTIMENTO<br>ESTRANHO...<br>GENGAR POR PERTO!";
@@ -60,11 +61,6 @@ function actualizarPantalla() {
     pokemonDetectado = true;
 }
 
-function restaurarInterfaz() {
-    document.getElementById('reader').style.display = 'none';
-    document.getElementById('pokedex-content').style.display = 'flex';
-}
-
 function capturarNormal() {
     if (!pokemonDetectado) return;
     sonidoBoton.play().catch(() => {});
@@ -95,12 +91,14 @@ function iniciarCaptura(img, prob, msg) {
     setTimeout(() => {
         sprite.classList.remove('shaking-slow');
         if (Math.random() < prob) {
+            // ÉXITO: SE ACTIVA EL SONIDO DE CAPTURA [cite: 2026-03-01]
             texto.innerHTML = "¡ATRAPADO!";
-            sonidoBoton.play().catch(() => {}); // Sincronización sonora de éxito
+            sonidoCaptura.play().catch(() => {}); 
             sprite.classList.add('captured-success');
             document.querySelectorAll('.led').forEach(l => l.classList.add('success'));
             pokemonDetectado = false;
         } else {
+            // FALLO: PERSISTENCIA DEL POKÉMON
             texto.innerHTML = "¡SE ESCAPÓ!";
             sprite.style.transform = "scale(0.35)";
             setTimeout(() => {
@@ -110,7 +108,7 @@ function iniciarCaptura(img, prob, msg) {
                 sprite.style.transform = "scale(1)"; 
                 setTimeout(() => {
                     sprite.style.filter = "none";
-                    texto.innerHTML = pokemonNombre; // Persistencia del Pokémon
+                    texto.innerHTML = pokemonNombre; 
                 }, 800);
             }, 600);
         }
