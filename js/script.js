@@ -3,21 +3,13 @@ const sonidoBoton = new Audio('assets/sng/clic.mp3');
 const sonidoCaptura = new Audio('assets/sng/captura.wav'); 
 const sonidoEspera = new Audio('assets/sng/espera-pokeball.mp3'); 
 const sonidoEscapo = new Audio('assets/sng/escapo.mp3'); 
-const sonidoBrilloCofre = new Audio('assets/sng/brillocofre.mp3'); // Nuevo sonido de revelación
-
-// Precarga de archivos críticos
-sonidoCaptura.load();
-sonidoEspera.load();
-sonidoEscapo.load();
-sonidoBrilloCofre.load();
-
-const preAnillo = new Image(); preAnillo.src = "assets/img/anillo.png"; 
-const preCofre = new Image(); preCofre.src = "assets/img/gengar-cofre.png";
+const sonidoBrilloCofre = new Audio('assets/sng/brillocofre.mp3'); 
 
 let html5QrCode;
-let pokemonDetectado = true;
+let pokemonDetectado = true; // Forzamos true para que los botones funcionen al inicio
 let audioDesbloqueado = false;
 
+// Base de datos y Gengar inicial
 let pokemonActualData = { 
     text: "GENGAR", 
     sprite: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/94.png", 
@@ -58,14 +50,23 @@ async function activarEscaner() {
     sonidoBoton.currentTime = 0;
     sonidoBoton.play().catch(() => {}); 
     
+    // RESET TOTAL ANTES DE ABRIR CÁMARA
+    const sprite = document.getElementById('main-sprite');
+    sprite.onclick = null;
+    sprite.classList.remove('is-pokeball', 'shaking-hard', 'shaking-slow', 'clickable-chest', 'ring-reveal', 'captured-success');
+    sprite.style.opacity = "1";
+    sprite.style.transform = "scale(1)";
+
     document.getElementById('pokedex-content').style.display = 'none';
     document.getElementById('reader').style.display = 'block';
+    
     document.querySelectorAll('.led').forEach(l => {
         l.classList.remove('success');
         l.classList.add('animating');
     });
 
     try {
+        if(html5QrCode.isScanning) await html5QrCode.stop();
         await html5QrCode.start({ facingMode: "environment" }, { fps: 20, qrbox: 250 }, (text) => {
             let code = text.toUpperCase().trim();
             if (pokemonDB[code]) {
@@ -89,19 +90,10 @@ function actualizarPantalla() {
     sprite.style.opacity = "1";
     sprite.style.transform = "scale(1)";
     sprite.onclick = null; 
-    sprite.classList.remove('is-pokeball', 'shaking-hard', 'shaking-slow', 'clickable-chest', 'ring-reveal');
+    sprite.classList.remove('is-pokeball', 'shaking-hard', 'shaking-slow', 'clickable-chest', 'ring-reveal', 'captured-success');
     
-    setTimeout(() => {
-        const grito = new Audio(pokemonActualData.cry);
-        grito.play().catch(() => {});
-    }, 100);
-    
+    new Audio(pokemonActualData.cry).play().catch(() => {});
     pokemonDetectado = true;
-}
-
-function restaurarInterfaz() {
-    document.getElementById('reader').style.display = 'none';
-    document.getElementById('pokedex-content').style.display = 'flex';
 }
 
 function capturarNormal() {
@@ -111,4 +103,93 @@ function capturarNormal() {
 }
 
 function capturarSuper() {
-    if (!pokemon
+    if (!pokemonDetectado) return;
+    sonidoEspera.play().catch(() => {});
+    iniciarCaptura('https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/great-ball.png', (pokemonActualData.catchRate * 2), "¡SUPER BALL!");
+}
+
+function iniciarCaptura(img, prob, msg) {
+    const sprite = document.getElementById('main-sprite');
+    const texto = document.getElementById('main-text');
+    const pokemonNombre = pokemonActualData.text;
+
+    pokemonDetectado = false; // Bloqueamos botones durante la animación
+    sprite.style.transition = "transform 0.4s ease, opacity 0.4s ease";
+    sprite.style.transform = "scale(0)";
+    sprite.style.opacity = "0";
+    texto.innerHTML = "¡ALLÁ VA!";
+
+    setTimeout(() => {
+        sprite.src = img;
+        sprite.style.transform = "scale(0.65)";
+        sprite.style.opacity = "1";
+        sprite.classList.add('is-pokeball', 'shaking-hard');
+        texto.innerHTML = msg;
+
+        setTimeout(() => {
+            sprite.classList.remove('shaking-hard');
+            sprite.classList.add('shaking-slow');
+        }, 1500);
+
+        setTimeout(() => {
+            sprite.classList.remove('shaking-slow');
+            if (Math.random() < prob) {
+                texto.innerHTML = "¡ATRAPADO!";
+                sonidoCaptura.currentTime = 0;
+                sonidoCaptura.play().catch(() => {}); 
+                sprite.classList.add('captured-success');
+                document.querySelectorAll('.led').forEach(l => l.classList.add('success'));
+
+                if (pokemonNombre.includes("GENGAR")) {
+                    setTimeout(() => {
+                        sprite.classList.remove('is-pokeball', 'captured-success');
+                        sprite.style.opacity = "0"; 
+                        setTimeout(() => {
+                            sonidoBrilloCofre.play().catch(() => {});
+                            sprite.src = "assets/img/gengar-cofre.png";
+                            sprite.classList.add('clickable-chest');
+                            sprite.style.opacity = "1";
+                            sprite.style.transform = "scale(1.2)";
+                            texto.innerHTML = "GENGAR TIENE<br>ALGO PARA TI...";
+                            sprite.onclick = abrirCofre;
+                        }, 500);
+                    }, 4000); 
+                }
+            } else {
+                texto.innerHTML = "¡SE ESCAPÓ!";
+                sonidoEscapo.play().catch(() => {});
+                sprite.style.transform = "scale(0.35)";
+                setTimeout(() => {
+                    sprite.classList.remove('is-pokeball');
+                    sprite.src = pokemonActualData.sprite;
+                    sprite.style.transform = "scale(1.2)";
+                    sprite.style.opacity = "1";
+                    setTimeout(() => {
+                        sprite.style.transform = "scale(1)"; 
+                        texto.innerHTML = pokemonNombre; 
+                        pokemonDetectado = true; // Liberamos botones
+                    }, 200);
+                }, 600);
+            }
+        }, 3500);
+    }, 400); 
+}
+
+function abrirCofre() {
+    const sprite = document.getElementById('main-sprite');
+    const texto = document.getElementById('main-text');
+    sprite.onclick = null;
+    sprite.classList.remove('clickable-chest');
+    sprite.style.opacity = "0";
+    setTimeout(() => {
+        sprite.src = "assets/img/anillo.png"; 
+        sprite.classList.add('ring-reveal');
+        sprite.style.opacity = "1";
+        texto.innerHTML = "¿QUIERES SER<br>MI PAREJA?";
+    }, 500);
+}
+
+function restaurarInterfaz() {
+    document.getElementById('reader').style.display = 'none';
+    document.getElementById('pokedex-content').style.display = 'flex';
+}
