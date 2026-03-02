@@ -96,25 +96,21 @@ function iniciarCaptura(img, prob, msg) {
         sprite.classList.remove('shaking-slow');
         if (Math.random() < prob) {
             texto.innerHTML = "¡ATRAPADO!";
-            sonidoBoton.play().catch(() => {}); 
+            sonidoBoton.play().catch(() => {}); // Sincronización sonora de éxito
             sprite.classList.add('captured-success');
             document.querySelectorAll('.led').forEach(l => l.classList.add('success'));
             pokemonDetectado = false;
         } else {
-            // CORRECCIÓN: EL POKÉMON SE QUEDA PARA RE-INTENTO
             texto.innerHTML = "¡SE ESCAPÓ!";
             sprite.style.transform = "scale(0.35)";
-
             setTimeout(() => {
                 sprite.style.filter = "brightness(2.5) contrast(1.2)";
                 sprite.classList.remove('is-pokeball');
-                sprite.src = pokemonSpriteURL; // Vuelve el Pokémon detectado
+                sprite.src = pokemonSpriteURL;
                 sprite.style.transform = "scale(1)"; 
-                
                 setTimeout(() => {
                     sprite.style.filter = "none";
-                    texto.innerHTML = pokemonNombre; // Mantiene el nombre del Pokémon para intentar de nuevo
-                    // YA NO VOLVEMOS A GENGAR AUTOMÁTICAMENTE
+                    texto.innerHTML = pokemonNombre; // Persistencia del Pokémon
                 }, 800);
             }, 600);
         }
