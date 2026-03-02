@@ -93,4 +93,77 @@ function actualizarPantalla() {
     pokemonDetectado = true;
 }
 
-// ... (Resto de funciones capturarNormal, capturarSuper, iniciarCaptura y abrirCofre se mantienen igual)
+function capturarNormal() {
+    if (!pokemonDetectado) return;
+    sonidoEspera.play().catch(() => {});
+    iniciarCaptura('https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png', pokemonActualData.catchRate, "¡POKÉ BALL!");
+}
+
+function capturarSuper() {
+    if (!pokemonDetectado) return;
+    sonidoEspera.play().catch(() => {});
+    iniciarCaptura('https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/great-ball.png', (pokemonActualData.catchRate * 2), "¡SUPER BALL!");
+}
+
+function iniciarCaptura(img, prob, msg) {
+    const sprite = document.getElementById('main-sprite');
+    const texto = document.getElementById('main-text');
+    const pokemonNombre = pokemonActualData.text;
+
+    sprite.src = img;
+    sprite.classList.add('is-pokeball', 'shaking-hard');
+    texto.innerHTML = msg;
+
+    setTimeout(() => {
+        sprite.classList.remove('shaking-hard');
+        sprite.classList.add('shaking-slow');
+    }, 1500);
+
+    setTimeout(() => {
+        sprite.classList.remove('shaking-slow');
+        if (Math.random() < prob) {
+            texto.innerHTML = "¡ATRAPADO!";
+            sonidoCaptura.currentTime = 0;
+            sonidoCaptura.play().catch(() => {}); 
+            document.querySelectorAll('.led').forEach(l => l.classList.add('success'));
+            pokemonDetectado = false;
+
+            if (pokemonNombre.includes("GENGAR")) {
+                setTimeout(() => {
+                    // 2. RUTA RELATIVA CORREGIDA
+                    sprite.src = "assets/img/gengar-cofre.png"; 
+                    sprite.classList.add('clickable-chest');
+                    texto.innerHTML = "GENGAR TIENE<br>ALGO PARA TI...";
+                    sprite.onclick = abrirCofre;
+                }, 2500);
+            }
+        } else {
+            texto.innerHTML = "¡SE ESCAPÓ!";
+            sprite.style.transform = "scale(0.35)";
+            setTimeout(() => {
+                sprite.classList.remove('is-pokeball');
+                sprite.src = pokemonActualData.sprite;
+                sprite.style.transform = "scale(1)"; 
+                setTimeout(() => { texto.innerHTML = pokemonNombre; }, 800);
+            }, 600);
+        }
+    }, 3500);
+}
+
+// 3. FUNCIÓN DE APERTURA CON RUTA BLINDADA
+function abrirCofre() {
+    const sprite = document.getElementById('main-sprite');
+    const texto = document.getElementById('main-text');
+
+    sprite.onclick = null;
+    sprite.classList.remove('clickable-chest');
+    sprite.style.opacity = "0";
+    
+    setTimeout(() => {
+        // Asegúrate de que el archivo es assets/img/anillo.png (todo minúsculas)
+        sprite.src = "assets/img/anillo.png"; 
+        sprite.classList.add('ring-reveal');
+        sprite.style.opacity = "1";
+        texto.innerHTML = "¿QUIERES SER<br>MI PAREJA?";
+    }, 500);
+}
