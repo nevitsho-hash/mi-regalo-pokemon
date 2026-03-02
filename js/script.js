@@ -1,4 +1,3 @@
-/* Mantenemos exactamente la misma lógica de la Base 7 para no romper nada */
 const sonidoBoton = new Audio('assets/sng/clic.mp3');
 let html5QrCode;
 let pokemonDetectado = true;
@@ -11,6 +10,7 @@ let pokemonActualData = {
     cry: "assets/sng/gengar.mp3" 
 };
 
+// BASE DE DATOS RESTAURADA CON LOS 7 POKÉMON [cite: 2026-03-01]
 const pokemonDB = {
     "BEAUTIFLY": { text: "¡BEAUTIFLY!", sprite: "assets/img/BEAUTIFLY.png", catchRate: 0.5, cry: "assets/sng/beautifly.mp3" },
     "SNORLAX": { text: "¡SNORLAX!", sprite: "assets/img/SNORLAX.png", catchRate: 0.2, cry: "assets/sng/snorlax.mp3" },
@@ -101,14 +101,12 @@ function iniciarCaptura(img, prob, msg) {
         } else {
             texto.innerHTML = "¡SE ESCAPÓ!";
             sprite.style.transform = "scale(0.35)";
-
             setTimeout(() => {
                 sprite.style.filter = "brightness(2.5) contrast(1.2)";
                 sprite.classList.remove('is-pokeball');
                 sprite.src = pokemonSpriteURL;
                 sprite.style.transform = "scale(1)"; 
             }, 600);
-
             setTimeout(() => {
                 sprite.style.filter = "none";
                 setTimeout(() => {
