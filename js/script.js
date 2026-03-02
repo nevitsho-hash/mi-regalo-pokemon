@@ -79,11 +79,12 @@ function capturarSuper() {
     iniciarCaptura('https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/great-ball.png', (pokemonActualData.catchRate * 2), "¡SUPER BALL!");
 }
 
+// ... (Audios y base de datos iguales) ...
+
 function iniciarCaptura(img, prob, msg) {
     const sprite = document.getElementById('main-sprite');
     const texto = document.getElementById('main-text');
     const pokemonSpriteURL = pokemonActualData.sprite; 
-    const pokemonNombre = pokemonActualData.text;
 
     sprite.src = img;
     sprite.classList.add('is-pokeball', 'shaking-hard');
@@ -97,7 +98,6 @@ function iniciarCaptura(img, prob, msg) {
     setTimeout(() => {
         sprite.classList.remove('shaking-slow');
         if (Math.random() < prob) {
-            // FASE 1: ÉXITO DE CAPTURA
             texto.innerHTML = "¡ATRAPADO!";
             sonidoCaptura.currentTime = 0;
             sonidoCaptura.play().catch(() => {}); 
@@ -105,28 +105,53 @@ function iniciarCaptura(img, prob, msg) {
             document.querySelectorAll('.led').forEach(l => l.classList.add('success'));
             pokemonDetectado = false;
 
-            // FASE 2: REVELACIÓN DEL TESORO (Solo si es GENGAR)
-            if (pokemonNombre.includes("GENGAR")) {
+            // FASE: REVELACIÓN DEL COFRE INTERACTIVO
+            if (pokemonActualData.text.includes("GENGAR")) {
                 setTimeout(() => {
-                    sprite.style.transform = "scale(1.2)";
-                    sprite.src = "assets/img/gengar-cofre.png"; 
-                    texto.innerHTML = "GENGAR TIENE ALGO PARA TI"; 
+                    sprite.src = "assets/img/gengar-cofre.png";
+                    sprite.classList.add('clickable-chest');
+                    texto.innerHTML = "GENGAR TIENE<br>ALGO PARA TI...";
+                    
+                    // Añadimos el evento de clic ÚNICAMENTE en este momento
+                    sprite.onclick = abrirCofre;
                 }, 2500);
             }
         } else {
-            // FALLO: PERSISTENCIA
+            // FALLO (Persistencia)
             texto.innerHTML = "¡SE ESCAPÓ!";
             sprite.style.transform = "scale(0.35)";
             setTimeout(() => {
-                sprite.style.filter = "brightness(2.5) contrast(1.2)";
                 sprite.classList.remove('is-pokeball');
                 sprite.src = pokemonSpriteURL;
                 sprite.style.transform = "scale(1)"; 
-                setTimeout(() => {
-                    sprite.style.filter = "none";
-                    texto.innerHTML = pokemonNombre; 
-                }, 800);
+                setTimeout(() => { texto.innerHTML = pokemonActualData.text; }, 800);
             }, 600);
         }
     }, 3500);
+}
+
+// FUNCIÓN DEFINITIVA: LA PROPUESTA [2026-03-02]
+function abrirCofre() {
+    const sprite = document.getElementById('main-sprite');
+    const texto = document.getElementById('main-text');
+
+    // Quitamos interactividad para que no se repita
+    sprite.onclick = null; 
+    sprite.classList.remove('clickable-chest');
+
+    // Animación de transición
+    sprite.style.opacity = "0";
+    
+    setTimeout(() => {
+        // Cambiamos al anillo
+        sprite.src = "assets/img/anillo.png"; 
+        sprite.classList.add('ring-reveal');
+        sprite.style.opacity = "1";
+        
+        // LA PREGUNTA
+        texto.innerHTML = "¿QUIERES SER<br>MI PAREJA?";
+        
+        // Opcional: Sonido de brillo/evolución si tienes uno
+        new Audio('assets/sng/brillo.mp3').play().catch(() => {});
+    }, 500);
 }
