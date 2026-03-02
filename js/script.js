@@ -1,14 +1,16 @@
-// Audios y Precarga [cite: 2026-03-02]
+// Audios y Precarga Maestro [2026-03-02]
 const sonidoBoton = new Audio('assets/sng/clic.mp3');
 const sonidoCaptura = new Audio('assets/sng/captura.wav'); 
 const sonidoEspera = new Audio('assets/sng/espera-pokeball.mp3'); 
-const sonidoEscapo = new Audio('assets/sng/escapo.mp3'); // Nuevo sonido [cite: 2026-03-02]
+const sonidoEscapo = new Audio('assets/sng/escapo.mp3'); 
+const sonidoBrilloCofre = new Audio('assets/sng/brillocofre.mp3'); // Nuevo sonido de revelación
 
+// Precarga de archivos críticos
 sonidoCaptura.load();
 sonidoEspera.load();
 sonidoEscapo.load();
+sonidoBrilloCofre.load();
 
-// Precarga de imágenes
 const preAnillo = new Image(); preAnillo.src = "assets/img/anillo.png"; 
 const preCofre = new Image(); preCofre.src = "assets/img/gengar-cofre.png";
 
@@ -39,7 +41,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 function desbloquearCanalesSecundarios() {
     if (!audioDesbloqueado) {
-        [sonidoCaptura, sonidoEspera, sonidoEscapo].forEach(audio => {
+        [sonidoCaptura, sonidoEspera, sonidoEscapo, sonidoBrilloCofre].forEach(audio => {
             audio.muted = true;
             audio.play().then(() => {
                 audio.pause();
@@ -58,7 +60,6 @@ async function activarEscaner() {
     
     document.getElementById('pokedex-content').style.display = 'none';
     document.getElementById('reader').style.display = 'block';
-    
     document.querySelectorAll('.led').forEach(l => {
         l.classList.remove('success');
         l.classList.add('animating');
@@ -110,93 +111,4 @@ function capturarNormal() {
 }
 
 function capturarSuper() {
-    if (!pokemonDetectado) return;
-    sonidoEspera.play().catch(() => {});
-    iniciarCaptura('https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/great-ball.png', (pokemonActualData.catchRate * 2), "¡SUPER BALL!");
-}
-
-function iniciarCaptura(img, prob, msg) {
-    const sprite = document.getElementById('main-sprite');
-    const texto = document.getElementById('main-text');
-    const pokemonSpriteURL = pokemonActualData.sprite; 
-    const pokemonNombre = pokemonActualData.text;
-
-    // FASE 0: ZOOM HACIA ADENTRO
-    sprite.style.transition = "transform 0.4s ease, opacity 0.4s ease";
-    sprite.style.transform = "scale(0)";
-    sprite.style.opacity = "0";
-    texto.innerHTML = "¡ALLÁ VA!";
-
-    setTimeout(() => {
-        // FASE 1: APARECE POKÉ BALL
-        sprite.src = img;
-        sprite.style.transform = "scale(0.65)";
-        sprite.style.opacity = "1";
-        sprite.classList.add('is-pokeball', 'shaking-hard');
-        texto.innerHTML = msg;
-
-        setTimeout(() => {
-            sprite.classList.remove('shaking-hard');
-            sprite.classList.add('shaking-slow');
-        }, 1500);
-
-        setTimeout(() => {
-            sprite.classList.remove('shaking-slow');
-            if (Math.random() < prob) {
-                // ÉXITO
-                texto.innerHTML = "¡ATRAPADO!";
-                sonidoCaptura.currentTime = 0;
-                sonidoCaptura.play().catch(() => {}); 
-                sprite.classList.add('captured-success');
-                document.querySelectorAll('.led').forEach(l => l.classList.add('success'));
-                pokemonDetectado = false;
-
-                if (pokemonNombre.includes("GENGAR")) {
-                    setTimeout(() => {
-                        sprite.classList.remove('is-pokeball', 'captured-success');
-                        sprite.style.opacity = "0"; 
-                        setTimeout(() => {
-                            sprite.src = "assets/img/gengar-cofre.png";
-                            sprite.classList.add('clickable-chest');
-                            sprite.style.opacity = "1";
-                            sprite.style.transform = "scale(1.2)";
-                            texto.innerHTML = "GENGAR TIENE<br>ALGO PARA TI...";
-                            sprite.onclick = abrirCofre;
-                        }, 500);
-                    }, 4000); 
-                }
-            } else {
-                // FALLO: SUENA ESCAPO.MP3 [cite: 2026-03-02]
-                texto.innerHTML = "¡SE ESCAPÓ!";
-                sonidoEscapo.currentTime = 0;
-                sonidoEscapo.play().catch(() => {});
-
-                sprite.style.transform = "scale(0.35)";
-                setTimeout(() => {
-                    sprite.classList.remove('is-pokeball');
-                    sprite.src = pokemonSpriteURL;
-                    sprite.style.transform = "scale(1.2)";
-                    sprite.style.opacity = "1";
-                    setTimeout(() => {
-                        sprite.style.transform = "scale(1)"; 
-                        texto.innerHTML = pokemonNombre; 
-                    }, 200);
-                }, 600);
-            }
-        }, 3500);
-    }, 400); 
-}
-
-function abrirCofre() {
-    const sprite = document.getElementById('main-sprite');
-    const texto = document.getElementById('main-text');
-    sprite.onclick = null;
-    sprite.classList.remove('clickable-chest');
-    sprite.style.opacity = "0";
-    setTimeout(() => {
-        sprite.src = "assets/img/anillo.png"; 
-        sprite.classList.add('ring-reveal');
-        sprite.style.opacity = "1";
-        texto.innerHTML = "¿QUIERES SER<br>MI PAREJA?";
-    }, 500);
-}
+    if (!pokemon
