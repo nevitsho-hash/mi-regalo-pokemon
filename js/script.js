@@ -7,19 +7,12 @@ const sonidos = {
     brillo: new Audio('assets/sng/brillocofre.mp3')
 };
 
-// Canal específico para los gritos (Punto crítico de tu error anterior)
+// Canal único para gritos (Iniciado vacío)
 const canalGrito = new Audio();
 
 let html5QrCode;
 let pokemonDetectado = true;
 let audioDesbloqueado = false;
-
-let pokemonActualData = { 
-    text: "GENGAR", 
-    sprite: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/94.png", 
-    catchRate: 0.1, 
-    cry: "assets/sng/gengar.mp3" 
-};
 
 const pokemonDB = {
     "BEAUTIFLY": { text: "¡BEAUTIFLY!", sprite: "assets/img/BEAUTIFLY.png", catchRate: 0.5, cry: "assets/sng/beautifly.mp3" },
@@ -35,28 +28,28 @@ window.addEventListener('DOMContentLoaded', () => {
     html5QrCode = new Html5Qrcode("reader");
 });
 
-// 2. DESBLOQUEO DE CANALES (Solución definitiva al silencio inicial)
+// FUNCIÓN DE DESBLOQUEO MAESTRO
 function desbloquearAudio() {
     if (!audioDesbloqueado) {
-        // Desbloqueamos efectos fijos
+        // Desbloqueamos los sonidos de efectos
         Object.values(sonidos).forEach(s => {
-            s.muted = true;
-            s.play().then(() => { s.pause(); s.currentTime = 0; s.muted = false; }).catch(() => {});
+            s.play().then(() => { s.pause(); s.currentTime = 0; }).catch(e => console.log("Audio Lock:", e));
         });
-        
-        // "Calentamos" el canal de gritos con un micro-silencio (Acción crucial)
-        canalGrito.muted = true;
+
+        // DESBLOQUEO CRÍTICO DEL CANAL DE GRITOS
+        // Cargamos un segundo de silencio o simplemente lo iniciamos
         canalGrito.play().then(() => {
             canalGrito.pause();
-            canalGrito.muted = false;
-        }).catch(() => {});
+            canalGrito.currentTime = 0;
+        }).catch(e => console.log("Cry Channel Lock:", e));
 
         audioDesbloqueado = true;
     }
 }
 
 async function activarEscaner() {
-    desbloquearAudio(); // Se dispara con el clic del botón verde
+    // ESTA ES LA INTERACCIÓN DEL USUARIO: Desbloqueamos todo aquí
+    desbloquearAudio();
     sonidos.boton.play().catch(() => {});
     
     const sprite = document.getElementById('main-sprite');
@@ -70,9 +63,7 @@ async function activarEscaner() {
     document.querySelectorAll('.led').forEach(l => { l.classList.remove('success'); l.classList.add('animating'); });
 
     try {
-        if (html5QrCode && html5QrCode.isScanning) {
-            await html5QrCode.stop();
-        }
+        if (html5QrCode && html5QrCode.isScanning) { await html5QrCode.stop(); }
         await html5QrCode.start({ facingMode: "environment" }, { fps: 20, qrbox: 250 }, (text) => {
             let code = text.toUpperCase().trim();
             if (pokemonDB[code]) {
@@ -93,14 +84,14 @@ function actualizarPantalla() {
     
     const sprite = document.getElementById('main-sprite');
     sprite.src = pokemonActualData.sprite;
-    sprite.onclick = null;
-    sprite.classList.remove('is-pokeball', 'shaking-hard', 'shaking-slow', 'clickable-chest', 'ring-reveal', 'captured-success');
     
-    // Reproducción del grito: El canal ya tiene permiso por el desbloquearAudio()
+    // REPRODUCCIÓN DEL GRITO
+    // Ya tenemos el canal autorizado, ahora le damos la fuente y suena
     canalGrito.src = pokemonActualData.cry;
-    canalGrito.play().catch(e => console.error("Error Audio Pokémon:", e));
+    canalGrito.load(); // Forzamos la carga de la nueva fuente
+    canalGrito.play().catch(e => console.log("Error al reproducir grito:", e));
     
-    pokemonDetectado = true; // Habilitamos botones
+    pokemonDetectado = true;
 }
 
 function capturarNormal() { 
@@ -120,9 +111,9 @@ function iniciarCaptura(img, prob, msg) {
     const texto = document.getElementById('main-text');
     const esGengar = pokemonActualData.text.includes("GENGAR");
 
-    pokemonDetectado = false; // Bloqueo de seguridad
+    pokemonDetectado = false;
 
-    // ANIMACIÓN DE SUCCIÓN (Mejora de fluidez solicitada)
+    // EFECTO ZOOM (SUCCIÓN)
     sprite.style.transition = "transform 0.4s ease, opacity 0.4s ease";
     sprite.style.transform = "scale(0)";
     sprite.style.opacity = "0";
@@ -135,7 +126,7 @@ function iniciarCaptura(img, prob, msg) {
         texto.innerHTML = msg;
 
         setTimeout(() => { 
-            if (sprite.classList.contains('shaking-hard')) {
+            if (sprite.classList.contains('is-pokeball')) {
                 sprite.classList.replace('shaking-hard', 'shaking-slow'); 
             }
         }, 1500);
@@ -143,7 +134,6 @@ function iniciarCaptura(img, prob, msg) {
         setTimeout(() => {
             sprite.classList.remove('shaking-slow');
             if (Math.random() < prob) {
-                // ÉXITO
                 texto.innerHTML = "¡ATRAPADO!";
                 sonidos.captura.play().catch(() => {});
                 sprite.classList.add('captured-success');
@@ -153,40 +143,43 @@ function iniciarCaptura(img, prob, msg) {
                     setTimeout(() => {
                         sprite.style.transition = "opacity 0.8s ease";
                         sprite.style.opacity = "0";
+
                         setTimeout(() => {
-                            sonidos.brillo.play().catch(() => {});
+                            sprite.classList.remove('is-pokeball', 'captured-success', 'shaking-hard', 'shaking-slow');
                             sprite.src = "assets/img/gengar-cofre.png";
-                            sprite.classList.remove('is-pokeball', 'captured-success');
-                            sprite.classList.add('clickable-chest');
+                            sonidos.brillo.currentTime = 0;
+                            sonidos.brillo.play().catch(() => {});
+                            
                             sprite.style.opacity = "1";
                             sprite.style.transform = "scale(1.2)";
+                            sprite.classList.add('clickable-chest');
                             texto.innerHTML = "GENGAR TIENE<br>ALGO PARA TI...";
                             sprite.onclick = abrirCofre;
-                        }, 500);
+                        }, 800);
                     }, 4000);
                 } else {
-                    // Si no es Gengar, liberamos botones tras pausa de éxito
                     setTimeout(() => { pokemonDetectado = true; }, 1200);
                 }
             } else {
-                // FALLO
                 texto.innerHTML = "¡SE ESCAPÓ!";
+                sonidos.escapo.currentTime = 0;
                 sonidos.escapo.play().catch(() => {});
                 sprite.style.transform = "scale(0.35)";
+                
                 setTimeout(() => {
-                    sprite.classList.remove('is-pokeball');
+                    sprite.classList.remove('is-pokeball', 'shaking-hard', 'shaking-slow');
                     sprite.src = pokemonActualData.sprite;
                     sprite.style.transform = "scale(1.2)";
                     sprite.style.opacity = "1";
                     setTimeout(() => { 
                         sprite.style.transform = "scale(1)";
                         texto.innerHTML = pokemonActualData.text; 
-                        pokemonDetectado = true; // Liberación tras escape
+                        pokemonDetectado = true; 
                     }, 200);
                 }, 600);
             }
         }, 3500);
-    }, 400); 
+    }, 400);
 }
 
 function abrirCofre() {
@@ -194,7 +187,6 @@ function abrirCofre() {
     const texto = document.getElementById('main-text');
     sprite.onclick = null;
     sprite.classList.remove('clickable-chest');
-    sprite.style.transition = "opacity 0.4s ease";
     sprite.style.opacity = "0";
     setTimeout(() => {
         sprite.src = "assets/img/anillo.png";
