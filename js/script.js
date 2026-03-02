@@ -30,24 +30,39 @@ window.addEventListener('DOMContentLoaded', () => {
 function desbloquearAudio() {
     if (!audioDesbloqueado) {
         Object.values(sonidos).forEach(s => {
-            s.play().then(() => { s.pause(); s.currentTime = 0; }).catch(() => {});
+           const volumenOriginal = s.volume;
+
+        s.play().then(() => { s.pause(); s.currentTime = 0; s.muted = false;
+        s.volume = volumenOriginal;
+            }).catch(e => console.log("Audio Lock:", e));
         });
         // Desbloqueo forzado del canal de gritos
-        canalGrito.play().then(() => { canalGrito.pause(); }).catch(() => {});
+        canalGrito.muted = true;
+        canalGrito.play().then(() => {
+            canalGrito.pause();
+            canalGrito.currentTime = 0;
+            canalGrito.muted = false;
+        }).catch(e => console.log("Cry Channel Lock:", e));
+
         audioDesbloqueado = true;
     }
 }
 
 async function activarEscaner() {
+    // 1. Ejecutamos el desbloqueo silencioso
     desbloquearAudio();
-    sonidos.boton.play().catch(() => {});
     
-    pokemonDetectado = true;
+    // 2. Esperamos un mini-instante y lanzamos SOLO el sonido del botón
+    setTimeout(() => {
+        sonidos.boton.currentTime = 0;
+        sonidos.boton.play().catch(() => {});
+    }, 50);
+
     const sprite = document.getElementById('main-sprite');
+    sprite.onclick = null;
     sprite.classList.remove('is-pokeball', 'shaking-hard', 'shaking-slow', 'clickable-chest', 'ring-reveal', 'anillo-animado', 'captured-success');
     sprite.style.opacity = "1";
     sprite.style.transform = "scale(1)";
-
     document.getElementById('pokedex-content').style.display = 'none';
     document.getElementById('reader').style.display = 'block';
 
@@ -56,7 +71,7 @@ async function activarEscaner() {
         await html5QrCode.start({ facingMode: "environment" }, { fps: 20, qrbox: 250 }, (text) => {
             let code = text.toUpperCase().trim();
             if (pokemonDB[code]) {
-                // CLAVE: Cargamos el audio justo AQUÍ, cuando el código es detectado
+                // Pre-carga el audio del pokemon detectado
                 canalGrito.src = pokemonDB[code].cry;
                 canalGrito.load();
                 
