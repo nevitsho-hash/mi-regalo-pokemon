@@ -48,11 +48,85 @@ body, html { margin: 0; padding: 0; width: 100%; height: 100%; display: flex; al
 }
 
 /* CONTROLES IZQUIERDA CIRCULAR */
-.controls { position: relative; height: 140px; width: 100%; z-index: 9999; pointer-events: auto; }
-.black-circle { position: absolute; left: 0; bottom: 85px; width: 42px; height: 42px; background: #333; border-radius: 50%; border: 3px solid #1a1a1a; cursor: pointer; box-shadow: 0 4px 0 #000; }
-.blue-button { position: absolute; left: 0; bottom: 25px; width: 42px; height: 42px; background: linear-gradient(to bottom, #2196f3, #0d47a1); border: 3px solid #1a1a1a; border-radius: 50%; cursor: pointer; box-shadow: 0 4px 0 #062a5e; }
-.green-button { position: absolute; left: 50%; transform: translateX(-50%); bottom: 55px; width: 105px; height: 45px; background: linear-gradient(to bottom, #4caf50, #2e7d32); border: 4px solid #1a1a1a; border-radius: 12px; cursor: pointer; }
-.d-pad { position: absolute; right: 0; bottom: 15px; width: 75px; height: 75px; background: #333; clip-path: polygon(35% 0%, 65% 0%, 65% 35%, 100% 35%, 100% 65%, 65% 65%, 65% 100%, 35% 100%, 35% 65%, 0% 65%, 0% 35%, 35% 35%); }
+.controls { 
+    position: relative; 
+    height: 140px; 
+    width: 100%; 
+    z-index: 9999; 
+    pointer-events: auto; 
+}
 
-#reader { width: 100% !important; height: 100% !important; display: none; }
-#reader video { object-fit: cover !important; }
+/* BOTÓN NEGRO (Captura Normal) - Espejo del Azul */
+.black-circle { 
+    position: absolute; 
+    left: 0; 
+    bottom: 85px; 
+    width: 42px; 
+    height: 42px; 
+    background: linear-gradient(180deg, #555555 0%, #222222 100%); 
+    border: 3px solid #1a1a1a; 
+    border-radius: 50%; 
+    cursor: pointer; 
+    /* Brillo interno y profundidad 3D */
+    box-shadow: inset 0 2px 3px rgba(255, 255, 255, 0.2), 0 4px 0 #000000; 
+    transition: all 0.1s;
+}
+
+.black-circle:active {
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.5), 0 1px 0 #000000;
+    transform: translateY(3px);
+}
+
+/* BOTÓN AZUL (Super Ball) */
+.blue-button { 
+    position: absolute; 
+    left: 0; 
+    bottom: 25px; 
+    width: 42px; 
+    height: 42px; 
+    background: linear-gradient(180deg, #2196f3 0%, #0d47a1 100%); 
+    border: 3px solid #1a1a1a; 
+    border-radius: 50%; 
+    cursor: pointer; 
+    /* Brillo interno y profundidad 3D */
+    box-shadow: inset 0 2px 3px rgba(255, 255, 255, 0.3), 0 4px 0 #062a5e; 
+    transition: all 0.1s;
+}
+
+.blue-button:active {
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.5), 0 1px 0 #062a5e;
+    transform: translateY(3px);
+}
+
+/* BOTÓN VERDE (Escanear) */
+.green-button { 
+    position: absolute; 
+    left: 50%; 
+    transform: translateX(-50%); 
+    bottom: 55px; 
+    width: 105px; 
+    height: 45px; 
+    background: linear-gradient(180deg, #4caf50 0%, #2e7d32 100%); 
+    border: 4px solid #1a1a1a; 
+    border-radius: 12px; 
+    cursor: pointer; 
+    /* Brillo interno y profundidad 3D */
+    box-shadow: inset 0 2px 3px rgba(255, 255, 255, 0.3), 0 5px 0 #1b4d1f;
+    transition: all 0.1s;
+}
+
+.green-button:active {
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.5), 0 1px 0 #1b4d1f;
+    transform: translateX(-50%) translateY(4px);
+}
+
+.d-pad { 
+    position: absolute; 
+    right: 0; 
+    bottom: 15px; 
+    width: 75px; 
+    height: 75px; 
+    background: #333; 
+    clip-path: polygon(35% 0%, 65% 0%, 65% 35%, 100% 35%, 100% 65%, 65% 65%, 65% 100%, 35% 100%, 35% 65%, 0% 65%, 0% 35%, 35% 35%); 
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+}
