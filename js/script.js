@@ -51,16 +51,17 @@ async function activarEscaner() {
     const pokedexContent = document.getElementById('pokedex-content');
     const sprite = document.getElementById('main-sprite');
     
-    // 1. Limpieza radical preventiva
-    if (html5QrCode) {
-        try {
-            await html5QrCode.stop();
-            await html5QrCode.clear();
-        } catch (e) {
-            readerDiv.innerHTML = ""; 
+    await html5QrCode.start(
+    { facingMode: "environment" }, 
+    { 
+        fps: 20, 
+        // Eliminamos el qrbox temporalmente para ver si el vídeo base carga
+        // Si funciona, luego lo volvemos a poner.
+        videoConstraints: {
+            facingMode: "environment"
         }
-        html5QrCode = null;
-    }
+    }, 
+    (text) => {
 
     // 2. Reset visual y liberación de botones
     pokemonDetectado = true;
