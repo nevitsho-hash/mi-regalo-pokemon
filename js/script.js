@@ -1,5 +1,7 @@
+// Definición de audios [cite: 2026-03-01]
 const sonidoBoton = new Audio('assets/sng/clic.mp3');
-const sonidoCaptura = new Audio('assets/sng/captura.mp3'); // Nuevo sonido de éxito [cite: 2026-03-01]
+const sonidoCaptura = new Audio('assets/sng/captura.mp3'); 
+
 let html5QrCode;
 let pokemonDetectado = true;
 const fraseGengar = "UM SENTIMENTO<br>ESTRANHO...<br>GENGAR POR PERTO!";
@@ -25,8 +27,9 @@ window.addEventListener('DOMContentLoaded', () => {
     html5QrCode = new Html5Qrcode("reader");
 });
 
+// SOLO EL BOTÓN VERDE ACTIVA EL CLIC [cite: 2026-03-02]
 async function activarEscaner() {
-    sonidoBoton.play().catch(() => {});
+    sonidoBoton.play().catch(() => {}); // Único lugar donde suena el clic
     document.getElementById('pokedex-content').style.display = 'none';
     document.getElementById('reader').style.display = 'block';
     document.querySelectorAll('.led').forEach(l => {
@@ -61,15 +64,19 @@ function actualizarPantalla() {
     pokemonDetectado = true;
 }
 
+function restaurarInterfaz() {
+    document.getElementById('reader').style.display = 'none';
+    document.getElementById('pokedex-content').style.display = 'flex';
+}
+
+// ELIMINADO EL SONIDO DE CLIC DE ESTAS FUNCIONES [cite: 2026-03-02]
 function capturarNormal() {
     if (!pokemonDetectado) return;
-    sonidoBoton.play().catch(() => {});
     iniciarCaptura('https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png', pokemonActualData.catchRate, "¡POKÉ BALL!");
 }
 
 function capturarSuper() {
     if (!pokemonDetectado) return;
-    sonidoBoton.play().catch(() => {});
     iniciarCaptura('https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/great-ball.png', (pokemonActualData.catchRate * 2), "¡SUPER BALL!");
 }
 
@@ -91,14 +98,14 @@ function iniciarCaptura(img, prob, msg) {
     setTimeout(() => {
         sprite.classList.remove('shaking-slow');
         if (Math.random() < prob) {
-            // ÉXITO: SE ACTIVA EL SONIDO DE CAPTURA [cite: 2026-03-01]
+            // ÉXITO: AQUÍ SUENA EL SONIDO DE CAPTURA [cite: 2026-03-02]
             texto.innerHTML = "¡ATRAPADO!";
             sonidoCaptura.play().catch(() => {}); 
             sprite.classList.add('captured-success');
             document.querySelectorAll('.led').forEach(l => l.classList.add('success'));
             pokemonDetectado = false;
         } else {
-            // FALLO: PERSISTENCIA DEL POKÉMON
+            // FALLO: PERSISTENCIA
             texto.innerHTML = "¡SE ESCAPÓ!";
             sprite.style.transform = "scale(0.35)";
             setTimeout(() => {
