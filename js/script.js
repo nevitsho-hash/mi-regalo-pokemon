@@ -11,6 +11,7 @@ const canalGrito = new Audio();
 let html5QrCode;
 let pokemonDetectado = true;
 let audioDesbloqueado = false;
+let pokemonActualData = null;
 
 const pokemonDB = {
     "BEAUTIFLY": { text: "¡BEAUTIFLY!", sprite: "assets/img/BEAUTIFLY.png", catchRate: 0.5, cry: "assets/sng/beautifly.mp3" },
@@ -19,34 +20,92 @@ const pokemonDB = {
     "TOTODILE": { text: "¡TOTODILE!", sprite: "assets/img/TOTODILE.png", catchRate: 0.5, cry: "assets/sng/totodile.mp3" },
     "UMBREON": { text: "¡UMBREON!", sprite: "assets/img/UMBREON.png", catchRate: 0.5, cry: "assets/sng/umbreon.mp3" },
     "JIGGLYPUFF": { text: "¡JIGGLYPUFF!", sprite: "assets/img/JIGGLYPUFF.png", catchRate: 0.5, cry: "assets/sng/jigglypuff.mp3" },
-    
-    // GENGAR: Base de 0.2 (20% con Poké Ball normal)
     "GENGAR": { text: "¡GENGAR!", sprite: "assets/img/GENGAR.png", catchRate: 0.2, cry: "assets/sng/gengar.mp3" }
 };
 
-// ...
+window.addEventListener('DOMContentLoaded', () => {
+    html5QrCode = new Html5Qrcode("reader");
+});
+
+function desbloquearAudio() {
+    if (!audioDesbloqueado) {
+        Object.values(sonidos).forEach(s => {
+            s.volume = 0.1;
+            s.play().then(() => { s.pause(); s.currentTime = 0; s.volume = 1; }).catch(() => {});
+        });
+        canalGrito.volume = 1.0;
+        canalGrito.play().then(() => { canalGrito.pause(); canalGrito.volume = 1.0; }).catch(() => {});
+        audioDesbloqueado = true;
+    }
+}
+
+async function activarEscaner() {
+    desbloquearAudio();
+    pokemonDetectado = true;
+    const sprite = document.getElementById('main-sprite');
+    sprite.classList.remove('is-pokeball', 'shaking-hard', 'shaking-slow', 'clickable-chest', 'ring-reveal', 'anillo-animado', 'captured-success');
+    sprite.style.opacity = "1";
+    sprite.style.transform = "scale(1)";
+    sprite.onclick = null;
+
+    document.getElementById('pokedex-content').style.display = 'none';
+    document.getElementById('reader').style.display = 'block';
+
+    document.querySelectorAll('.led').forEach(l => { 
+        l.classList.remove('success'); 
+        l.classList.add('animating'); 
+    });
+
+    try {
+        if (html5QrCode && html5QrCode.isScanning) { await html5QrCode.stop(); }
+        await html5QrCode.start({ facingMode: "environment" }, { fps: 20, qrbox: 250 }, (text) => {
+            let code = text.toUpperCase().trim();
+            if (pokemonDB[code]) {
+                canalGrito.src = pokemonDB[code].cry;
+                canalGrito.load();
+                html5QrCode.stop().then(() => {
+                    pokemonActualData = pokemonDB[code];
+                    actualizarPantalla();
+                });
+            }
+        });
+    } catch (err) { restaurarInterfaz(); }
+}
+
+function actualizarPantalla() {
+    document.getElementById('reader').style.display = 'none';
+    document.getElementById('pokedex-content').style.display = 'flex';
+    document.getElementById('main-text').innerHTML = pokemonActualData.text;
+    document.querySelectorAll('.led').forEach(l => l.classList.remove('animating', 'success'));
+    
+    const sprite = document.getElementById('main-sprite');
+    sprite.src = pokemonActualData.sprite;
+    
+    setTimeout(() => {
+        canalGrito.play().catch(() => {
+            setTimeout(() => canalGrito.play(), 300);
+        });
+    }, 200);
+    pokemonDetectado = true;
+}
 
 function capturarNormal() {
-    if (!pokemonDetectado) return;
+    if (!pokemonDetectado || !pokemonActualData) return;
     sonidos.espera.play().catch(() => {});
-    // Usa el ratio base (0.2 para Gengar = 20%)
     iniciarCaptura('https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png', pokemonActualData.catchRate, "¡POKÉ BALL!");
 }
 
 function capturarSuper() {
-    if (!pokemonDetectado) return;
+    if (!pokemonDetectado || !pokemonActualData) return;
     sonidos.espera.play().catch(() => {});
     
-    // Lógica para que la Super Ball suba al 70% específicamente con Gengar
-    let ratioSuper = pokemonActualData.catchRate * 2; // Por defecto duplicamos
+    let probFinal = pokemonActualData.catchRate * 2;
     if (pokemonActualData.text.includes("GENGAR")) {
-        ratioSuper = 0.7; // Forzamos el 70% para el momento especial
+        probFinal = 0.7; 
     }
     
-    iniciarCaptura('https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/great-ball.png', ratioSuper, "¡SUPER BALL!");
+    iniciarCaptura('https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/great-ball.png', probFinal, "¡SUPER BALL!");
 }
-
-// ... (Resto del código igual a la Base 28.0)
 
 function iniciarCaptura(img, prob, msg) {
     const sprite = document.getElementById('main-sprite');
@@ -77,8 +136,6 @@ function iniciarCaptura(img, prob, msg) {
                 texto.innerHTML = "¡ATRAPADO!";
                 sonidos.captura.play().catch(() => {});
                 sprite.classList.remove('is-pokeball');
-                
-                // --- RESTAURADO: LEDs en verde (success) ---
                 document.querySelectorAll('.led').forEach(l => l.classList.add('success'));
 
                 setTimeout(() => {
