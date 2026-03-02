@@ -7,11 +7,10 @@ const sonidos = {
     brillo: new Audio('assets/sng/brillocofre.mp3')
 };
 
-// Canal único para gritos (Iniciado vacío)
 const canalGrito = new Audio();
 
 let html5QrCode;
-let pokemonDetectado = true; 
+let pokemonDetectado = true;
 let audioDesbloqueado = false;
 
 const pokemonDB = {
@@ -28,21 +27,13 @@ window.addEventListener('DOMContentLoaded', () => {
     html5QrCode = new Html5Qrcode("reader");
 });
 
-// FUNCIÓN DE DESBLOQUEO MAESTRO
 function desbloquearAudio() {
     if (!audioDesbloqueado) {
         Object.values(sonidos).forEach(s => {
-            s.muted = true;
-            s.play().then(() => { s.pause(); s.currentTime = 0; s.muted = false; }).catch(() => {});
+            s.play().then(() => { s.pause(); s.currentTime = 0; }).catch(() => {});
         });
-
-        canalGrito.muted = true;
-        canalGrito.play().then(() => {
-            canalGrito.pause();
-            canalGrito.currentTime = 0;
-            canalGrito.muted = false;
-        }).catch(() => {});
-
+        // Desbloqueo forzado del canal de gritos
+        canalGrito.play().then(() => { canalGrito.pause(); }).catch(() => {});
         audioDesbloqueado = true;
     }
 }
@@ -51,23 +42,24 @@ async function activarEscaner() {
     desbloquearAudio();
     sonidos.boton.play().catch(() => {});
     
-    // RESET DE SEGURIDAD
-    pokemonDetectado = true; 
+    pokemonDetectado = true;
     const sprite = document.getElementById('main-sprite');
-    sprite.onclick = null;
     sprite.classList.remove('is-pokeball', 'shaking-hard', 'shaking-slow', 'clickable-chest', 'ring-reveal', 'anillo-animado', 'captured-success');
     sprite.style.opacity = "1";
     sprite.style.transform = "scale(1)";
 
     document.getElementById('pokedex-content').style.display = 'none';
     document.getElementById('reader').style.display = 'block';
-    document.querySelectorAll('.led').forEach(l => { l.classList.remove('success'); l.classList.add('animating'); });
 
     try {
         if (html5QrCode && html5QrCode.isScanning) { await html5QrCode.stop(); }
         await html5QrCode.start({ facingMode: "environment" }, { fps: 20, qrbox: 250 }, (text) => {
             let code = text.toUpperCase().trim();
             if (pokemonDB[code]) {
+                // CLAVE: Cargamos el audio justo AQUÍ, cuando el código es detectado
+                canalGrito.src = pokemonDB[code].cry;
+                canalGrito.load();
+                
                 html5QrCode.stop().then(() => {
                     pokemonActualData = pokemonDB[code];
                     actualizarPantalla();
@@ -81,19 +73,14 @@ function actualizarPantalla() {
     document.getElementById('reader').style.display = 'none';
     document.getElementById('pokedex-content').style.display = 'flex';
     document.getElementById('main-text').innerHTML = pokemonActualData.text;
-    document.querySelectorAll('.led').forEach(l => l.classList.remove('animating', 'success'));
     
     const sprite = document.getElementById('main-sprite');
     sprite.src = pokemonActualData.sprite;
-    sprite.style.opacity = "1";
-    sprite.style.transform = "scale(1)";
-    sprite.onclick = null;
     
-    canalGrito.src = pokemonActualData.cry;
-    canalGrito.load(); 
-    canalGrito.play().catch(() => {});
+    // Reproducción inmediata: el navegador ya lo considera "cargado por el usuario"
+    canalGrito.play().catch(e => console.log("Fallo audio:", e));
     
-    pokemonDetectado = true; 
+    pokemonDetectado = true;
 }
 
 function capturarNormal() {
@@ -113,9 +100,7 @@ function iniciarCaptura(img, prob, msg) {
     const texto = document.getElementById('main-text');
     const esGengar = pokemonActualData.text.includes("GENGAR");
 
-    pokemonDetectado = false; 
-
-    // EFECTO ZOOM (SUCCIÓN)
+    pokemonDetectado = false;
     sprite.style.transition = "transform 0.4s ease, opacity 0.4s ease";
     sprite.style.transform = "scale(0)";
     sprite.style.opacity = "0";
@@ -127,33 +112,28 @@ function iniciarCaptura(img, prob, msg) {
         sprite.classList.add('is-pokeball', 'shaking-hard');
         texto.innerHTML = msg;
 
-        setTimeout(() => { 
+        setTimeout(() => {
             if (sprite.classList.contains('is-pokeball')) {
-                sprite.classList.replace('shaking-hard', 'shaking-slow'); 
+                sprite.classList.replace('shaking-hard', 'shaking-slow');
             }
         }, 1500);
 
         setTimeout(() => {
             sprite.classList.remove('shaking-slow');
             if (Math.random() < prob) {
-                // --- ÉXITO CON BRILLO ---
                 texto.innerHTML = "¡ATRAPADO!";
                 sonidos.captura.play().catch(() => {});
-                sprite.classList.remove('is-pokeball'); 
-                
+                sprite.classList.remove('is-pokeball');
                 setTimeout(() => {
                     sprite.classList.add('captured-success');
-                    document.querySelectorAll('.led').forEach(l => l.classList.add('success'));
                 }, 10);
 
                 if (esGengar) {
                     setTimeout(() => {
-                        sprite.style.transition = "opacity 0.8s ease";
                         sprite.style.opacity = "0";
                         setTimeout(() => {
                             sprite.classList.remove('captured-success');
                             sprite.src = "assets/img/gengar-cofre.png";
-                            sonidos.brillo.currentTime = 0;
                             sonidos.brillo.play().catch(() => {});
                             sprite.style.opacity = "1";
                             sprite.style.transform = "scale(1.2)";
@@ -166,21 +146,17 @@ function iniciarCaptura(img, prob, msg) {
                     setTimeout(() => { pokemonDetectado = true; }, 1500);
                 }
             } else {
-                // --- FALLO ---
                 texto.innerHTML = "¡SE ESCAPÓ!";
-                sonidos.escapo.currentTime = 0;
                 sonidos.escapo.play().catch(() => {});
                 sprite.style.transform = "scale(0.35)";
-                
                 setTimeout(() => {
                     sprite.classList.remove('is-pokeball', 'shaking-hard', 'shaking-slow');
                     sprite.src = pokemonActualData.sprite;
-                    sprite.style.transform = "scale(1.2)";
                     sprite.style.opacity = "1";
+                    sprite.style.transform = "scale(1)";
                     setTimeout(() => { 
-                        sprite.style.transform = "scale(1)";
-                        texto.innerHTML = pokemonActualData.text; 
-                        pokemonDetectado = true; 
+                        texto.innerHTML = pokemonActualData.text;
+                        pokemonDetectado = true;
                     }, 200);
                 }, 600);
             }
@@ -192,26 +168,18 @@ function abrirCofre() {
     const sprite = document.getElementById('main-sprite');
     const texto = document.getElementById('main-text');
     sprite.onclick = null;
-    sprite.classList.remove('clickable-chest');
-    sprite.style.transition = "opacity 0.5s ease";
     sprite.style.opacity = "0";
-
     setTimeout(() => {
         sprite.src = "assets/img/anillo.png";
         sprite.style.opacity = "1";
         sprite.classList.add('ring-reveal');
         texto.innerHTML = "¿QUIERES SER<br>MI PAREJA?";
-        
-        // Retraso para la animación activa del anillo
-        setTimeout(() => {
-            sprite.classList.add('anillo-animado');
-            pokemonDetectado = true;
-        }, 1500); 
+        setTimeout(() => { sprite.classList.add('anillo-animado'); }, 1500);
     }, 500);
 }
 
-function restaurarInterfaz() { 
-    document.getElementById('reader').style.display = 'none'; 
-    document.getElementById('pokedex-content').style.display = 'flex'; 
+function restaurarInterfaz() {
+    document.getElementById('reader').style.display = 'none';
+    document.getElementById('pokedex-content').style.display = 'flex';
     pokemonDetectado = true;
 }
