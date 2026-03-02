@@ -1,15 +1,16 @@
+/* Mantenemos exactamente la misma lógica de la Base 7 para no romper nada */
 const sonidoBoton = new Audio('assets/sng/clic.mp3');
 let html5QrCode;
 let pokemonDetectado = true;
-// Gengar como estado inicial con tu frase personalizada [cite: 2026-03-01]
+const fraseGengar = "UM SENTIMENTO<br>ESTRANHO...<br>GENGAR POR PERTO!";
+
 let pokemonActualData = { 
-    text: "UM SENTIMENTO<br>ESTRANHO...<br>GENGAR POR PERTO!", 
+    text: fraseGengar, 
     sprite: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/94.png", 
     catchRate: 0.1, 
     cry: "assets/sng/gengar.mp3" 
 };
 
-// RESTAURACIÓN TOTAL DE LA BASE DE DATOS [cite: 2026-03-01]
 const pokemonDB = {
     "BEAUTIFLY": { text: "¡BEAUTIFLY!", sprite: "assets/img/BEAUTIFLY.png", catchRate: 0.5, cry: "assets/sng/beautifly.mp3" },
     "SNORLAX": { text: "¡SNORLAX!", sprite: "assets/img/SNORLAX.png", catchRate: 0.2, cry: "assets/sng/snorlax.mp3" },
@@ -53,9 +54,7 @@ function actualizarPantalla() {
     document.querySelectorAll('.led').forEach(l => l.classList.remove('animating', 'success'));
     const sprite = document.getElementById('main-sprite');
     sprite.src = pokemonActualData.sprite;
-    sprite.style.width = "120px";
     sprite.style.transform = "scale(1)";
-    sprite.style.filter = "none";
     sprite.classList.remove('is-pokeball', 'shaking-hard', 'shaking-slow', 'captured-success');
     new Audio(pokemonActualData.cry).play().catch(() => {});
     pokemonDetectado = true;
@@ -82,7 +81,6 @@ function iniciarCaptura(img, prob, msg) {
     const sprite = document.getElementById('main-sprite');
     const texto = document.getElementById('main-text');
     const pokemonSpriteURL = pokemonActualData.sprite; 
-    const fraseGengar = "UM SENTIMENTO<br>ESTRANHO...<br>GENGAR POR PERTO!";
 
     sprite.src = img;
     sprite.classList.add('is-pokeball', 'shaking-hard');
@@ -102,30 +100,22 @@ function iniciarCaptura(img, prob, msg) {
             pokemonDetectado = false;
         } else {
             texto.innerHTML = "¡SE ESCAPÓ!";
-            
-            // Animación de escape natural [cite: 2026-03-01]
-            sprite.style.transition = "transform 0.8s ease, filter 0.5s ease";
-            sprite.style.transform = "scale(0.4)"; 
+            sprite.style.transform = "scale(0.35)";
 
-            // Destello al abrirse la bola
             setTimeout(() => {
                 sprite.style.filter = "brightness(2.5) contrast(1.2)";
-            }, 400);
-
-            setTimeout(() => {
                 sprite.classList.remove('is-pokeball');
                 sprite.src = pokemonSpriteURL;
-                sprite.style.transform = "scale(1.2)"; // El Pokémon "salta" fuera
+                sprite.style.transform = "scale(1)"; 
+            }, 600);
+
+            setTimeout(() => {
                 sprite.style.filter = "none";
-                
-                // Retorno al estado inicial tras ver al Pokémon escapar
                 setTimeout(() => {
-                    sprite.style.transform = "scale(1)";
                     sprite.src = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/94.png";
                     texto.innerHTML = fraseGengar;
-                    sprite.style.width = "120px";
-                }, 1200);
-            }, 800);
+                }, 1400);
+            }, 1000);
         }
     }, 3500);
 }
