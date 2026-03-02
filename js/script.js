@@ -27,22 +27,20 @@ window.addEventListener('DOMContentLoaded', () => {
     html5QrCode = new Html5Qrcode("reader");
 });
 
-// FUNCIÓN DE DESBLOQUEO (Silenciosa para evitar solapamientos)
+// DESBLOQUEO SILENCIOSO (La llave de paso)
 function desbloquearAudio() {
     if (!audioDesbloqueado) {
+        // Desbloqueamos todos los sonidos en silencio total
         Object.values(sonidos).forEach(s => {
-            s.muted = true; // Muteamos para que no se oiga nada al pulsar el botón verde
-            s.play().then(() => { 
-                s.pause(); 
-                s.currentTime = 0; 
-                s.muted = false; // Ya tenemos el permiso, quitamos el mute para después
-            }).catch(() => {});
+            s.muted = true;
+            s.play().then(() => { s.pause(); s.currentTime = 0; s.muted = false; }).catch(() => {});
         });
         
         canalGrito.muted = true;
         canalGrito.play().then(() => { 
             canalGrito.pause(); 
-            canalGrito.muted = false;
+            canalGrito.currentTime = 0;
+            canalGrito.muted = false; 
         }).catch(() => {});
         
         audioDesbloqueado = true;
@@ -50,11 +48,9 @@ function desbloquearAudio() {
 }
 
 async function activarEscaner() {
-    // Desbloqueamos los canales en silencio absoluto
-    desbloquearAudio(); 
+    desbloquearAudio(); // El clic del usuario aquí abre el canal de audio
     
-    // Eliminado: sonidos.boton.play() para evitar ruidos al iniciar cámara
-    
+    // Reset visual y de lógica
     pokemonDetectado = true;
     const sprite = document.getElementById('main-sprite');
     sprite.classList.remove('is-pokeball', 'shaking-hard', 'shaking-slow', 'clickable-chest', 'ring-reveal', 'anillo-animado', 'captured-success');
@@ -69,9 +65,9 @@ async function activarEscaner() {
         await html5QrCode.start({ facingMode: "environment" }, { fps: 20, qrbox: 250 }, (text) => {
             let code = text.toUpperCase().trim();
             if (pokemonDB[code]) {
-                // Pre-carga el grito en el momento de la detección
+                // ESTRATEGIA: Cargar el audio INMEDIATAMENTE al detectar el QR
                 canalGrito.src = pokemonDB[code].cry;
-                canalGrito.load();
+                canalGrito.load(); 
                 
                 html5QrCode.stop().then(() => {
                     pokemonActualData = pokemonDB[code];
@@ -90,8 +86,11 @@ function actualizarPantalla() {
     const sprite = document.getElementById('main-sprite');
     sprite.src = pokemonActualData.sprite;
     
-    // Suena el grito del Pokémon detectado
-    canalGrito.play().catch(e => console.log("Fallo audio:", e));
+    // DISPARO DEL GRITO
+    // Pequeño retardo de 100ms para asegurar que la UI ha cambiado
+    setTimeout(() => {
+        canalGrito.play().catch(e => console.log("Re-intento audio:", e));
+    }, 100);
     
     pokemonDetectado = true;
 }
