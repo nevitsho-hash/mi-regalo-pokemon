@@ -1,7 +1,7 @@
-// Definición de audios y precarga [cite: 2026-03-02]
+// Definición de audios y precarga
 const sonidoBoton = new Audio('assets/sng/clic.mp3');
 const sonidoCaptura = new Audio('assets/sng/captura.wav'); 
-const sonidoEspera = new Audio('assets/sng/espera-pokeball.mp3'); // Nuevo sonido de lanzamiento
+const sonidoEspera = new Audio('assets/sng/espera-pokeball.mp3'); 
 
 sonidoCaptura.load();
 sonidoEspera.load();
@@ -32,8 +32,7 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 async function activarEscaner() {
-    // El botón verde sigue usando exclusivamente el sonido de clic
-    sonidoBoton.play().catch(e => console.log("Clic bloqueado")); 
+    sonidoBoton.play().catch(() => {}); 
     document.getElementById('pokedex-content').style.display = 'none';
     document.getElementById('reader').style.display = 'block';
     document.querySelectorAll('.led').forEach(l => {
@@ -64,27 +63,19 @@ function actualizarPantalla() {
     sprite.style.opacity = "1";
     sprite.style.transform = "scale(1)";
     sprite.classList.remove('is-pokeball', 'shaking-hard', 'shaking-slow', 'captured-success');
-    
-    new Audio(pokemonActualData.cry).play().catch(e => console.log("Grito bloqueado"));
+    new Audio(pokemonActualData.cry).play().catch(() => {});
     pokemonDetectado = true;
-}
-
-function restaurarInterfaz() {
-    document.getElementById('reader').style.display = 'none';
-    document.getElementById('pokedex-content').style.display = 'flex';
 }
 
 function capturarNormal() {
     if (!pokemonDetectado) return;
-    // Activamos el sonido de espera al lanzar [cite: 2026-03-02]
-    sonidoEspera.play().catch(e => console.log("Audio espera bloqueado"));
+    sonidoEspera.play().catch(() => {});
     iniciarCaptura('https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png', pokemonActualData.catchRate, "¡POKÉ BALL!");
 }
 
 function capturarSuper() {
     if (!pokemonDetectado) return;
-    // Activamos el sonido de espera al lanzar [cite: 2026-03-02]
-    sonidoEspera.play().catch(e => console.log("Audio espera bloqueado"));
+    sonidoEspera.play().catch(() => {});
     iniciarCaptura('https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/great-ball.png', (pokemonActualData.catchRate * 2), "¡SUPER BALL!");
 }
 
@@ -106,16 +97,24 @@ function iniciarCaptura(img, prob, msg) {
     setTimeout(() => {
         sprite.classList.remove('shaking-slow');
         if (Math.random() < prob) {
-            // ÉXITO: Sonido de captura corregido (.wav)
+            // FASE 1: ÉXITO DE CAPTURA
             texto.innerHTML = "¡ATRAPADO!";
             sonidoCaptura.currentTime = 0;
-            sonidoCaptura.play().catch(e => console.error("Error sonido captura:", e)); 
-            
+            sonidoCaptura.play().catch(() => {}); 
             sprite.classList.add('captured-success');
             document.querySelectorAll('.led').forEach(l => l.classList.add('success'));
             pokemonDetectado = false;
+
+            // FASE 2: REVELACIÓN DEL TESORO (Solo si es GENGAR)
+            if (pokemonNombre.includes("GENGAR")) {
+                setTimeout(() => {
+                    sprite.style.transform = "scale(1.2)";
+                    sprite.src = "assets/img/gengar-cofre.png"; 
+                    texto.innerHTML = "¿QUÉ TIENE GENGAR?<br>¡MIRA ADENTRO!"; 
+                }, 2500);
+            }
         } else {
-            // FALLO: Persistencia
+            // FALLO: PERSISTENCIA
             texto.innerHTML = "¡SE ESCAPÓ!";
             sprite.style.transform = "scale(0.35)";
             setTimeout(() => {
