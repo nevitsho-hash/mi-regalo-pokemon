@@ -15,9 +15,9 @@ let pokemonActualData = null;
 
 // 2. BASE DE DATOS DE POKÉMON
 const pokemonDB = {
-    "BEAUTIFLY": { text: "¡MIRA ESA BEAUTIFLY!<br>SUS ALAS SON BELLAS,<br>¡PERO TU ERES MAS!", sprite: "assets/img/BEAUTIFLY.png", catchRate: 0.5, cry: "assets/sng/beautifly.mp3" },
-    "SNORLAX": { text: "¡HAS ENCONTRADO<br>A SNORLAX!<br>BLOQUEA EL CAMINO,<br>PERO NO A MI CORAZON", sprite: "assets/img/SNORLAX.png", catchRate: 0.5, cry: "assets/sng/snorlax.mp3" },
-    "SWALOT": { text: "¡HAS VISTO A SWALOT!<br>NADA ME LLENA TANTO<br>COMO ESTAR CONTIGO", sprite: "assets/img/SWALOT.png", catchRate: 0.5, cry: "assets/sng/swalot.mp3" },
+    "BEAUTIFLY": { text: "¡VEJA ESSA BEAUTIFLY!<br>SUAS ASAS SÃO BELAS,<br>MAS VOCÊ É MUITO MAIS!", sprite: "assets/img/BEAUTIFLY.png", catchRate: 0.5, cry: "assets/sng/beautifly.mp3" },
+    "SNORLAX": { text: "¡VOCÊ ENCONTROU O SNORLAX!<br>ELE BLOQUEIA O CAMINHO,<br>MAS NÃO O MEU CORAÇÃO", sprite: "assets/img/SNORLAX.png", catchRate: 0.5, cry: "assets/sng/snorlax.mp3" },
+    "SWALOT": { text: "¡VOCÊ VIU O SWALOT!<br>NADA ME PREENCHE TANTO<br>COMO ESTAR COM VOCÊ", sprite: "assets/img/SWALOT.png", catchRate: 0.5, cry: "assets/sng/swalot.mp3" },
     "TOTODILE": { text: "¡TOTODILE SE DISTRAJO!<br>¡CAPTURALO ANTES DE<br>QUE SE VAYA!", sprite: "assets/img/TOTODILE.png", catchRate: 0.5, cry: "assets/sng/totodile.mp3" },
     "UMBREON": { text: "¡UMBREON NO SE RINDE!<br>EN MIS NOCHES LARGAS,<br>ERES MI ÚNICO<br>PUNTO DE LUZ", sprite: "assets/img/UMBREON.png", catchRate: 0.5, cry: "assets/sng/umbreon.mp3" },
     "JIGGLYPUFF": { text: "¡ES JIGGLYPUFF!<br>MI CANCIÓN FAVORITA<br>ES OÍR TU RISA", sprite: "assets/img/JIGGLYPUFF.png", catchRate: 0.5, cry: "assets/sng/jigglypuff.mp3" },
@@ -168,7 +168,7 @@ function abrirCofre() {
         sprite.src = "assets/img/anillo.png";
         sprite.style.opacity = "1";
         sprite.classList.add('ring-reveal');
-        texto.innerHTML = "NI SIQUIERA GENGAR<br>PUDO OCULTAR...<br>LO QUE EL DESTINO<br>TENIA GUARDADO";
+        texto.innerHTML = "NEM MESMO O GENGAR<br>PÔDE ESCONDER...<br>O QUE O DESTINO<br>TINHA GUARDADO";
         const musicaFinal = new Audio('assets/sng/cancionfinal.mp3');
         musicaFinal.volume = 0; musicaFinal.play().catch(() => {});
         let vol = 0;
